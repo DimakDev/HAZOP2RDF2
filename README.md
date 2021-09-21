@@ -11,7 +11,7 @@ HAZOP Studien sind essenzieller Teil für die Risiko- und Sicherheitsanalyse von
 -   Wie kann technische eine Anpassung der Konfiguration von HAZOP Studien realisiert werden?
 -   Wie kann das grundlegende Modell eingesetzt werden, um strukturelle und logische Fehler der HAZOP zu erkennen?
 
-### Lastenheft
+### Lastenheft:
 
 -   Literaturrecherche und begründete Auswahl der Forschungsmethodik zur Bearbeitung der Fragestellungen. Das schriftliche Ergebnis dieses Arbeitspakets dient als Meilenstein
 -   Zielgerichtete Beantwortung der Fragestellung durch systematische Anwendung der ausgewählten Forschungsmethodik
@@ -19,6 +19,7 @@ HAZOP Studien sind essenzieller Teil für die Risiko- und Sicherheitsanalyse von
 
 > Die Arbeit ist gemäß der Richtlinie des Instituts für Automatisierungstechnik durchzuführen. Eignung und Qualität der erstellten Software sind durch automatisierte Komponenten-, Integrations- und Systemtests nachzuweisen.
 
+Autor: Dmytro Kostiuk  
 Betreuer: Dipl.-Ing. A. Klose  
 Prüfer: Prof. Dr.-Ing. habil. Leon Urbas  
 Datum Arbeitsbeginn: 01.10.2021  
