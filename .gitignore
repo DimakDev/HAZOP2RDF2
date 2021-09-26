@@ -5,3 +5,4 @@ repl-temp-*
 # macOS
 .obsidian
 .DS_Store
+.latex
