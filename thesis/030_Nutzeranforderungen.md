@@ -8,11 +8,9 @@ Links:
 
 - Generelles Template, Zusammenfassung wichtiger Funktionen.
 - Verifizierung von Felder.
-- Logische Valideirung (optionale and mandatory Felder).
+- Logische Validierung (optionale und mandatory Felder).
 - Export in JSON, YAML, CSV.
-- Kompabilitaet - Web-Anwendung.
-
-
+- Kompatibilitaet - Web-Anwendung.
 
 ---
 
