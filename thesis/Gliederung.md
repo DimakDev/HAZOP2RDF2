@@ -1,30 +1,36 @@
-==Allgemeiner Aufbau?==
-==Reihenfolge der Kapitel?==
-==Inhalt der einzelnen Kapitel?==
+## Titelseite
 
-### ~~Titelseite~~
+## Aufgabenstellung im Original (vom verantw. Hochschullehrer unterschrieben)
 
-### ~~Aufgabenstellung im Original (vom verantw. Hochschullehrer unterschrieben)~~
+## Kurzfassung (deutsch)
 
-### Kurzfassung (deutsch)
+[[000_Kurzfassung]]
 
-### Abstract (englisch)
+## Abstract (englisch)
 
-### ~~Inhaltsverzeichnis (mit Angabe der Seitennummern)~~
+[[000_Abstract]]
 
-### ~~Zeichen, Benennungen und Einheiten~~
+## Inhaltsverzeichnis (mit Angabe der Seitennummern)
 
-### Vorwort?
+## Zeichen, Benennungen und Einheiten
 
-### Einleitung (Motivation, Einordnung der Aufgabenstellung)
+## Vorwort (optional)
 
-### Grundlagen und Stand der Technik
+## Einleitung (Motivation, Einordnung der Aufgabenstellung)
+
+[[010_Einleitung]]
+
+## Grundlagen und Stand der Technik
+
+[[020_Grundlagen]]
 
 - Auswertung nationaler und internationaler Literatur auf dem relevanten Fachgebiet
 - kritische Bewertung der Inhalte (z.B. bei unterschiedlichen Definitionen, Aussagen, denen der Autor der DA kritisch gegenüber steht, usw.)
 - ggf. Ableitung des eigenen Themas aus erkannten Defiziten
 
-### Formulieren von Nutzeranforderungen
+## Formulieren von Nutzeranforderungen
+
+[[030_Nutzeranforderungen]]
 
 - Nutzeranforderungen konkretisieren die Aufgabenstellung, Grundlage sollte die Gliederung sein z.B. nach [IEEE](https://tu-dresden.de/ing/elektrotechnik/ifa/ressourcen/dateien/richtlinie_wiss_arbeiten/Nutzeranforderungen_nach_IEEE-1.pdf)
 - ausgehend von IEEE sind für Studien-, Diplom- und Masterarbeiten im Allgemeinen Aussagen zu folgenden Punkten ausreichend:
@@ -36,7 +42,9 @@
     - zusätzlich zur verbalen Beschreibung soll eine Darstellung als Kontextdiagramm nach [strukturierter Analyse](https://tu-dresden.de/ing/elektrotechnik/ifa/ressourcen/dateien/richtlinie_wiss_arbeiten/LS-AT_Vorlage_StrukturierteAnalyse.pdf) oder als Anwendungsfall-Diagramm nach [UML](https://tu-dresden.de/ing/elektrotechnik/ifa/ressourcen/dateien/richtlinie_wiss_arbeiten/uml.pdf)erfolgen
     - beachten der Qualitätsmerkmale auf Folie 5 des [Dokumentes IEEE](https://tu-dresden.de/ing/elektrotechnik/ifa/ressourcen/dateien/richtlinie_wiss_arbeiten/Nutzeranforderungen_nach_IEEE-1.pdf)
 
-### Entwurf
+## Entwurf
+
+[[040_Entwurf]]
 
 - Grundlage für alle Entwurfsentscheidungen sind die Nutzeranforderungen oder daraus abgeleitete Systemanforderungen
 - abgeleitete Systemanforderungen referenzieren die zu Grunde liegenden Nutzeranforderungen (z.B. wegen geforderter Webanwendung ist Gliederung in Webserver und Webclient erforderlich);
@@ -46,29 +54,35 @@
 - begründete Entscheidung für eine der vorgestellten Varianten anhand von Nutzer- oder der daraus abgeleiteten Systemanforderungen
 - falls erforderlich, Überarbeiten der Nutzeranforderungen ggf. in mehreren Iterationszyklen
 
-### Implementierung
+## Implementierung
+
+[[050_Implementierung]]
 
 - Referenzierung auf die im Entwurf dekomponierten Klassen, Komponenten oder Algorithmen
 - Beschreibung der Implementierung (Programmiersprache, Programmstrukturen, HW-Details, usw.)
 - Diskussion von möglichen Implementierungsvarianten (Vorgehen wie im Entwurf)
 
-### Validierung
+## Validierung
+
+[[060_Validierung]]
 
 - Auswahl und Beschreibung der Testumgebung und der zu wählenden bzw. gewählten Testbedingungen
 - Beschreibung der Ergebnisse
 - Darstellung des Erfüllungsstandes der Nutzeranforderungen (welche Nutzeranforderungen wurden vollständig erfüllt. Im Falle von teilweise oder nicht erfüllten Anforderungen ist eine Begründung erfoderlich.)
 
-### Zusammenfassung/Ausblick
+## Zusammenfassung / Ausblick
+
+[[070_Zusammenfassung]]
 
 - Zusammenfassende Darstellung des Entwicklungsprozesses
 - Diskussion der Ergebnisse und Erfahrungen
 - Darstellung von Defiziten - Anregungen für folgende Arbeiten
 
-### Literaturverzeichnis
+## Literaturverzeichnis
 
-### Anlagen
+## Anlagen
 
 - Bilder und Tabellen, soweit sie nicht im Textteil enthalten sind
 - Zeichnungen, Stromlaufpläne, Programmstrukturen, Programmauszüge, Versuchsprotokolle usw.
 
-### ~~Selbständigkeitserklärung (Muster s. Anlage 5)~~
+## Selbständigkeitserklärung (Muster s. Anlage 5)
