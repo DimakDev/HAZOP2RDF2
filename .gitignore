@@ -3,6 +3,5 @@ elm-stuff
 # elm-repl generated files
 repl-temp-*
 # macOS
-.obsidian
 .DS_Store
 .latex
