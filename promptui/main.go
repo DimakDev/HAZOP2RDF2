@@ -4,27 +4,37 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"path/filepath"
 	"strings"
 
 	"github.com/manifoldco/promptui"
 )
 
 const (
-	data    = "./data"
-	ext     = ".xlsx"
-	rows    = 5
-	format  = ".ttl"
-	logfile = "verification.log"
+	CMD_HEAD  string = "CMD_HEAD"
+	CMD_TAIL         = "CMD_TAIL"
+	CMD_FULL         = "CMD_FULL"
+	CMD_INPUT        = "CMD_INPUT"
+	CMD_DATA         = "CMD_DATA"
+	CMD_GRAPH        = "CMD_GRAPH"
+)
+
+const (
+	datadir = "./data"
+	dataext = ".xlsx"
+	logpath = "./verification.log"
 )
 
 type Command struct {
 	Name  string
 	Alias string
 	Desc  string
+	File  string
 }
 
 type Prompt struct {
 	PromptUI promptui.Select
+	Commands []Command
 }
 
 func main() {
@@ -38,63 +48,65 @@ func main() {
 }
 
 func (p *Prompt) generate() error {
-	files, err := ioutil.ReadDir(data)
+	files, err := ioutil.ReadDir(datadir)
 	if err != nil {
-		return fmt.Errorf("Error reading `%s`: %v", data, err)
+		return fmt.Errorf("Error reading `%s`: %v", datadir, err)
 	}
 
 	var commands []Command
 	for _, f := range files {
-		if strings.HasSuffix(f.Name(), ext) {
+		if strings.HasSuffix(f.Name(), dataext) {
+			datapath := filepath.Join(datadir, f.Name())
 			commands = append(commands,
 				Command{
-					Name:  fmt.Sprintf("Import `%s`", f.Name()),
-					Alias: "IMPORT",
-					Desc:  fmt.Sprintf("Import `%s` from `%s` directory.", f.Name(), data),
+					Name:  fmt.Sprintf("Head `%s`", f.Name()),
+					Alias: CMD_HEAD,
+					Desc:  fmt.Sprintf("Show first rows `%s`", f.Name()),
+					File:  datapath,
 				},
 				Command{
-					Name:  fmt.Sprintf("Show `%s`", f.Name()),
-					Alias: "HEAD",
-					Desc:  fmt.Sprintf("Show first %d rows of `%s`.", rows, f.Name()),
+					Name:  fmt.Sprintf("Tail `%s`", f.Name()),
+					Alias: CMD_TAIL,
+					Desc:  fmt.Sprintf("Show last rows `%s`", f.Name()),
+					File:  datapath,
 				},
 				Command{
-					Name:  fmt.Sprintf("Show `%s`", f.Name()),
-					Alias: "TAIL",
-					Desc:  fmt.Sprintf("Show last %d rows of `%s`.", rows, f.Name()),
+					Name:  fmt.Sprintf("Show full `%s`", f.Name()),
+					Alias: CMD_FULL,
+					Desc:  fmt.Sprintf("Show all rows `%s`", f.Name()),
+					File:  datapath,
 				},
 				Command{
-					Name:  fmt.Sprintf("Show `%s`", f.Name()),
-					Alias: "FULL",
-					Desc:  fmt.Sprintf("Show all rows of `%s`.", f.Name()),
+					Name:  fmt.Sprintf("Verificate input `%s`", f.Name()),
+					Alias: CMD_INPUT,
+					Desc:  fmt.Sprintf("Verificate input `%s`:\n  1. Check column name (regex, synonyms).\n  2. Check column type (number, text).\nVerification results will be saved in `%s`.", f.Name(), logpath),
+					File:  datapath,
 				},
 				Command{
-					Name:  fmt.Sprintf("Verificate `%s`", f.Name()),
-					Alias: "INPUT",
-					Desc:  fmt.Sprintf("Verificate input `%s` data:\n  1. Check column name (regex, synonyms).\n  2. Check column type (number, text).\nVerification log is saved in `%s`.", f.Name(), logfile),
+					Name:  fmt.Sprintf("Verificate data `%s`", f.Name()),
+					Alias: CMD_DATA,
+					Desc:  fmt.Sprintf("Verificate data `%s`:\n  1. Check value length.\n  2. Check value range.\n  3. Check optional and mandatory fields.\nVerification results will be saved in `%s`.", f.Name(), logpath),
+					File:  datapath,
 				},
 				Command{
-					Name:  fmt.Sprintf("Verificate `%s`", f.Name()),
-					Alias: "DATA",
-					Desc:  fmt.Sprintf("Verificate `%s` data:\n  1. Check value length.\n  2. Check value range.\n  3. Check optional and mandatory fields.\nVerification log is saved in `%s`.", f.Name(), logfile),
-				},
-				Command{
-					Name:  fmt.Sprintf("Generate report graph of `%s`", f.Name()),
-					Alias: "GRAPH",
-					Desc:  fmt.Sprintf("Generate report graph of `%s` in `%s`.", f.Name(), format),
+					Name:  fmt.Sprintf("Create Hazop graph `%s`", f.Name()),
+					Alias: CMD_GRAPH,
+					Desc:  fmt.Sprintf("Create Hazop graph `%s`", f.Name()),
+					File:  datapath,
 				},
 			)
 		}
 	}
 
 	if len(commands) == 0 {
-		return fmt.Errorf("`%s` is empty, no `%s` file(s) found", data, ext)
+		return fmt.Errorf("`%s` is empty, no `%s` file(s) found", datadir, dataext)
 	}
 
 	templates := &promptui.SelectTemplates{
 		Label:    "========== {{ . }} ==========",
-		Active:   "🎱{{ .Name | cyan }} ({{ .Alias | red }})",
-		Inactive: "  {{ .Name | cyan }} ({{ .Alias | red }})",
-		Selected: "🎱{{ .Name | red | cyan }}",
+		Active:   "➡️ {{ .Name | cyan }}",
+		Inactive: "  {{ .Name | cyan }}",
+		Selected: "➡️ {{ .Name | red }}",
 		Details: `
 ---------- Description ---------------------------
 {{ .Desc | faint }}`,
@@ -116,14 +128,34 @@ func (p *Prompt) generate() error {
 		Searcher:  searcher,
 	}
 
+	p.Commands = commands
+
 	return nil
 }
 
 func (p *Prompt) run() error {
-	_, _, err := p.PromptUI.Run()
-	if err != nil {
-		return fmt.Errorf("Prompt failed: %v", err)
+	for {
+		i, _, err := p.PromptUI.Run()
+		if err != nil {
+			return fmt.Errorf("Prompt failed: %v", err)
+		}
+
+		switch alias := p.Commands[i].Alias; alias {
+		case CMD_HEAD:
+			log.Println(CMD_HEAD)
+		case CMD_TAIL:
+			log.Println(CMD_TAIL)
+		case CMD_FULL:
+			log.Println(CMD_FULL)
+		case CMD_INPUT:
+			log.Println(CMD_INPUT)
+		case CMD_DATA:
+			log.Println(CMD_DATA)
+		case CMD_GRAPH:
+			log.Println(CMD_GRAPH)
+		default:
+			return fmt.Errorf("Error alias: `%s` not found", alias)
+		}
 	}
 	return nil
-	// fmt.Printf("You choose number %d: %s\n", i+1, commands[i].Name)
 }
