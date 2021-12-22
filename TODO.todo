@@ -1,5 +1,4 @@
 Hazop Formula Todos:
- ☐ [promptui]: add command switcher @feat
  ☐ [go-pretty]: show full table @feat
  ☐ [go-pretty]: show head/tail table @feat
  ☐ [verification]: add *input* verification (regex, synonyms) @feat
@@ -12,6 +11,7 @@ Hazop Formula Todos:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ [promptui]: add command switcher @feat @done (21-12-22 15:32) @project(Hazop Formula Todos)
  ✔ [promptui]: add prompt runner @feat @done (21-12-22 13:59) @project(Hazop Formula Todos)
  ✔ [promptui]: add prompt generation @feat @done (21-12-22 13:59) @project(Hazop Formula Todos)
  ✔ [promptui]: add command list @feat @done (21-12-22 13:59) @project(Hazop Formula Todos)
