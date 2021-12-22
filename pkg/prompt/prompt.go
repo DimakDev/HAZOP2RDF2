@@ -22,7 +22,7 @@ const (
 const (
 	datadir = "./data"
 	dataext = ".xlsx"
-	logpath = "./verification.log"
+	logpath = "./log/verification.log"
 )
 
 type Command struct {
@@ -85,13 +85,13 @@ func (p *Prompt) generate() error {
 				Command{
 					Name:  fmt.Sprintf("Verificate data `%s`", f.Name()),
 					Alias: CMD_DATA,
-					Desc:  fmt.Sprintf("Verificate data `%s`:\n  1. Check value length.\n  2. Check value range.\n  3. Check optional and mandatory fields.\nVerification results will be saved in `%s`.", f.Name(), logpath),
+					Desc:  fmt.Sprintf("Verificate data `%s`:\n  1. Check value length.\n  2. Check value range.\n  3. Check optional and mandatory fields.\nVerification results will be written in `%s`.", f.Name(), logpath),
 					File:  datapath,
 				},
 				Command{
 					Name:  fmt.Sprintf("Create Hazop graph `%s`", f.Name()),
 					Alias: CMD_GRAPH,
-					Desc:  fmt.Sprintf("Create Hazop graph `%s`", f.Name()),
+					Desc:  fmt.Sprintf("Create RDF graph from source `%s`", f.Name()),
 					File:  datapath,
 				},
 			)
@@ -107,9 +107,7 @@ func (p *Prompt) generate() error {
 		Active:   "➡️ {{ .Name | cyan }}",
 		Inactive: "  {{ .Name | cyan }}",
 		Selected: "➡️ {{ .Name | red }}",
-		Details: `
----------- Description ---------------------------
-{{ .Desc | faint }}`,
+		Details:  "---------- Description -------------\n{{ .Desc | faint }}",
 	}
 
 	searcher := func(input string, index int) bool {
@@ -121,7 +119,7 @@ func (p *Prompt) generate() error {
 	}
 
 	p.PromptUI = promptui.Select{
-		Label:     "Select Hazop Formula Command",
+		Label:     "Select Command",
 		Items:     commands,
 		Templates: templates,
 		Size:      8,
@@ -140,7 +138,7 @@ func (p *Prompt) run() error {
 			return fmt.Errorf("Prompt failed: %v", err)
 		}
 
-		switch alias := p.Commands[i].Alias; alias {
+		switch p.Commands[i].Alias {
 		case CMD_HEAD:
 			log.Println(CMD_HEAD)
 		case CMD_TAIL:
@@ -154,7 +152,7 @@ func (p *Prompt) run() error {
 		case CMD_GRAPH:
 			log.Println(CMD_GRAPH)
 		default:
-			return fmt.Errorf("Error alias: `%s` not found", alias)
+			return fmt.Errorf("Error alias: `%s` not found", p.Commands[i].Alias)
 		}
 	}
 	return nil
