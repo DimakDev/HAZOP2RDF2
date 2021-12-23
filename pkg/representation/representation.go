@@ -1,111 +1,64 @@
-package data
+package main
 
 import (
 	"fmt"
 	"log"
 	"os"
-	"reflect"
 
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/jedib0t/go-pretty/v6/text"
 	"github.com/xuri/excelize/v2"
 )
 
-func ShowExcel() {
-	f, err := excelize.OpenFile("data/HazopGuideToBestPracticeUno.xlsx")
+const columnWidth = 20
+
+func representExcelData(datapath string) error {
+	f, err := excelize.OpenFile(datapath)
 	if err != nil {
-		fmt.Println(err)
-		return
+		return fmt.Errorf("Error opening `%s`: %v", datapath, err)
 	}
 
-	sheetmap := f.GetSheetMap()
-	// fmt.Println(sheetmap[1])
+	for _, name := range f.GetSheetMap() {
+		log.Printf("Reading Workbook: `%s`, Worksheet `%s`\n", datapath, name)
 
-	// docprops, err := f.GetDocProps()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	return
-	// }
+		rows, err := f.GetRows(name)
+		if err != nil {
+			return fmt.Errorf("Error reading Workbook `%s`, Worksheet `%s`: %v", datapath, name, err)
+		}
 
-	// fmt.Print(docprops)
+		if len(rows) == 0 {
+			log.Printf("Workbook `%s`, Worksheet `%s` is empty\n", datapath, name)
+			continue
+		}
 
-	// cols, err := f.GetCols(sheetmap[1])
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	return
-	// }
+		trows := make([]table.Row, len(rows))
+		tconfigs := make([]table.ColumnConfig, len(rows))
+		for i, row := range rows {
+			tinter := make([]interface{}, len(row))
+			for j, r := range row {
+				tinter[j] = r
+			}
+			trows[i] = tinter
+			tconfigs[i] = table.ColumnConfig{Number: i + 1, WidthMax: columnWidth, WidthMaxEnforcer: text.WrapHard}
+		}
 
-	// for _, col := range cols {
-	// 	for _, c := range col {
-	// 		// fmt.Printf("%T", c)
-	// 		fmt.Print(c, "\t\t")
-	// 	}
-	// 	fmt.Println()
-	// }
-
-	rows, err := f.GetRows(sheetmap[1])
-	if err != nil {
-		fmt.Println(err)
-		return
+		t := table.NewWriter()
+		t.SetOutputMirror(os.Stdout)
+		t.SetColumnConfigs(tconfigs)
+		t.SetTitle(rows[0][0])
+		t.AppendHeader(trows[1])
+		t.AppendRows(trows[2:])
+		t.AppendSeparator()
+		t.SetStyle(table.StyleColoredBright)
+		t.Render()
 	}
 
-	// for _, row := range rows {
-	// 	for _, colCell := range row {
-	// 		fmt.Print(colCell, "\t")
-	// 	}
-	// 	fmt.Println()
-	// }
-	var sa interface{} = rows[1]
-	log.Printf("%#v", sa)
-	s := interfaceSlice(rows[1])
-	// s := make([]interface{}, len(rows[1]))
-	// for i, v := range rows[1] {
-	// 	s[i] = v
-	// }
-
-	rr := make([]table.Row, len(rows[2:]))
-	// for _, v := range rows[2:] {
-	// 	for k, j := range v {
-	// 		if len(j) > 20 {
-	// 			v[k] = text.WrapText(j, 20)
-	// 		}
-	// 	}
-	// }
-	for i, v := range rows[2:] {
-		r := interfaceSlice(v)
-		rr[i] = r
-	}
-
-	t := table.NewWriter()
-	t.SetOutputMirror(os.Stdout)
-	t.SetColumnConfigs([]table.ColumnConfig{{Number: 1, WidthMax: 20, WidthMaxEnforcer: text.WrapHard}, {Number: 2, WidthMax: 20, WidthMaxEnforcer: text.WrapHard}, {Number: 3, WidthMax: 20, WidthMaxEnforcer: text.WrapHard}, {Number: 4, WidthMax: 20, WidthMaxEnforcer: text.WrapHard}, {Number: 5, WidthMax: 20, WidthMaxEnforcer: text.WrapHard}, {Number: 6, WidthMax: 20, WidthMaxEnforcer: text.WrapHard}, {Number: 7, WidthMax: 20, WidthMaxEnforcer: text.WrapHard}})
-	// t.SetTitle(rows[0][0])
-	t.AppendHeader(s)
-	t.AppendRows(rr)
-	t.AppendSeparator()
-	// t.AppendRow([]interface{}{300, "Tyrion", "Lannister", 5000})
-	// t.AppendFooter(table.Row{"", "", "Total", 10000})
-	t.SetStyle(table.StyleColoredBright)
-	// t.SetAllowedRowLength(100)
-	t.Render()
+	return nil
 }
 
-func interfaceSlice(slice interface{}) []interface{} {
-	s := reflect.ValueOf(slice)
-	if s.Kind() != reflect.Slice {
-		panic("InterfaceSlice() given a non-slice type")
+func main() {
+	datapath := "data/HazopGuideToBestPracticeUno.xlsx"
+	if err := representExcelData(datapath); err != nil {
+		log.Fatal(err)
 	}
-
-	// Keep the distinction between nil and empty slice input
-	if s.IsNil() {
-		return nil
-	}
-
-	ret := make([]interface{}, s.Len())
-
-	for i := 0; i < s.Len(); i++ {
-		ret[i] = s.Index(i).Interface()
-	}
-
-	return ret
 }
