@@ -7,7 +7,7 @@ Hazop Formula Todos:
  ☐ [conf]: add `.toml` configuration file for all constants/verification constrains @feat
  ☐ [cli]: build cli together `root.go` @improvement
  ☐ [test]: add input/data verification tests @test
- ☐ [build]: add realease for (os..., arch...) @build
+ ☐ [build]: add release for (os..., arch...) @build
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
