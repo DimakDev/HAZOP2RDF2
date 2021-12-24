@@ -24,5 +24,5 @@ package main
 import "github.com/dimakdev/hazop-formula-cli/cmd"
 
 func main() {
-	cmd.Execute()
+    cmd.Execute()
 }
