@@ -1,0 +1,36 @@
+# ========== Hazop Formula ============
+# Settings and configuration arguments.
+[package]
+name = "toml"
+description = ""
+help = ""
+version = "0.4.2"
+author = "Dmytro Kostiuk <X100@X100.LINK>"
+
+[common]
+data_dir = "./data"
+data_ext = ".xlsx"
+text_dir = "./txt"
+
+[hazop.worksheet]
+metadata = { regex = "^[a-zA-Z0-9.]*-(?i)(metadata|analysis)$", name = "Metadata" }
+analysis = { regex = "^[a-zA-Z0-9.]*-(?i)(metadata|analysis)$", name = "Analysis" }
+
+[hazop.metadata.element]
+label = { regex = "(?i)(name|label|parameter)", name = "Label", type = "text", min_len = 0, max_len = 4, range = 0 }
+description = { regex = "(?i)(description)", name = "Description", type = "text", min_len = 0, max_len = 160, range = 0 }
+
+[hazop.analysis.element]
+reference = { regex = "(?i)(^ref.?|^no.?)", name = "Ref.", type = "number", min_len = 0, max_len = 0, range = 1000 }
+guide_word = { regex = "(?i)(guide\\s?word)", name = "Guide Word", type = "text", min_len = 0, max_len = 40, range = 0 }
+parameter = { regex = "(?i)(parameter)", name = "Parameter", type = "text", min_len = 0, max_len = 40, range = 0 }
+deviation = { regex = "(?i)(deviation)", name = "Deviation", type = "text", min_len = 0, max_len = 80, range = 0 }
+cause = { regex = "(?i)(cause)", name = "Cause", type = "text", min_len = 0, max_len = 160, range = 0 }
+consequense = { regex = "(?i)(consequense|effect)", name = "Consequense", type = "text", min_len = 0, max_len = 160, range = 0 }
+safeguard = { regex = "(?i)(safeguard|protect((ion)|(ive))|systems?)", name = "Safeguard", type = "text", min_len = 0, max_len = 160, range = 0 }
+action_ref = { regex = "(?i)((action|recommendation)\\s?((no.?)|(ref.?)))", name = "Action Ref.", type = "text", min_len = 0, max_len = 0, range = 1000 }
+action = { regex = "(?i)(action|recommendation)))", name = "Action", type = "text", min_len = 0, max_len = 160, range = 0 }
+action_on = { regex = "(?i)((action|recommendation)\\s?(on.?))", name = "Action On", type = "text", min_len = 0, max_len = 40, range = 0 }
+severity = { regex = "(?i)(severity)", name = "Severity", type = "number", min_len = 0, max_len = 0, range = 100 }
+likehood = { regex = "(?i)(likehood|probability)", name = "Likehood", type = "number", min_len = 0, max_len = 0, range = 100 }
+risk_priority = { regex = "(?i)(risk|priority)", name = "Risk Priotrity", type = "text", min_len = 0, max_len = 40, range = 0 }
