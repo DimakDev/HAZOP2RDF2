@@ -1,16 +1,16 @@
 Hazop Formula Todos:
  ☐ [go-pretty]: show full table @feat
  ☐ [go-pretty]: show head/tail table @feat
- ☐ [verification]: add *input* verification (regex, synonyms) @feat
  ☐ [verification]: add *data* verification (type, value length, value range) @feat
  ☐ [graph]: add rdf graph builder @feat
- ☐ [conf]: add `.toml` configuration file for all constants/verification constrains @feat
  ☐ [cli]: build cli together `root.go` @improvement
  ☐ [test]: add input/data verification tests @test
  ☐ [build]: add release for (os..., arch...) @build
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ [verification]: add *input* verification (regex, synonyms) @feat @done (21-12-25 00:16) @project(Hazop Formula Todos)
+ ✔ [conf]: add `.toml` configuration file for all constants/verification constrains @feat @done (21-12-25 00:16) @project(Hazop Formula Todos)
  ✔ [promptui]: add command switcher @feat @done (21-12-22 15:32) @project(Hazop Formula Todos)
  ✔ [promptui]: add prompt runner @feat @done (21-12-22 13:59) @project(Hazop Formula Todos)
  ✔ [promptui]: add prompt generation @feat @done (21-12-22 13:59) @project(Hazop Formula Todos)
