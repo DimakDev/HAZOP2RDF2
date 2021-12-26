@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-    datapath := "data/HazopCrawleyGuideToBestPracticeNormalized.xlsx"
+    datapath := "data/HazopCrawleyGuideToBestPracticeNormalizedShort.xlsx"
 
     wb := workbook.New(datapath)
 
@@ -15,9 +15,17 @@ func main() {
         log.Fatal(err)
     }
 
+    if err := wb.VerifyWorkbook(); err != nil {
+        log.Fatal(err)
+    }
+
     if err := wb.VerifyWorksheets(); err != nil {
         log.Fatal(err)
     }
 
-    log.Printf("%+v", wb.Verification)
+    wb.Preview()
+
+    // for _, ws := range wb.Worksheets {
+    //     log.Printf("%+v", ws)
+    // }
 }
