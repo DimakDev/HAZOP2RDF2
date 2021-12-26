@@ -1,69 +1,57 @@
+// package main
 package workbook
 
-// import (
-//     "fmt"
-//     "log"
-//     "os"
+import (
+    "os"
 
-//     "github.com/jedib0t/go-pretty/table"
-//     "github.com/jedib0t/go-pretty/text"
-// )
+    "github.com/jedib0t/go-pretty/v6/table"
+    "github.com/jedib0t/go-pretty/v6/text"
+)
 
-// const columnWidth = 20
+const columnWidth = 20
 
-// func representWorkbook(datapath string) error {
+func newMatrix(d1, d2 int) []table.Row {
+    a := make([]interface{}, d1*d2)
+    m := make([]table.Row, d2)
+    lo, hi := 0, d1
+    for i := range m {
+        m[i] = a[lo:hi]
+        lo, hi = hi, hi+d1
+    }
+    return m
+}
 
-//     return nil
-// }
+func transposeMatrix(a [][]interface{}) []table.Row {
+    b := newMatrix(len(a), len(a[0]))
+    for i := 0; i < len(b); i++ {
+        for j := 0; j < len(b[i]); j++ {
+            b[i][j] = a[j][i]
+        }
+    }
+    return b
+}
 
-// func main() {
-//     datapath := "data/HazopGuideToBestPracticeUno.xlsx"
-//     if err := representExcelData(datapath, false, true, 4); err != nil {
-//         log.Fatal(err)
-//     }
+func createConfigs(d1 int) []table.ColumnConfig {
+    configs := make([]table.ColumnConfig, d1)
+    for i := 0; i < d1; i++ {
+        configs[i] = table.ColumnConfig{
+            Number:           i + 1,
+            WidthMax:         columnWidth,
+            WidthMaxEnforcer: text.WrapHard,
+        }
+    }
+    return configs
+}
 
-//     for _, name := range f.GetSheetMap() {
-//         rows, err := f.GetRows(name)
-//         if err != nil {
-//             return fmt.Errorf("Error reading Workbook `%s`, Worksheet `%s`: %v", datapath, name, err)
-//         }
-
-//         if len(rows) == 0 {
-//             log.Printf("Workbook `%s`, Worksheet `%s` is empty\n", datapath, name)
-//             continue
-//         }
-//         log.Println(len(rows))
-//         // if head {
-//         //     rows = append(rows[:1], rows[1:nrows+2]...)
-//         //     log.Printf("Head Workbook: `%s`, Worksheet `%s`, Rows: %d, Columns: %d\n", datapath, name, len(rows), len(rows[1]))
-//         // } else if tail {
-//         //     rows = append(rows[:1], rows[len(rows)-nrows:]...)
-//         //     log.Printf("Tail Workbook: `%s`, Worksheet `%s`, Rows: %d, Columns: %d\n", datapath, name, len(rows), len(rows[1]))
-//         // } else {
-//         //     log.Printf("Reading Workbook: `%s`, Worksheet `%s`, Rows: %d, Columns: %d\n", datapath, name, len(rows), len(rows[1]))
-//         // }
-
-//         trows := make([]table.Row, len(rows))
-//         for i, row := range rows {
-//             tinter := make([]interface{}, len(row))
-//             for j, r := range row {
-//                 tinter[j] = r
-//             }
-//             trows[i] = tinter
-//         }
-
-//         tconfigs := make([]table.ColumnConfig, len(rows[0]))
-//         for i := 0; i < len(rows[0]); i++ {
-//             tconfigs[i] = table.ColumnConfig{Number: i + 1, WidthMax: columnWidth, WidthMaxEnforcer: text.WrapHard}
-//         }
-
-//         t := table.NewWriter()
-//         t.SetOutputMirror(os.Stdout)
-//         t.SetColumnConfigs(tconfigs)
-//         t.AppendHeader(trows[0])
-//         t.AppendRows(trows[1:])
-//         t.AppendSeparator()
-//         t.SetStyle(table.StyleColoredBright)
-//         t.Render()
-//     }
-// }
+func (wb *Workbook) Preview() {
+    for _, ws := range wb.Worksheets {
+        t := table.NewWriter()
+        t.SetOutputMirror(os.Stdout)
+        t.AppendHeader(ws.Header)
+        t.AppendRows(transposeMatrix(ws.Columns))
+        t.SetColumnConfigs(createConfigs(len(ws.Columns)))
+        // t.SetStyle(table.StyleColoredBright)
+        t.AppendSeparator()
+        t.Render()
+    }
+}
