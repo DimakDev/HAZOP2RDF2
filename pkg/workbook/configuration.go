@@ -1,179 +1,48 @@
 package workbook
 
 import (
-	"log"
+    "log"
 
-	"github.com/spf13/viper"
+    "github.com/spf13/viper"
 )
 
-type Configuration struct {
-	Package struct {
-		Name        string `mapstructure"name"`
-		Description string `mapstructure"description"`
-		Help        string `mapstructure"help"`
-		Version     string `mapstructure"version"`
-		Author      string `mapstructure"author"`
-	} `mapstructure"package"`
-	Common struct {
-		DataDir string `mapstructure"data_dir"`
-		DataExt string `mapstructure"data_ext"`
-		TextDir string `mapstructure"text_dir"`
-	} `mapstructure"common"`
-	Hazop struct {
-		Worksheet struct {
-			Metadata struct {
-				Regex string `mapstructure"regex"`
-				Name  string `mapstructure"name"`
-			} `mapstructure"metadata"`
-			Analysis struct {
-				Regex string `mapstructure"regex"`
-				Name  string `mapstructure"name"`
-			} `mapstructure"analysis"`
-		} `mapstructure"worksheet"`
-		Metadata struct {
-			Element struct {
-				Label struct {
-					Regex  string `mapstructure"regex"`
-					Name   string `mapstructure"name"`
-					Type   string `mapstructure"type"`
-					MinLen int    `mapstructure"min_len"`
-					MaxLen int    `mapstructure"max_len"`
-					Range  int    `mapstructure"range"`
-				} `mapstructure"label"`
-				Description struct {
-					Regex  string `mapstructure"regex"`
-					Name   string `mapstructure"name"`
-					Type   string `mapstructure"type"`
-					MinLen int    `mapstructure"min_len"`
-					MaxLen int    `mapstructure"max_len"`
-					Range  int    `mapstructure"range"`
-				} `mapstructure"description"`
-			} `mapstructure"element"`
-		} `mapstructure"metadata"`
-		Analysis struct {
-			Element struct {
-				Reference struct {
-					Regex  string `mapstructure"regex"`
-					Name   string `mapstructure"name"`
-					Type   string `mapstructure"type"`
-					MinLen int    `mapstructure"min_len"`
-					MaxLen int    `mapstructure"max_len"`
-					Range  int    `mapstructure"range"`
-				} `mapstructure"reference"`
-				GuideWord struct {
-					Regex  string `mapstructure"regex"`
-					Name   string `mapstructure"name"`
-					Type   string `mapstructure"type"`
-					MinLen int    `mapstructure"min_len"`
-					MaxLen int    `mapstructure"max_len"`
-					Range  int    `mapstructure"range"`
-				} `mapstructure"guide_word"`
-				Parameter struct {
-					Regex  string `mapstructure"regex"`
-					Name   string `mapstructure"name"`
-					Type   string `mapstructure"type"`
-					MinLen int    `mapstructure"min_len"`
-					MaxLen int    `mapstructure"max_len"`
-					Range  int    `mapstructure"range"`
-				} `mapstructure"parameter"`
-				Deviation struct {
-					Regex  string `mapstructure"regex"`
-					Name   string `mapstructure"name"`
-					Type   string `mapstructure"type"`
-					MinLen int    `mapstructure"min_len"`
-					MaxLen int    `mapstructure"max_len"`
-					Range  int    `mapstructure"range"`
-				} `mapstructure"deviation"`
-				Cause struct {
-					Regex  string `mapstructure"regex"`
-					Name   string `mapstructure"name"`
-					Type   string `mapstructure"type"`
-					MinLen int    `mapstructure"min_len"`
-					MaxLen int    `mapstructure"max_len"`
-					Range  int    `mapstructure"range"`
-				} `mapstructure"cause"`
-				Consequense struct {
-					Regex  string `mapstructure"regex"`
-					Name   string `mapstructure"name"`
-					Type   string `mapstructure"type"`
-					MinLen int    `mapstructure"min_len"`
-					MaxLen int    `mapstructure"max_len"`
-					Range  int    `mapstructure"range"`
-				} `mapstructure"consequense"`
-				Safeguard struct {
-					Regex  string `mapstructure"regex"`
-					Name   string `mapstructure"name"`
-					Type   string `mapstructure"type"`
-					MinLen int    `mapstructure"min_len"`
-					MaxLen int    `mapstructure"max_len"`
-					Range  int    `mapstructure"range"`
-				} `mapstructure"safeguard"`
-				ActionRef struct {
-					Regex  string `mapstructure"regex"`
-					Name   string `mapstructure"name"`
-					Type   string `mapstructure"type"`
-					MinLen int    `mapstructure"min_len"`
-					MaxLen int    `mapstructure"max_len"`
-					Range  int    `mapstructure"range"`
-				} `mapstructure"action_ref"`
-				Action struct {
-					Regex  string `mapstructure"regex"`
-					Name   string `mapstructure"name"`
-					Type   string `mapstructure"type"`
-					MinLen int    `mapstructure"min_len"`
-					MaxLen int    `mapstructure"max_len"`
-					Range  int    `mapstructure"range"`
-				} `mapstructure"action"`
-				ActionOn struct {
-					Regex  string `mapstructure"regex"`
-					Name   string `mapstructure"name"`
-					Type   string `mapstructure"type"`
-					MinLen int    `mapstructure"min_len"`
-					MaxLen int    `mapstructure"max_len"`
-					Range  int    `mapstructure"range"`
-				} `mapstructure"action_on"`
-				Severity struct {
-					Regex  string `mapstructure"regex"`
-					Name   string `mapstructure"name"`
-					Type   string `mapstructure"type"`
-					MinLen int    `mapstructure"min_len"`
-					MaxLen int    `mapstructure"max_len"`
-					Range  int    `mapstructure"range"`
-				} `mapstructure"severity"`
-				Likehood struct {
-					Regex  string `mapstructure"regex"`
-					Name   string `mapstructure"name"`
-					Type   string `mapstructure"type"`
-					MinLen int    `mapstructure"min_len"`
-					MaxLen int    `mapstructure"max_len"`
-					Range  int    `mapstructure"range"`
-				} `mapstructure"likehood"`
-				RiskPriority struct {
-					Regex  string `mapstructure"regex"`
-					Name   string `mapstructure"name"`
-					Type   string `mapstructure"type"`
-					MinLen int    `mapstructure"min_len"`
-					MaxLen int    `mapstructure"max_len"`
-					Range  int    `mapstructure"range"`
-				} `mapstructure"risk_priority"`
-			} `mapstructure"element"`
-		} `mapstructure"analysis"`
-	} `mapstructure"hazop"`
+type Settings struct {
+    Package struct {
+        Name        string `toml:"name"`
+        Description string `toml:"description"`
+        Help        string `toml:"help"`
+        Version     string `toml:"version"`
+        Author      string `toml:"author"`
+    } `toml:"package"`
+    Common struct {
+        DataDir string `toml:"data_dir"`
+        DataExt string `toml:"data_ext"`
+        TextDir string `toml:"text_dir"`
+    } `toml:"common"`
+    Hazop struct {
+        Pattern  string `toml:"pattern"`
+        Elements []struct {
+            Name  string `toml:"name"`
+            Regex string `toml:"regex"`
+            Type  string `toml:"type"`
+            Min   int    `toml:"min"`
+            Max   int    `toml:"max"`
+        } `toml:"elements"`
+    } `toml:"hazop"`
 }
 
-var Config Configuration
+var settings Settings
 
 func init() {
-	viper.SetConfigName("cfg")
-	viper.SetConfigType("toml")
-	viper.AddConfigPath(".")
+    viper.SetConfigName("cfg")
+    viper.SetConfigType("toml")
+    viper.AddConfigPath(".")
 
-	if err := viper.ReadInConfig(); err != nil {
-		log.Fatal("Error reading `.toml` config: ", err)
-	}
+    if err := viper.ReadInConfig(); err != nil {
+        log.Fatal("Error reading `.toml` settings: ", err)
+    }
 
-	err := viper.Unmarshal(&Config)
-	if err != nil {
-		log.Fatal("Error parsing `.toml` config: ", err)
-	}
+    if err := viper.Unmarshal(&settings); err != nil {
+        log.Fatal("Error parsing `.toml` settings: ", err)
+    }
 }
