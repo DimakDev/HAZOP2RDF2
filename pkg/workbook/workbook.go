@@ -1,40 +1,44 @@
 package workbook
 
 import (
-	"path/filepath"
-	"strings"
+    "fmt"
+    "path/filepath"
+    "strings"
 
-	"github.com/xuri/excelize/v2"
+    "github.com/xuri/excelize/v2"
 )
 
 type Workbook struct {
-	File         *excelize.File
-	Name         string
-	Path         string
-	Worksheets   map[int]*Worksheet
-	Verification map[int][]Verification
-}
-
-type Verification struct {
-	Action    string
-	IsValid   bool
-	Message   string
-	Worksheet string
+    File       *excelize.File
+    Name       string
+    Path       string
+    SheetMap   map[int]string
+    Worksheets map[int]*Worksheet
+    Errors     map[int][]error
 }
 
 type Worksheet struct {
-	NodeName   string
-	IsMetadata bool
-	IsAnalysis bool
-	Rows       [][]string
+    Header  []interface{}
+    Columns [][]interface{}
+    Errors  map[int][]error
 }
 
 func New(datapath string) *Workbook {
-	_, fname := filepath.Split(datapath)
-	return &Workbook{
-		Name:         strings.TrimSuffix(fname, filepath.Ext(fname)),
-		Path:         datapath,
-		Worksheets:   make(map[int]*Worksheet),
-		Verification: make(map[int][]Verification),
-	}
+    _, fname := filepath.Split(datapath)
+    return &Workbook{
+        Name:       strings.TrimSuffix(fname, filepath.Ext(fname)),
+        Path:       datapath,
+        SheetMap:   map[int]string{},
+        Worksheets: map[int]*Worksheet{},
+        Errors:     map[int][]error{},
+    }
+}
+
+func (wb *Workbook) ReadWorkbook() error {
+    if f, err := excelize.OpenFile(wb.Path); err == nil {
+        wb.File = f
+        return nil
+    } else {
+        return fmt.Errorf("Error opening `%s`: %v", wb.Path, err)
+    }
 }
