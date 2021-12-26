@@ -12,25 +12,22 @@ data_dir = "./data"
 data_ext = ".xlsx"
 text_dir = "./txt"
 
-[hazop.worksheet]
-metadata = { regex = "^[a-zA-Z0-9.]*-(?i)(metadata|analysis)$", name = "Metadata" }
-analysis = { regex = "^[a-zA-Z0-9.]*-(?i)(metadata|analysis)$", name = "Analysis" }
-
-[hazop.metadata.element]
-label = { regex = "(?i)(name|label|parameter)", name = "Label", type = "text", min_len = 0, max_len = 4, range = 0 }
-description = { regex = "(?i)(description)", name = "Description", type = "text", min_len = 0, max_len = 160, range = 0 }
-
-[hazop.analysis.element]
-reference = { regex = "(?i)(^ref.?|^no.?)", name = "Ref.", type = "number", min_len = 0, max_len = 0, range = 1000 }
-guide_word = { regex = "(?i)(guide\\s?word)", name = "Guide Word", type = "text", min_len = 0, max_len = 40, range = 0 }
-parameter = { regex = "(?i)(parameter)", name = "Parameter", type = "text", min_len = 0, max_len = 40, range = 0 }
-deviation = { regex = "(?i)(deviation)", name = "Deviation", type = "text", min_len = 0, max_len = 80, range = 0 }
-cause = { regex = "(?i)(cause)", name = "Cause", type = "text", min_len = 0, max_len = 160, range = 0 }
-consequense = { regex = "(?i)(consequense|effect)", name = "Consequense", type = "text", min_len = 0, max_len = 160, range = 0 }
-safeguard = { regex = "(?i)(safeguard|protect((ion)|(ive))|systems?)", name = "Safeguard", type = "text", min_len = 0, max_len = 160, range = 0 }
-action_ref = { regex = "(?i)((action|recommendation)\\s?((no.?)|(ref.?)))", name = "Action Ref.", type = "text", min_len = 0, max_len = 0, range = 1000 }
-action = { regex = "(?i)(action|recommendation)))", name = "Action", type = "text", min_len = 0, max_len = 160, range = 0 }
-action_on = { regex = "(?i)((action|recommendation)\\s?(on.?))", name = "Action On", type = "text", min_len = 0, max_len = 40, range = 0 }
-severity = { regex = "(?i)(severity)", name = "Severity", type = "number", min_len = 0, max_len = 0, range = 100 }
-likehood = { regex = "(?i)(likehood|probability)", name = "Likehood", type = "number", min_len = 0, max_len = 0, range = 100 }
-risk_priority = { regex = "(?i)(risk|priority)", name = "Risk Priotrity", type = "text", min_len = 0, max_len = 40, range = 0 }
+[hazop]
+pattern = "^[a-zA-Z0-9.]*-(?i)(metadata|analysis)$"
+elements = [
+	{ name = "Label", regex = "(?i)(name|label|parameter)", type = "string", min = 0, max = 40 },
+	{ name = "Description", regex = "(?i)(description)", type = "string", min = 0, max = 160 },
+	{ name = "Reference", regex = "(?i)(^ref.?|^no.?)", type = "integer", min = 0, max = 1000 },
+	{ name = "Guide Word", regex = "(?i)(guide\\s?word)", type = "string", min = 0, max = 40 },
+	{ name = "Parameter", regex = "(?i)(parameter)", type = "string", min = 0, max = 40 },
+	{ name = "Deviation", regex = "(?i)(deviation)", type = "string", min = 0, max = 80 },
+	{ name = "Cause", regex = "(?i)(cause)", type = "string", min = 0, max = 160 },
+	{ name = "Consequense", regex = "(?i)(consequense|effect)", type = "string", min = 0, max = 160 },
+	{ name = "Safeguard", regex = "(?i)(safeguard|protect(ion|ive)|systems?)", type = "string", min = 0, max = 160 },
+	{ name = "Action Ref.", regex = "(?i)(action|recommendation)\\s?(ref.?|no.?)$", type = "integer", min = 0, max = 1000 },
+	{ name = "Action", regex = "(?i)(action|recommendation)$", type = "string", min = 0, max = 160 },
+	{ name = "Action On", regex = "(?i)(action|recommendation)\\s?on.?$", type = "string", min = 0, max = 40 },
+	{ name = "Severity", regex = "(?i)(severity)", type = "integer", min = 0, max = 100 },
+	{ name = "Likehood", regex = "(?i)(likehood|probability)", type = "integer", min = 0, max = 100 },
+	{ name = "Risk Priotrity", regex = "(?i)(risk|priority)", type = "string", min = 0, max = 40 },
+]
