@@ -2,43 +2,105 @@ package workbook
 
 import (
     "fmt"
-    "path/filepath"
-    "strings"
 
     "github.com/xuri/excelize/v2"
 )
 
 type Workbook struct {
     File       *excelize.File
-    Name       string
-    Path       string
-    SheetMap   map[int]string
-    Worksheets map[int]*Worksheet
-    Errors     map[int][]error
+    Worksheets []*Worksheet
 }
 
 type Worksheet struct {
-    Header  []interface{}
-    Columns [][]interface{}
-    Errors  map[int][]error
+    SheetIndex    int
+    SheetName     string
+    NumOfCols     int
+    NumOfRows     int
+    HazopData     *HazopData
+    HazopHeader   *HazopHeader
+    HazopValidity *HazopValidity
 }
 
-func New(datapath string) *Workbook {
-    _, fname := filepath.Split(datapath)
-    return &Workbook{
-        Name:       strings.TrimSuffix(fname, filepath.Ext(fname)),
-        Path:       datapath,
-        SheetMap:   map[int]string{},
-        Worksheets: map[int]*Worksheet{},
-        Errors:     map[int][]error{},
+type HazopData struct {
+    Raw          [][]string
+    NodeMetadata [][]interface{}
+    NodeHazop    [][]interface{}
+    Report       *Report
+}
+
+type HazopHeader struct {
+    Raw          map[int]string
+    NodeMetadata map[int]string
+    NodeHazop    map[int]string
+    Report       *Report
+}
+
+type HazopValidity struct {
+    NodeMetadata bool
+    NodeHazop    bool
+}
+
+type Report struct {
+    Warnings []string
+    Errors   []error
+    Info     []string
+}
+
+func NewWorkbook(fpath string) (*Workbook, error) {
+    f, err := excelize.OpenFile(fpath)
+    if err != nil {
+        return nil, fmt.Errorf("Error opening file: %v", err)
+    }
+    wb := &Workbook{File: f}
+    wb.initWorksheets()
+    if err := wb.readWorkbook(); err != nil {
+        return nil, err
+    }
+    if err := wb.verifyWorkbook(); err != nil {
+        return nil, err
+    }
+    return wb, nil
+}
+
+func (wb *Workbook) initWorksheets() {
+    for i, sname := range wb.File.GetSheetMap() {
+        wb.Worksheets = append(wb.Worksheets, &Worksheet{
+            SheetIndex: i,
+            SheetName:  sname,
+            HazopHeader: &HazopHeader{
+                Raw:          map[int]string{},
+                NodeMetadata: map[int]string{},
+                NodeHazop:    map[int]string{},
+                Report:       &Report{},
+            },
+            HazopData: &HazopData{
+                Report: &Report{},
+            },
+            HazopValidity: &HazopValidity{},
+        })
     }
 }
 
-func (wb *Workbook) ReadWorkbook() error {
-    if f, err := excelize.OpenFile(wb.Path); err == nil {
-        wb.File = f
-        return nil
-    } else {
-        return fmt.Errorf("Error opening `%s`: %v", wb.Path, err)
-    }
+func (hd *HazopData) newWarning(msg string) {
+    hd.Report.Warnings = append(hd.Report.Warnings, msg)
+}
+
+func (hd *HazopData) newError(err error) {
+    hd.Report.Errors = append(hd.Report.Errors, err)
+}
+
+func (hd *HazopData) newInfo(msg string) {
+    hd.Report.Info = append(hd.Report.Info, msg)
+}
+
+func (hh *HazopHeader) newWarning(msg string) {
+    hh.Report.Warnings = append(hh.Report.Warnings, msg)
+}
+
+func (hh *HazopHeader) newError(err error) {
+    hh.Report.Errors = append(hh.Report.Errors, err)
+}
+
+func (hh *HazopHeader) newInfo(msg string) {
+    hh.Report.Info = append(hh.Report.Info, msg)
 }
