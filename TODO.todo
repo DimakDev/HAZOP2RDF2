@@ -1,19 +1,19 @@
 Hazop Formula Todos:
- ☐ [workbook]: fix data verification indexing @fix
- ☐ [workbook]: add go routines and wait groups @imrpovement
- ☐ [report]: add report configuration @feat
  ☐ [go-pretty]: add merge cells @feat
- ☐ [go-pretty]: add maximum length of the table @feat
+ ☐ [go-pretty]: cut table if too long @feat
+ ☐ [report]: add report configuration @feat
  ☐ [cli]: build cli together `root.go` @improvement
  ☐ [test]: add verification tests @test
  ☐ [build]: add release for (os..., arch...) @build
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ [workbook]: fix data verification indexing @fix @done (21-12-29 21:47)
+ ✔ [verification]: add *data* verification (type, value length, value range) @feat @done (21-12-29 21:47)
+ ✘ [workbook]: add go routines and wait groups @imrpovement @cancelled (21-12-29 21:46) @project(Hazop Formula Todos)
  ✘ [graph]: add rdf graph builder @feat @cancelled (21-12-29 05:58) @project(Hazop Formula Todos)
  ✘ [verification]: add column map to filter tables @feat @cancelled (21-12-26 20:57) @project(Hazop Formula Todos)
  ✘ [go-pretty]: show head/tail rows @feat @cancelled (21-12-26 20:20) @project(Hazop Formula Todos)
- ✔ [verification]: add *data* verification (type, value length, value range) @feat @done (21-12-29 05:58)
  ✔ [go-pretty]: show full table @feat @done (21-12-26 20:16) @project(Hazop Formula Todos)
  ✔ [verification]: add *input* verification (regex, synonyms) @feat @done (21-12-25 00:16) @project(Hazop Formula Todos)
  ✔ [conf]: add `.toml` configuration file for all constants/verification constrains @feat @done (21-12-25 00:16) @project(Hazop Formula Todos)
