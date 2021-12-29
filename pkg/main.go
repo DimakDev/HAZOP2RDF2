@@ -7,25 +7,17 @@ import (
 )
 
 func main() {
-    datapath := "data/HazopCrawleyGuideToBestPracticeNormalizedShort.xlsx"
+    fpath := "data/HazopCrawleyGuideToBestPracticeNormalizedShort.xlsx"
 
-    wb := workbook.New(datapath)
-
-    if err := wb.ReadWorkbook(); err != nil {
+    wb, err := workbook.NewWorkbook(fpath)
+    if err != nil {
         log.Fatal(err)
     }
 
-    if err := wb.VerifyWorkbook(); err != nil {
-        log.Fatal(err)
+    for _, ws := range wb.Worksheets {
+        log.Println(ws.HazopData.NodeMetadata)
+        // log.Println(ws.HazopHeader.NodeMetadata)
+        log.Println(ws.HazopData.Report.Errors)
+        break
     }
-
-    if err := wb.VerifyWorksheets(); err != nil {
-        log.Fatal(err)
-    }
-
-    wb.Preview()
-
-    // for _, ws := range wb.Worksheets {
-    //     log.Printf("%+v", ws)
-    // }
 }
