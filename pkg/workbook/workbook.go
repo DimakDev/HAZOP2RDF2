@@ -29,9 +29,9 @@ type HazopData struct {
 }
 
 type HazopHeader struct {
-    Raw          map[int]string
-    NodeMetadata map[int]string
-    NodeHazop    map[int]string
+    Raw          []string
+    NodeMetadata []string
+    NodeHazop    []string
     Report       *Report
 }
 
@@ -68,9 +68,9 @@ func (wb *Workbook) initWorksheets() {
             SheetIndex: i,
             SheetName:  sname,
             HazopHeader: &HazopHeader{
-                Raw:          map[int]string{},
-                NodeMetadata: map[int]string{},
-                NodeHazop:    map[int]string{},
+                Raw:          make([]string, len(settings.Hazop.Element)),
+                NodeMetadata: make([]string, len(settings.Hazop.Element)),
+                NodeHazop:    make([]string, len(settings.Hazop.Element)),
                 Report:       &Report{},
             },
             HazopData: &HazopData{
