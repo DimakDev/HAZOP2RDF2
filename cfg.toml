@@ -1,33 +1,33 @@
-# ========== Hazop Formula ============
-# Settings and configuration arguments.
+# ========== Hazop Formula Settings ============
 [package]
-name = "toml"
+name = ""
 description = ""
 help = ""
-version = "0.4.2"
+version = "1.1.1"
 author = "Dmytro Kostiuk <X100@X100.LINK>"
 
 [common]
 data_dir = "./data"
 data_ext = ".xlsx"
-text_dir = "./txt"
+report_dir = "./txt"
 
 [hazop]
-pattern = "^[a-zA-Z0-9.]*-(?i)(metadata|analysis)$"
-elements = [
-	{ name = "Label", regex = "(?i)(name|label|parameter)", type = "string", min = 0, max = 40 },
-	{ name = "Description", regex = "(?i)(description)", type = "string", min = 0, max = 160 },
-	{ name = "Reference", regex = "(?i)(^ref.?|^no.?)", type = "integer", min = 0, max = 1000 },
-	{ name = "Guide Word", regex = "(?i)(guide\\s?word)", type = "string", min = 0, max = 40 },
-	{ name = "Parameter", regex = "(?i)(parameter)", type = "string", min = 0, max = 40 },
-	{ name = "Deviation", regex = "(?i)(deviation)", type = "string", min = 0, max = 80 },
-	{ name = "Cause", regex = "(?i)(cause)", type = "string", min = 0, max = 160 },
-	{ name = "Consequense", regex = "(?i)(consequense|effect)", type = "string", min = 0, max = 160 },
-	{ name = "Safeguard", regex = "(?i)(safeguard|protect(ion|ive)|systems?)", type = "string", min = 0, max = 160 },
-	{ name = "Action Ref.", regex = "(?i)(action|recommendation)\\s?(ref.?|no.?)$", type = "integer", min = 0, max = 1000 },
-	{ name = "Action", regex = "(?i)(action|recommendation)$", type = "string", min = 0, max = 160 },
-	{ name = "Action On", regex = "(?i)(action|recommendation)\\s?on.?$", type = "string", min = 0, max = 40 },
-	{ name = "Severity", regex = "(?i)(severity)", type = "integer", min = 0, max = 100 },
-	{ name = "Likehood", regex = "(?i)(likehood|probability)", type = "integer", min = 0, max = 100 },
-	{ name = "Risk Priotrity", regex = "(?i)(risk|priority)", type = "string", min = 0, max = 40 },
+data_type = { node_metadata = 0, node_hazop = 1 }
+cell_type = { string = 0, integer = 1, float = 2 }
+element = [
+	{ data_type = 0, name = "Label", regex = "^(?i)(name|label|parameter)", cell_type = 0, min_len = 0, max_len = 40 },
+	{ data_type = 0, name = "Description", regex = "^(?i)(description)", cell_type = 0, min_len = 0, max_len = 600 },
+	{ data_type = 1, name = "Reference", regex = "^(?i)(^ref.?|^no.?)", cell_type = 1, min_len = 0, max_len = 1000 },
+	{ data_type = 1, name = "Guide Word", regex = "^(?i)(guide\\s?word)", cell_type = 0, min_len = 0, max_len = 40 },
+	{ data_type = 1, name = "Parameter", regex = "^(?i)(parameter)", cell_type = 0, min_len = 0, max_len = 40 },
+	{ data_type = 1, name = "Deviation", regex = "^(?i)(deviation)", cell_type = 0, min_len = 0, max_len = 80 },
+	{ data_type = 1, name = "Cause", regex = "^(?i)(cause)", cell_type = 0, min_len = 0, max_len = 160 },
+	{ data_type = 1, name = "Consequence", regex = "^(?i)(consequence|effect)", cell_type = 0, min_len = 0, max_len = 160 },
+	{ data_type = 1, name = "Safeguard", regex = "^(?i)(safeguard|protect(ion|ive)|systems?)", cell_type = 0, min_len = 0, max_len = 160 },
+	{ data_type = 1, name = "Action Ref.", regex = "^(?i)(action|recommendation)\\s?(ref.?|no.?)$", cell_type = 1, min_len = 0, max_len = 1000 },
+	{ data_type = 1, name = "Action", regex = "^(?i)(action|recommendation)$", cell_type = 0, min_len = 0, max_len = 160 },
+	{ data_type = 1, name = "Action On", regex = "^(?i)(action|recommendation)\\s?on.?$", cell_type = 0, min_len = 0, max_len = 40 },
+	{ data_type = 1, name = "Severity", regex = "^(?i)(severity)", cell_type = 1, min_len = 0, max_len = 100 },
+	{ data_type = 1, name = "Likehood", regex = "^(?i)(likehood|probability)", cell_type = 1, min_len = 0, max_len = 100 },
+	{ data_type = 1, name = "Risk Priotrity", regex = "^(?i)(risk|priority)", cell_type = 0, min_len = 0, max_len = 40 },
 ]
