@@ -1,7 +1,6 @@
 package workbook
 
 import (
-    "errors"
     "fmt"
     "strconv"
 
@@ -13,49 +12,49 @@ func (wb *Workbook) verifyWorkbook() error {
         if err := ws.categorizeHazopHeader(); err != nil {
             return err
         }
-        if err := ws.verifyHazopHeaderNodeMetadata(); err != nil {
+        if err := ws.verifyNodeMetadataHeader(); err != nil {
             return err
         }
-        if err := ws.verifyHazopHeaderNodeHazop(); err != nil {
+        if err := ws.verifyNodeHazopHeader(); err != nil {
             return err
         }
         if ws.HazopValidity.NodeMetadata {
-            if err := ws.verifyHazopDataNodeMetadata(); err != nil {
+            if err := ws.verifyNodeMetadata(); err != nil {
                 return err
             }
         }
-        // if ws.HazopValidity.NodeHazop {
-        //     if err := ws.verifyHazopDataNodeHazop(); err != nil {
-        //         return err
-        //     }
-        // }
+        if ws.HazopValidity.NodeHazop {
+            if err := ws.verifyNodeHazop(); err != nil {
+                return err
+            }
+        }
     }
     return nil
 }
 
 func (ws *Worksheet) categorizeHazopHeader() error {
-    for j, hhr := range ws.HazopHeader.Raw {
-        switch dtype := settings.Hazop.Element[j].DataType; dtype {
+    for i, v := range ws.HazopHeader.Raw {
+        switch dtype := settings.Hazop.Element[i].DataType; dtype {
         case settings.Hazop.DataType.NodeMetadata:
-            ws.HazopHeader.NodeMetadata[j] = hhr
+            ws.HazopHeader.NodeMetadata[i] = v
         case settings.Hazop.DataType.NodeHazop:
-            ws.HazopHeader.NodeHazop[j] = hhr
+            ws.HazopHeader.NodeHazop[i] = v
         default:
             return fmt.Errorf("Error unknown data type: %d", dtype)
         }
     }
+
     return nil
 }
 
-func (ws *Worksheet) verifyHazopHeaderNodeMetadata() error {
-    coord := getMapValues(ws.HazopHeader.NodeMetadata)
-    vX, _, err := cellsNameToCoordinates(coord)
+func (ws *Worksheet) verifyNodeMetadataHeader() error {
+    h, err := newHeader(ws.HazopHeader.NodeMetadata)
     if err != nil {
-        return err
+        return nil
     }
 
-    if !checkEqualVector(vX) {
-        err := fmt.Errorf("Node Metadata header alignment: `%s`", coord)
+    if !checkEqualVector(h.xs) {
+        err := fmt.Errorf("Node Metadata alignment: %v", h.vs)
         ws.HazopValidity.NodeMetadata = false
         ws.HazopHeader.newError(err)
     } else {
@@ -65,15 +64,14 @@ func (ws *Worksheet) verifyHazopHeaderNodeMetadata() error {
     return nil
 }
 
-func (ws *Worksheet) verifyHazopHeaderNodeHazop() error {
-    coord := getMapValues(ws.HazopHeader.NodeHazop)
-    _, vY, err := cellsNameToCoordinates(coord)
+func (ws *Worksheet) verifyNodeHazopHeader() error {
+    h, err := newHeader(ws.HazopHeader.NodeHazop)
     if err != nil {
-        return err
+        return nil
     }
 
-    if !checkEqualVector(vY) {
-        err := fmt.Errorf("Node Hazop header alignment: `%s`", coord)
+    if !checkEqualVector(h.ys) {
+        err := fmt.Errorf("Node Hazop alignment: %v", h.vs)
         ws.HazopValidity.NodeHazop = false
         ws.HazopHeader.newError(err)
     } else {
@@ -83,128 +81,150 @@ func (ws *Worksheet) verifyHazopHeaderNodeHazop() error {
     return nil
 }
 
-func (ws *Worksheet) verifyHazopDataNodeMetadata() error {
-    elements := getMapKeys(ws.HazopHeader.NodeMetadata)
-    coord := getMapValues(ws.HazopHeader.NodeMetadata)
+type header struct {
+    ks []int
+    vs []string
+    xs []int
+    ys []int
+}
 
-    ws.HazopData.NodeMetadata = make([][]interface{}, len(elements))
-    for i := 0; i < len(elements); i++ {
-        x, y, err := cellNameToCoordinates(coord[i])
-        if err != nil {
-            return err
+func newHeader(s []string) (*header, error) {
+    var h header
+    for i, v := range s {
+        if len(v) != 0 {
+            x, y, err := excelize.CellNameToCoordinates(v)
+            if err != nil {
+                return nil, fmt.Errorf("Error parsing coordinate name: %v", err)
+            }
+            h.ks = append(h.ks, i)
+            h.vs = append(h.vs, v)
+            h.xs = append(h.xs, x)
+            h.ys = append(h.ys, y)
         }
-        ws.HazopData.NodeMetadata[i] = make([]interface{}, ws.NumOfCols-x)
-        for j := x; j < ws.NumOfCols; j++ {
-            if err := ws.verifyCell(elements[i], j, y); err != nil {
-                return err
+    }
+
+    return &h, nil
+}
+
+func (ws *Worksheet) verifyNodeMetadata() error {
+    h, err := newHeader(ws.HazopHeader.NodeMetadata)
+    if err != nil {
+        return nil
+    }
+    ws.HazopData.NodeMetadata = make([][]interface{}, len(h.ks))
+    for i := 0; i < len(h.ks); i++ {
+        x, y, err := excelize.CellNameToCoordinates(h.vs[i])
+        if err != nil {
+            return fmt.Errorf("Error parsing coordinate name: %v", err)
+        }
+        vec := make([]interface{}, ws.NumOfCols-x+1)
+        vec[0] = settings.Hazop.Element[h.ks[i]].Name
+        for j := 0; j < ws.NumOfCols-x; j++ {
+            val, cerr, serr := verifyCell(h.ks[i], ws.HazopData.Raw[x+j][y-1])
+            if serr != nil {
+                return serr
+            } else if cerr != nil {
+                cname, err := excelize.CoordinatesToCellName(x+j+1, y)
+                if err != nil {
+                    return fmt.Errorf("Error parsing coordniates: %v", err)
+                }
+                ws.HazopData.newError(fmt.Errorf("Value %s: %v", cname, cerr))
+            } else {
+                vec[j+1] = val
             }
         }
+        ws.HazopData.NodeMetadata[i] = vec
     }
     return nil
 }
 
-func (ws *Worksheet) verifyCell(idx, j, y int) error {
-    verifier, err := newVerifier(idx, ws.HazopData.Raw[j][y-1])
+func (ws *Worksheet) verifyNodeHazop() error {
+    h, err := newHeader(ws.HazopHeader.NodeHazop)
     if err != nil {
-        return err
+        return nil
     }
-    val, err := verifier.run()
-    if err != nil {
-        err := fmt.Errorf("Value error %d %d: %v", j, y, err)
-        ws.HazopData.newError(err)
-    } else {
-        ws.HazopData.NodeMetadata[j-1][y-1] = val
+    ws.HazopData.NodeHazop = make([][]interface{}, len(h.ks))
+    for i := 0; i < len(h.ks); i++ {
+        x, y, err := excelize.CellNameToCoordinates(h.vs[i])
+        if err != nil {
+            return fmt.Errorf("Error parsing coordinate name: %v", err)
+        }
+        vec := make([]interface{}, ws.NumOfRows-y+1)
+        vec[0] = settings.Hazop.Element[h.ks[i]].Name
+        for j := 0; j < ws.NumOfRows-y; j++ {
+            val, cerr, serr := verifyCell(h.ks[i], ws.HazopData.Raw[x-1][y+j])
+            if serr != nil {
+                return serr
+            } else if cerr != nil {
+                cname, err := excelize.CoordinatesToCellName(x, y+j+1)
+                if err != nil {
+                    return fmt.Errorf("Error parsing coordniates: %v", err)
+                }
+                ws.HazopData.newError(fmt.Errorf("Value %s: %v", cname, cerr))
+            } else {
+                vec[j+1] = val
+            }
+        }
+        ws.HazopData.NodeHazop[i] = vec
     }
     return nil
 }
 
-type checker func(interface{}, int, int) error
-type parser func(string) (interface{}, error)
+type checkCell func(interface{}, int, int) error
+type parseCell func(string) (interface{}, error)
 
-type verifier struct {
-    parse parser
-    check checker
-    val   string
-    min   int
-    max   int
+type cellVerifier struct {
+    parse  parseCell
+    check  checkCell
+    value  string
+    minLen int
+    maxLen int
 }
 
-func newVerifier(idx int, val string) (*verifier, error) {
+func newCellVerifier(idx int, val string) (*cellVerifier, error) {
     switch ctype := settings.Hazop.Element[idx].CellType; ctype {
     case settings.Hazop.CellType.String:
-        return &verifier{
-            parse: parseStr,
-            check: checkStrLen,
-            val:   val,
-            min:   settings.Hazop.Element[idx].MinLen,
-            max:   settings.Hazop.Element[idx].MaxLen,
+        return &cellVerifier{
+            parse:  parseStr,
+            check:  checkStrLen,
+            value:  val,
+            minLen: settings.Hazop.Element[idx].MinLen,
+            maxLen: settings.Hazop.Element[idx].MaxLen,
         }, nil
     case settings.Hazop.CellType.Integer:
-        return &verifier{
-            parse: parseInt,
-            check: checkIntRange,
-            val:   val,
-            min:   settings.Hazop.Element[idx].MinLen,
-            max:   settings.Hazop.Element[idx].MaxLen,
+        return &cellVerifier{
+            parse:  parseInt,
+            check:  checkIntRange,
+            value:  val,
+            minLen: settings.Hazop.Element[idx].MinLen,
+            maxLen: settings.Hazop.Element[idx].MaxLen,
         }, nil
     case settings.Hazop.CellType.Float:
-        return &verifier{
-            parse: parseFloat,
-            check: checkFloatRange,
-            val:   val,
-            min:   settings.Hazop.Element[idx].MinLen,
-            max:   settings.Hazop.Element[idx].MaxLen,
+        return &cellVerifier{
+            parse:  parseFloat,
+            check:  checkFloatRange,
+            value:  val,
+            minLen: settings.Hazop.Element[idx].MinLen,
+            maxLen: settings.Hazop.Element[idx].MaxLen,
         }, nil
     default:
         return nil, fmt.Errorf("Unknown cell type: %d", ctype)
     }
 }
 
-func (v *verifier) run() (interface{}, error) {
-    newVal, err := v.parse(v.val)
+func verifyCell(k int, val string) (interface{}, error, error) {
+    ver, err := newCellVerifier(k, val)
     if err != nil {
-        return nil, err
+        return nil, nil, err
     }
-    if err := v.check(newVal, v.min, v.max); err != nil {
-        return nil, err
-    }
-    return newVal, nil
-}
-
-func getMapValues(a map[int]string) []string {
-    values := []string{}
-    for _, v := range a {
-        values = append(values, v)
-    }
-    return values
-}
-
-func getMapKeys(a map[int]string) []int {
-    keys := []int{}
-    for i := range a {
-        keys = append(keys, i)
-    }
-    return keys
-}
-
-func cellsNameToCoordinates(a []string) ([]int, []int, error) {
-    vX, vY := make([]int, len(a)), make([]int, len(a))
-    for i := 0; i < len(a); i++ {
-        x, y, err := cellNameToCoordinates(a[i])
-        if err != nil {
-            return nil, nil, err
-        }
-        vX[i], vY[i] = x, y
-    }
-    return vX, vY, nil
-}
-
-func cellNameToCoordinates(a string) (int, int, error) {
-    x, y, err := excelize.CellNameToCoordinates(a)
+    cell, err := ver.parse(ver.value)
     if err != nil {
-        return 0, 0, fmt.Errorf("Error parsing coordinate name: %v", err)
+        return nil, err, nil
     }
-    return x, y, nil
+    if err := ver.check(cell, ver.minLen, ver.maxLen); err != nil {
+        return nil, err, nil
+    }
+    return cell, nil, nil
 }
 
 func checkEqualVector(a []int) bool {
@@ -237,24 +257,24 @@ func parseFloat(val string) (interface{}, error) {
 }
 
 func checkStrLen(val interface{}, min, max int) error {
-    if len(val.(string)) <= min || len(val.(string)) >= max {
-        return errors.New("Out of range")
+    if len(val.(string)) < min || len(val.(string)) > max {
+        return fmt.Errorf("out of range %d-%d", min, max)
     } else {
         return nil
     }
 }
 
 func checkIntRange(val interface{}, min, max int) error {
-    if val.(int) <= min || val.(int) >= max {
-        return errors.New("Out of range")
+    if val.(int) < min || val.(int) > max {
+        return fmt.Errorf("out of range %d-%d", min, max)
     } else {
         return nil
     }
 }
 
 func checkFloatRange(val interface{}, min, max int) error {
-    if val.(float32) <= float32(min) || val.(float32) >= float32(max) {
-        return errors.New("Out of range")
+    if val.(float32) < float32(min) || val.(float32) > float32(max) {
+        return fmt.Errorf("out of range %d-%d", min, max)
     } else {
         return nil
     }
