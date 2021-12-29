@@ -16,8 +16,8 @@ data_type = { node_metadata = 0, node_hazop = 1 }
 cell_type = { string = 0, integer = 1, float = 2 }
 element = [
     { data_type = 0, name = "Label", regex = "^(?i)(name|label|parameter)", cell_type = 0, min_len = 0, max_len = 40 },
-    { data_type = 0, name = "Description", regex = "^(?i)(description)", cell_type = 0, min_len = 0, max_len = 600 },
-    { data_type = 1, name = "Reference", regex = "^(?i)(^ref.?|^no.?)", cell_type = 1, min_len = 0, max_len = 1000 },
+    { data_type = 0, name = "Description", regex = "^(?i)(description)", cell_type = 0, min_len = 0, max_len = 160 },
+    { data_type = 1, name = "Reference", regex = "^(?i)(^ref.?|^no.?)", cell_type = 1, min_len = 0, max_len = 320 },
     { data_type = 1, name = "Guide Word", regex = "^(?i)(guide\\s?word)", cell_type = 0, min_len = 0, max_len = 40 },
     { data_type = 1, name = "Parameter", regex = "^(?i)(parameter)", cell_type = 0, min_len = 0, max_len = 40 },
     { data_type = 1, name = "Deviation", regex = "^(?i)(deviation)", cell_type = 0, min_len = 0, max_len = 80 },

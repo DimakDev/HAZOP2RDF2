@@ -9,15 +9,8 @@ import (
 func main() {
     fpath := "data/HazopCrawleyGuideToBestPracticeNormalizedShort.xlsx"
 
-    wb, err := workbook.NewWorkbook(fpath)
+    _, err := workbook.NewWorkbook(fpath)
     if err != nil {
         log.Fatal(err)
-    }
-
-    for _, ws := range wb.Worksheets {
-        log.Println(ws.HazopData.NodeMetadata)
-        // log.Println(ws.HazopHeader.NodeMetadata)
-        log.Println(ws.HazopData.Report.Errors)
-        break
     }
 }

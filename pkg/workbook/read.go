@@ -68,21 +68,21 @@ func (wb *Workbook) readHazopData() error {
 func (wb *Workbook) readHazopHeader() error {
     for _, ws := range wb.Worksheets {
         for j, el := range settings.Hazop.Element {
-            hhc, err := wb.File.SearchSheet(ws.SheetName, el.Regex, true)
+            coord, err := wb.File.SearchSheet(ws.SheetName, el.Regex, true)
             if err != nil {
                 return fmt.Errorf("Error scanning elements: %v", err)
             }
-            switch len(hhc) {
+            switch len(coord) {
             case 0:
                 msg := fmt.Sprintf("Element not found: `%s`", el.Name)
                 ws.HazopHeader.newWarning(msg)
             case 1:
-                ws.HazopHeader.Raw[j] = hhc[0]
+                ws.HazopHeader.Raw[j] = coord[0]
                 msg := fmt.Sprintf("Element found: `%s`", el.Name)
                 ws.HazopHeader.newInfo(msg)
             default:
                 msg := fmt.Sprintf("Element multiple coordinates: `%s` %v",
-                    el.Name, hhc)
+                    el.Name, coord)
                 ws.HazopHeader.newWarning(msg)
             }
         }
