@@ -1,6 +1,4 @@
 Hazop Formula Todos:
- ☐ [go-pretty]: add merge cells @feat
- ☐ [go-pretty]: cut table if too long @feat
  ☐ [report]: add report configuration @feat
  ☐ [cli]: build cli together `root.go` @improvement
  ☐ [test]: add verification tests @test
@@ -8,7 +6,9 @@ Hazop Formula Todos:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
- ✔ [workbook]: fix data verification indexing @fix @done (21-12-29 21:47)
+ ✘ [go-pretty]: cut table if too long @feat @cancelled (21-12-29 22:18) @project(Hazop Formula Todos)
+ ✘ [go-pretty]: add merged cells @feat @cancelled (21-12-29 22:18) @project(Hazop Formula Todos)
+ ✔ [verification]: fix data verification indexing @fix @done (21-12-29 21:47)
  ✔ [verification]: add *data* verification (type, value length, value range) @feat @done (21-12-29 21:47)
  ✘ [workbook]: add go routines and wait groups @imrpovement @cancelled (21-12-29 21:46) @project(Hazop Formula Todos)
  ✘ [graph]: add rdf graph builder @feat @cancelled (21-12-29 05:58) @project(Hazop Formula Todos)
