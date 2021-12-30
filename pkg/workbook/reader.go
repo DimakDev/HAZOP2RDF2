@@ -69,9 +69,9 @@ type argsEnvelope struct {
     minLen     int
     maxLen     int
     header     string
-    start      int
-    fix        int
-    end        int
+    startIdx   int
+    fixDim     int
+    endIdx     int
     length     int
     sheetIndex int
     sheetName  string
@@ -94,9 +94,9 @@ func (wb *Workbook) readNodeMetadata(i int, sname string) error {
             minLen:     settings.Hazop.Element[k].MinLen,
             maxLen:     settings.Hazop.Element[k].MaxLen,
             header:     settings.Hazop.Element[k].Name,
-            start:      x,
-            fix:        y,
-            end:        len(cols),
+            startIdx:   x,
+            fixDim:     y,
+            endIdx:     len(cols),
             length:     len(cols) - x,
             sheetIndex: i,
             sheetName:  sname,
@@ -133,9 +133,9 @@ func (wb *Workbook) readNodeHazop(i int, sname string) error {
             minLen:     settings.Hazop.Element[k].MinLen,
             maxLen:     settings.Hazop.Element[k].MaxLen,
             header:     settings.Hazop.Element[k].Name,
-            start:      y,
-            fix:        x,
-            end:        len(rows),
+            startIdx:   y,
+            fixDim:     x,
+            endIdx:     len(rows),
             length:     len(rows) - y,
             sheetIndex: i,
             sheetName:  sname,
@@ -160,7 +160,7 @@ func (wb *Workbook) newRow(args *argsEnvelope) ([]interface{}, error) {
     row := make([]interface{}, args.length)
     row[0] = args.header
     for i := 1; i < args.length; i++ {
-        cname, err := excelize.CoordinatesToCellName(i+args.start, args.fix)
+        cname, err := excelize.CoordinatesToCellName(i+args.startIdx, args.fixDim)
         if err != nil {
             return nil, fmt.Errorf("Error parsing coordniates: %v", err)
         }
@@ -185,7 +185,7 @@ func (wb *Workbook) newCol(args *argsEnvelope) ([]interface{}, error) {
     col := make([]interface{}, args.length)
     col[0] = args.header
     for i := 1; i < args.length; i++ {
-        cname, err := excelize.CoordinatesToCellName(args.fix, i+args.start)
+        cname, err := excelize.CoordinatesToCellName(args.fixDim, i+args.startIdx)
         if err != nil {
             return nil, fmt.Errorf("Error parsing coordniates: %v", err)
         }
