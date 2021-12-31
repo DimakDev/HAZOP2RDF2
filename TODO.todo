@@ -1,11 +1,13 @@
 Hazop Formula Todos:
  ☐ [report]: add report configuration @feat
- ☐ [cli]: build cli together `root.go` @improvement
  ☐ [test]: add verification tests @test
- ☐ [build]: add release for (os..., arch...) @build
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✘ [build]: add release for (os..., arch...) @build @cancelled (21-12-31 18:39) @project(Hazop Formula Todos)
+ ✔ [cli]: build cli together `root.go` @improvement @done (21-12-31 18:39) @project(Hazop Formula Todos)
+ ✔ [workbook]: add main routine for reader/verification @feat @done (21-12-31 07:18) @project(Hazop Formula Todos)
+ ✔ [workbook]: add explicit error messages @improvement @done (21-12-31 07:18) @project(Hazop Formula Todos)
  ✘ [go-pretty]: cut table if too long @feat @cancelled (21-12-29 22:18) @project(Hazop Formula Todos)
  ✘ [go-pretty]: add merged cells @feat @cancelled (21-12-29 22:18) @project(Hazop Formula Todos)
  ✔ [verification]: fix data verification indexing @fix @done (21-12-29 21:47)
@@ -16,7 +18,7 @@ Archive:
  ✘ [go-pretty]: show head/tail rows @feat @cancelled (21-12-26 20:20) @project(Hazop Formula Todos)
  ✔ [go-pretty]: show full table @feat @done (21-12-26 20:16) @project(Hazop Formula Todos)
  ✔ [verification]: add *input* verification (regex, synonyms) @feat @done (21-12-25 00:16) @project(Hazop Formula Todos)
- ✔ [conf]: add `.toml` configuration file for all constants/verification constrains @feat @done (21-12-25 00:16) @project(Hazop Formula Todos)
+ ✔ [settings]: add `.toml` configuration file for all constants/verification constrains @feat @done (21-12-25 00:16) @project(Hazop Formula Todos)
  ✔ [promptui]: add command switcher @feat @done (21-12-22 15:32) @project(Hazop Formula Todos)
  ✔ [promptui]: add prompt runner @feat @done (21-12-22 13:59) @project(Hazop Formula Todos)
  ✔ [promptui]: add prompt generation @feat @done (21-12-22 13:59) @project(Hazop Formula Todos)
