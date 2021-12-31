@@ -1,4 +1,4 @@
-module github.com/dimakdev/hazop-formula-cli
+module github.com/dimakdev/hazop-formula
 
 go 1.17
 

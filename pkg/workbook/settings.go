@@ -79,6 +79,10 @@ func groupElements(dtype int) map[int]Element {
     return elements
 }
 
+func GetCommon() Common {
+    return settings.Common
+}
+
 func getElement(idx int) Element {
     return settings.Hazop.Element[idx]
 }

@@ -1,5 +1,5 @@
 /*
-Copyright © 2021 X100 <X100@X100.LINK>
+Copyright © 2021 Dmytro Kostiuk <X100@X100.LINK>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@ THE SOFTWARE.
 */
 package main
 
-import "github.com/dimakdev/hazop-formula-cli/cmd"
+import "github.com/dimakdev/hazop-formula/cmd"
 
 func main() {
     cmd.Execute()
