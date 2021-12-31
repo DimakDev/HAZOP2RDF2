@@ -3,7 +3,6 @@ package workbook
 import (
     "errors"
     "fmt"
-    "log"
     "path/filepath"
     "strings"
 
@@ -14,13 +13,15 @@ var ErrOpeningFile = errors.New("Error opening file")
 
 type Workbook struct {
     File       *excelize.File
-    PlantName  string
-    PlantHazop map[int]*NodeHazop
+    Name       string
+    Worksheets []*Worksheet
 }
 
-type NodeHazop struct {
-    Metadata *NodeData
-    Analysis *NodeData
+type Worksheet struct {
+    SheetIndex int
+    SheetName  string
+    Metadata   *NodeData
+    Analysis   *NodeData
 }
 
 type NodeData struct {
@@ -33,7 +34,7 @@ type NodeData struct {
 
 type Report struct {
     Warnings []string
-    Errors   []error
+    Errors   []string
     Info     []string
 }
 
@@ -44,22 +45,25 @@ func NewWorkbook(datapath string) (*Workbook, error) {
     }
 
     _, filename := filepath.Split(datapath)
-    plantname := strings.TrimSuffix(filename, filepath.Ext(filename))
+    wbname := strings.TrimSuffix(filename, filepath.Ext(filename))
 
     wb := &Workbook{
-        File:       f,
-        PlantName:  plantname,
-        PlantHazop: map[int]*NodeHazop{},
+        File: f,
+        Name: wbname,
     }
 
-    if err := wb.readWorkbook(); err != nil {
+    if err := wb.newWorkbook(); err != nil {
         return nil, err
     }
+
+    // if err := newReport(wb.PlantName, wb.PlantHazop); err != nil {
+    //     return nil, err
+    // }
 
     return wb, nil
 }
 
-func (wb *Workbook) readWorkbook() error {
+func (wb *Workbook) newWorkbook() error {
     // Abbr: M — Metadata, A — Analysis
     typeM := settings.Hazop.DataType.Metadata
     typeA := settings.Hazop.DataType.Analysis
@@ -68,7 +72,9 @@ func (wb *Workbook) readWorkbook() error {
     elementsA := groupElements(typeA)
 
     for i, sname := range wb.File.GetSheetMap() {
-        wb.PlantHazop[i] = &NodeHazop{
+        ws := &Worksheet{
+            SheetIndex: i,
+            SheetName:  sname,
             Metadata: &NodeData{
                 Data:         map[int][]interface{}{},
                 Header:       map[int]string{},
@@ -83,8 +89,8 @@ func (wb *Workbook) readWorkbook() error {
             },
         }
 
-        nodeM := wb.PlantHazop[i].Metadata
-        nodeA := wb.PlantHazop[i].Analysis
+        nodeM := ws.Metadata
+        nodeA := ws.Analysis
 
         if err := wb.readHazopHeader(sname, elementsM, nodeM); err != nil {
             return err
@@ -130,23 +136,14 @@ func (wb *Workbook) readWorkbook() error {
         }
 
         if err := wb.readHazopData(sname, ncols, readerM, nodeM); err != nil {
-            return nil
+            return err
         }
 
         if err := wb.readHazopData(sname, nrows, readerA, nodeA); err != nil {
-            return nil
+            return err
         }
 
-        log.Println(nodeM.Data)
-        log.Println(nodeM.DataReport)
-        log.Println(nodeM.Header)
-        log.Println(nodeM.HeaderReport)
-        log.Println(nodeM.HeaderAligned)
-        log.Println(nodeA.Data)
-        log.Println(nodeA.DataReport)
-        log.Println(nodeA.Header)
-        log.Println(nodeA.HeaderReport)
-        log.Println(nodeA.HeaderAligned)
+        wb.Worksheets = append(wb.Worksheets, ws)
     }
 
     return nil
@@ -156,8 +153,8 @@ func (r *Report) newWarning(msg string) {
     r.Warnings = append(r.Warnings, msg)
 }
 
-func (r *Report) newError(err error) {
-    r.Errors = append(r.Errors, err)
+func (r *Report) newError(msg string) {
+    r.Errors = append(r.Errors, msg)
 }
 
 func (r *Report) newInfo(msg string) {

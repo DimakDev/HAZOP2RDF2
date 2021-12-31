@@ -87,12 +87,12 @@ func (wb *Workbook) readHazopData(sname string, total int, r *reader, n *NodeDat
 
             c, err := v.parse(cell)
             if err != nil {
-                n.DataReport.newError(fmt.Errorf("`%s` %v", cnames[i], err))
+                n.DataReport.newError(fmt.Sprintf("`%s` %v", cnames[i], err))
                 continue
             }
 
             if err := v.check(c, e.MinLen, e.MaxLen); err != nil {
-                n.DataReport.newError(fmt.Errorf("`%s` %v", cnames[i], err))
+                n.DataReport.newError(fmt.Sprintf("`%s` %v", cnames[i], err))
                 continue
             }
 

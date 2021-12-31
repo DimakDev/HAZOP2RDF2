@@ -20,14 +20,14 @@ var (
 func verifyHeaderAlignment(coord []int, cnames []string, n *NodeData) {
     if len(coord) == 0 {
         n.HeaderAligned = false
-        n.HeaderReport.newError(ErrNoHeaderFound)
+        n.HeaderReport.newError(ErrNoHeaderFound.Error())
         return
     }
 
     if !checkEqualVector(coord) {
         n.HeaderAligned = false
-        err := fmt.Errorf("%v: %v", ErrHeaderNotAligned, cnames)
-        n.HeaderReport.newError(err)
+        msg := fmt.Sprintf("%v: %v", ErrHeaderNotAligned, cnames)
+        n.HeaderReport.newError(msg)
     } else {
         n.HeaderAligned = true
         msg := fmt.Sprintf("%s: %v", HeaderAligned, cnames)
