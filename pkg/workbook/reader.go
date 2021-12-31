@@ -2,227 +2,149 @@ package workbook
 
 import (
     "fmt"
-    "log"
 
     "github.com/xuri/excelize/v2"
 )
 
-func (wb *Workbook) readWorkbook() error {
-    for i, sname := range wb.File.GetSheetMap() {
-        wb.initWorksheet(i, sname)
-        if err := wb.readHazopHeader(i, sname); err != nil {
-            return err
-        }
-        if err := wb.verifyHazopHeader(i, sname); err != nil {
-            return err
-        }
-        if wb.HazopValidity[i].NodeMetadata {
-            if err := wb.readNodeMetadata(i, sname); err != nil {
-                return err
-            }
-        }
-        if wb.HazopValidity[i].NodeHazop {
-            if err := wb.readNodeHazop(i, sname); err != nil {
-                return err
-            }
-        }
-    }
-    return nil
-}
-
-func (wb *Workbook) initWorksheet(i int, sname string) {
-    wb.SheetMap[i] = sname
-    wb.HazopData[i] = &HazopData{}
-    wb.HazopHeader[i] = &HazopHeader{
-        NodeMetadata: make(map[int]string),
-        NodeHazop:    make(map[int]string)}
-    wb.HazopValidity[i] = &HazopValidity{}
-    wb.HazopDataReport[i] = &Report{}
-    wb.HazopHeaderReport[i] = &Report{}
-}
-
-func (wb *Workbook) readHazopHeader(i int, sname string) error {
-    for j, el := range settings.Hazop.Element {
-        coord, err := wb.File.SearchSheet(sname, el.Regex, true)
+func (wb *Workbook) readHazopHeader(sname string, elements map[int]Element, n *NodeData) error {
+    for k, e := range elements {
+        coord, err := wb.File.SearchSheet(sname, e.Regex, true)
         if err != nil {
             return fmt.Errorf("Error scanning elements: %v", err)
         }
+
         switch len(coord) {
         case 0:
-            msg := fmt.Sprintf("Element not found: `%s`", el.Name)
-            wb.HazopHeaderReport[i].newWarning(msg)
+            n.HeaderReport.newWarning(fmt.Sprintf("Element not found: `%s`", e.Name))
         case 1:
-            wb.HazopHeader[i].newHeader(j, el.DataType, coord[0])
-            msg := fmt.Sprintf("Element found: `%s`", el.Name)
-            wb.HazopHeaderReport[i].newInfo(msg)
+            n.Header[k] = coord[0]
+            n.HeaderReport.newInfo(fmt.Sprintf("Element found: `%s`", e.Name))
         default:
-            msg := fmt.Sprintf("Element multiple coordinates: `%s` %v",
-                el.Name, coord)
-            wb.HazopHeaderReport[i].newWarning(msg)
+            n.HeaderReport.newWarning(fmt.Sprintf("Element multiple coordinates: `%s` %v", e.Name, coord))
         }
     }
+
     return nil
 }
 
-type argsEnvelope struct {
-    cellType   int
-    minLen     int
-    maxLen     int
-    header     string
-    startIdx   int
-    fixDim     int
-    endIdx     int
-    length     int
-    sheetIndex int
-    sheetName  string
+type readXYCnames func(int, int, int) ([]string, error)
+type readXYCoord func(string) (int, error)
+
+type reader struct {
+    runner readXYCoord
+    fixer  readXYCoord
+    cnames readXYCnames
 }
 
-func (wb *Workbook) readNodeMetadata(i int, sname string) error {
+func (wb *Workbook) readHazopData(sname string, total int, r *reader, n *NodeData) error {
+    for k, v := range n.Header {
+        e := getElement(k)
+
+        runner, err := r.runner(v)
+        if err != nil {
+            return err
+        }
+
+        fixer, err := r.fixer(v)
+        if err != nil {
+            return err
+        }
+
+        cnames, err := r.cnames(runner, fixer, total-runner)
+        if err != nil {
+            return err
+        }
+
+        v, err := newVerifier(e.CellType)
+        if err != nil {
+            return err
+        }
+
+        vec := make([]interface{}, len(cnames))
+        vec[0] = e.Name
+
+        for i := 1; i < len(cnames); i++ {
+            cell, err := wb.File.GetCellValue(sname, cnames[i])
+            if err != nil {
+                return fmt.Errorf("Error reading cell value: %v", err)
+            }
+
+            c, err := v.parse(cell)
+            if err != nil {
+                n.DataReport.newError(fmt.Errorf("Value `%s` %v", cnames[i], err))
+                continue
+            }
+
+            if err := v.check(c, e.MinLen, e.MaxLen); err != nil {
+                n.DataReport.newError(fmt.Errorf("Value `%s` %v", cnames[i], err))
+                continue
+            }
+
+            n.DataReport.newInfo(fmt.Sprintf("Value `%s` parsed and verified", cnames[i]))
+
+            vec[i] = c
+        }
+
+        n.Data[k] = vec
+    }
+
+    return nil
+}
+
+func (wb *Workbook) getNCols(sname string) (int, error) {
     cols, err := wb.File.GetCols(sname)
     if err != nil {
-        return fmt.Errorf("Error reading columns: %v", err)
+        return 0, fmt.Errorf("Error reading columns: %v", err)
     }
 
-    for k, v := range wb.HazopHeader[i].NodeMetadata {
-        x, y, err := excelize.CellNameToCoordinates(v)
-        if err != nil {
-            return fmt.Errorf("Error parsing coordinate name: %v", err)
-        }
-
-        args := &argsEnvelope{
-            cellType:   settings.Hazop.Element[k].CellType,
-            minLen:     settings.Hazop.Element[k].MinLen,
-            maxLen:     settings.Hazop.Element[k].MaxLen,
-            header:     settings.Hazop.Element[k].Name,
-            startIdx:   x,
-            fixDim:     y,
-            endIdx:     len(cols),
-            length:     len(cols) - x,
-            sheetIndex: i,
-            sheetName:  sname,
-        }
-
-        row, err := wb.newRow(args)
-        if err != nil {
-            return err
-        }
-
-        wb.HazopData[i].NodeMetadata = append(wb.HazopData[i].NodeMetadata, row)
-    }
-    log.Println(wb.HazopData[i].NodeMetadata)
-    log.Println(wb.HazopDataReport[i].Errors)
-    log.Println(wb.HazopHeader[i].NodeMetadata)
-    log.Println(wb.HazopHeaderReport[i].Errors)
-    return nil
+    return len(cols), nil
 }
 
-func (wb *Workbook) readNodeHazop(i int, sname string) error {
+func (wb *Workbook) getNRows(sname string) (int, error) {
     rows, err := wb.File.GetRows(sname)
     if err != nil {
-        return fmt.Errorf("Error reading rows: %v", err)
+        return 0, fmt.Errorf("Error reading columns: %v", err)
     }
 
-    for k, v := range wb.HazopHeader[i].NodeHazop {
-        x, y, err := excelize.CellNameToCoordinates(v)
-        if err != nil {
-            return fmt.Errorf("Error parsing coordinate name: %v", err)
-        }
-
-        args := &argsEnvelope{
-            cellType:   settings.Hazop.Element[k].CellType,
-            minLen:     settings.Hazop.Element[k].MinLen,
-            maxLen:     settings.Hazop.Element[k].MaxLen,
-            header:     settings.Hazop.Element[k].Name,
-            startIdx:   y,
-            fixDim:     x,
-            endIdx:     len(rows),
-            length:     len(rows) - y,
-            sheetIndex: i,
-            sheetName:  sname,
-        }
-
-        col, err := wb.newCol(args)
-        if err != nil {
-            return err
-        }
-
-        wb.HazopData[i].NodeHazop = append(wb.HazopData[i].NodeHazop, col)
-    }
-
-    log.Println(wb.HazopData[i].NodeHazop)
-    log.Println(wb.HazopDataReport[i].Errors)
-    log.Println(wb.HazopHeader[i].NodeHazop)
-    log.Println(wb.HazopHeaderReport[i].Errors)
-    return nil
+    return len(rows), nil
 }
 
-func (wb *Workbook) newRow(args *argsEnvelope) ([]interface{}, error) {
-    row := make([]interface{}, args.length)
-    row[0] = args.header
-    for i := 1; i < args.length; i++ {
-        cname, err := excelize.CoordinatesToCellName(i+args.startIdx, args.fixDim)
+func readXCnames(x, y, length int) ([]string, error) {
+    cnames := make([]string, length)
+    for i := 0; i < length; i++ {
+        cname, err := excelize.CoordinatesToCellName(x+i, y)
         if err != nil {
             return nil, fmt.Errorf("Error parsing coordniates: %v", err)
         }
-
-        cell, cerr, serr := wb.readVerifyCell(cname, args)
-        if serr != nil {
-            return nil, serr
-        } else if cerr != nil {
-            wb.HazopDataReport[args.sheetIndex].newError(cerr)
-            continue
-        } else {
-            row[i] = cell
-        }
-
-        row[i] = cell
+        cnames[i] = cname
     }
-
-    return row, nil
+    return cnames, nil
 }
 
-func (wb *Workbook) newCol(args *argsEnvelope) ([]interface{}, error) {
-    col := make([]interface{}, args.length)
-    col[0] = args.header
-    for i := 1; i < args.length; i++ {
-        cname, err := excelize.CoordinatesToCellName(args.fixDim, i+args.startIdx)
+func readYCnames(y, x, length int) ([]string, error) {
+    cnames := make([]string, length)
+    for i := 0; i < length; i++ {
+        cname, err := excelize.CoordinatesToCellName(x, y+i)
         if err != nil {
             return nil, fmt.Errorf("Error parsing coordniates: %v", err)
         }
-
-        cell, cerr, serr := wb.readVerifyCell(cname, args)
-        if serr != nil {
-            return nil, serr
-        } else if cerr != nil {
-            wb.HazopDataReport[args.sheetIndex].newError(cerr)
-            continue
-        } else {
-            col[i] = cell
-        }
+        cnames[i] = cname
     }
-
-    return col, nil
+    return cnames, nil
 }
 
-func (wb *Workbook) readVerifyCell(cname string, args *argsEnvelope) (interface{}, error, error) {
-    val, err := wb.File.GetCellValue(args.sheetName, cname)
+func readXCoord(coord string) (int, error) {
+    x, _, err := excelize.CellNameToCoordinates(coord)
     if err != nil {
-        return nil, nil, fmt.Errorf("Error reading cell value: %v", err)
+        return 0, fmt.Errorf("Error parsing coordinate name: %v", err)
     }
+    return x, nil
+}
 
-    verifier, err := newVerifier(args.cellType)
+func readYCoord(coord string) (int, error) {
+    _, y, err := excelize.CellNameToCoordinates(coord)
     if err != nil {
-        return nil, nil, err
+        return 0, fmt.Errorf("Error parsing coordinate name: %v", err)
     }
-
-    cell, err := verifier.parse(val)
-    if err != nil {
-        return nil, fmt.Errorf("Value `%s`: %v", cname, err), nil
-    }
-
-    if err := verifier.check(cell, args.minLen, args.maxLen); err != nil {
-        return nil, fmt.Errorf("Value `%s`: %v", cname, err), nil
-    }
-
-    return cell, nil, nil
+    return y, nil
 }
