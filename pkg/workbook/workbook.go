@@ -112,7 +112,7 @@ func (wb *Workbook) readWorkbook() error {
             return err
         }
 
-        nrows, err := wb.getNCols(sname)
+        nrows, err := wb.getNRows(sname)
         if err != nil {
             return err
         }
