@@ -1,12 +1,16 @@
 package workbook
 
 import (
+    "errors"
     "fmt"
+    "log"
     "path/filepath"
     "strings"
 
     "github.com/xuri/excelize/v2"
 )
+
+var ErrOpeningFile = errors.New("Error opening file")
 
 type Workbook struct {
     File       *excelize.File
@@ -36,7 +40,7 @@ type Report struct {
 func NewWorkbook(datapath string) (*Workbook, error) {
     f, err := excelize.OpenFile(datapath)
     if err != nil {
-        return nil, fmt.Errorf("Error opening file: %v", err)
+        return nil, fmt.Errorf("%v: %v", ErrOpeningFile, err)
     }
 
     _, filename := filepath.Split(datapath)
@@ -133,16 +137,16 @@ func (wb *Workbook) readWorkbook() error {
             return nil
         }
 
-        // log.Println(nodeM.Data)
-        // log.Println(nodeM.DataReport)
-        // log.Println(nodeM.Header)
-        // log.Println(nodeM.HeaderReport)
-        // log.Println(nodeM.HeaderAligned)
-        // log.Println(nodeA.Data)
-        // log.Println(nodeA.DataReport)
-        // log.Println(nodeA.Header)
-        // log.Println(nodeA.HeaderReport)
-        // log.Println(nodeA.HeaderAligned)
+        log.Println(nodeM.Data)
+        log.Println(nodeM.DataReport)
+        log.Println(nodeM.Header)
+        log.Println(nodeM.HeaderReport)
+        log.Println(nodeM.HeaderAligned)
+        log.Println(nodeA.Data)
+        log.Println(nodeA.DataReport)
+        log.Println(nodeA.Header)
+        log.Println(nodeA.HeaderReport)
+        log.Println(nodeA.HeaderAligned)
     }
 
     return nil

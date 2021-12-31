@@ -8,19 +8,30 @@ import (
     "github.com/xuri/excelize/v2"
 )
 
-func verifyHeaderAlignment(header []int, headerNames []string, n *NodeData) {
-    if len(header) == 0 {
+var (
+    ErrNoHeaderFound    = errors.New("No header found")
+    ErrHeaderNotAligned = errors.New("Header not aligned")
+    ErrParsingCellNames = errors.New("Error parsing cell names")
+    ErrUnknownCellType  = errors.New("Uknown cell type")
+    ErrValueOutOfRange  = errors.New("out of range")
+    HeaderAligned       = "Header aligned"
+)
+
+func verifyHeaderAlignment(coord []int, cnames []string, n *NodeData) {
+    if len(coord) == 0 {
         n.HeaderAligned = false
-        n.HeaderReport.newError(errors.New("No header found"))
+        n.HeaderReport.newError(ErrNoHeaderFound)
         return
     }
 
-    if !checkEqualVector(header) {
+    if !checkEqualVector(coord) {
         n.HeaderAligned = false
-        n.HeaderReport.newError(fmt.Errorf("Header not aligned: %v", headerNames))
+        err := fmt.Errorf("%v: %v", ErrHeaderNotAligned, cnames)
+        n.HeaderReport.newError(err)
     } else {
         n.HeaderAligned = true
-        n.HeaderReport.newInfo(fmt.Sprintf("Header aligned: %v", headerNames))
+        msg := fmt.Sprintf("%s: %v", HeaderAligned, cnames)
+        n.HeaderReport.newInfo(msg)
     }
 }
 
@@ -40,12 +51,12 @@ type header struct {
     coordY []int
 }
 
-func splitHeader(coord map[int]string) (*header, error) {
+func splitHeader(cnames map[int]string) (*header, error) {
     var h header
-    for k, v := range coord {
+    for k, v := range cnames {
         x, y, err := excelize.CellNameToCoordinates(v)
         if err != nil {
-            return nil, fmt.Errorf("Error parsing coordinate name: %v", err)
+            return nil, fmt.Errorf("%v: %v", ErrParsingCellNames, err)
         }
         h.keys = append(h.keys, k)
         h.coords = append(h.coords, v)
@@ -56,8 +67,8 @@ func splitHeader(coord map[int]string) (*header, error) {
     return &h, nil
 }
 
-type checker func(interface{}, int, int) error
 type parser func(string) (interface{}, error)
+type checker func(interface{}, int, int) error
 
 type verifier struct {
     parse parser
@@ -82,7 +93,7 @@ func newVerifier(ctype int) (*verifier, error) {
             check: checkFloatRange,
         }, nil
     default:
-        return nil, fmt.Errorf("Unknown cell type: %d", ctype)
+        return nil, fmt.Errorf("%v: %d", ErrUnknownCellType, ctype)
     }
 }
 
@@ -108,7 +119,7 @@ func parseFloat(val string) (interface{}, error) {
 
 func checkStrLen(val interface{}, min, max int) error {
     if len(val.(string)) < min || len(val.(string)) > max {
-        return fmt.Errorf("out of range %d-%d", min, max)
+        return fmt.Errorf("%v %d-%d", ErrValueOutOfRange, min, max)
     } else {
         return nil
     }
@@ -116,7 +127,7 @@ func checkStrLen(val interface{}, min, max int) error {
 
 func checkIntRange(val interface{}, min, max int) error {
     if val.(int) < min || val.(int) > max {
-        return fmt.Errorf("out of range %d-%d", min, max)
+        return fmt.Errorf("%v %d-%d", ErrValueOutOfRange, min, max)
     } else {
         return nil
     }
@@ -124,7 +135,7 @@ func checkIntRange(val interface{}, min, max int) error {
 
 func checkFloatRange(val interface{}, min, max int) error {
     if val.(float32) < float32(min) || val.(float32) > float32(max) {
-        return fmt.Errorf("out of range %d-%d", min, max)
+        return fmt.Errorf("%v %d-%d", ErrValueOutOfRange, min, max)
     } else {
         return nil
     }
