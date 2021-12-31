@@ -10,11 +10,11 @@ The tool can be used to unify Hazop knowledge and create a unified ontology so t
 
 ### Works in shell
 
-Use *bash*, *zsh*, *fish*, or a shell of your choice.
+Use *bash*, *zsh*, *fish*, or shell of your choice.
 
 **Requirements** 💀
 
-- with asdf: `asdf install` (the specified go version will be installed [`.tool-versions`](.tool-versions)) 
+- with asdf: `asdf install` (the specified go version will be installed [.tool-versions](.tool-versions)) 
 - Go 1.17 
 
 **Run**
@@ -33,4 +33,4 @@ The report contains header and data information for each subject and peace of th
 
 ### License
 
-Available under [MIT License](LICENSE):
+Available under [MIT License](LICENSE).
