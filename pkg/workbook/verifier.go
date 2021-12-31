@@ -1,40 +1,27 @@
 package workbook
 
 import (
+    "errors"
     "fmt"
     "strconv"
 
     "github.com/xuri/excelize/v2"
 )
 
-func (wb *Workbook) verifyHazopHeader(i int, _ string) error {
-    nm, err := newHeader(wb.HazopHeader[i].NodeMetadata)
-    if err != nil {
-        return nil
+func verifyHeaderAlignment(header []int, headerNames []string, n *NodeData) {
+    if len(header) == 0 {
+        n.HeaderAligned = false
+        n.HeaderReport.newError(errors.New("No header found"))
+        return
     }
 
-    if !checkEqualVector(nm.xs) {
-        err := fmt.Errorf("Node Metadata alignment: %v", nm.vs)
-        wb.HazopValidity[i].NodeMetadata = false
-        wb.HazopHeaderReport[i].newError(err)
+    if !checkEqualVector(header) {
+        n.HeaderAligned = false
+        n.HeaderReport.newError(fmt.Errorf("Header not aligned: %v", headerNames))
     } else {
-        wb.HazopValidity[i].NodeMetadata = true
+        n.HeaderAligned = true
+        n.HeaderReport.newInfo(fmt.Sprintf("Header aligned: %v", headerNames))
     }
-
-    nh, err := newHeader(wb.HazopHeader[i].NodeHazop)
-    if err != nil {
-        return nil
-    }
-
-    if !checkEqualVector(nh.ys) {
-        err := fmt.Errorf("Node Hazop alignment: %v", nh.vs)
-        wb.HazopValidity[i].NodeHazop = false
-        wb.HazopHeaderReport[i].newError(err)
-    } else {
-        wb.HazopValidity[i].NodeHazop = true
-    }
-
-    return nil
 }
 
 func checkEqualVector(a []int) bool {
@@ -47,23 +34,23 @@ func checkEqualVector(a []int) bool {
 }
 
 type header struct {
-    ks []int
-    vs []string
-    xs []int
-    ys []int
+    keys   []int
+    coords []string
+    coordX []int
+    coordY []int
 }
 
-func newHeader(m map[int]string) (*header, error) {
+func splitHeader(coord map[int]string) (*header, error) {
     var h header
-    for k, v := range m {
+    for k, v := range coord {
         x, y, err := excelize.CellNameToCoordinates(v)
         if err != nil {
             return nil, fmt.Errorf("Error parsing coordinate name: %v", err)
         }
-        h.ks = append(h.ks, k)
-        h.vs = append(h.vs, v)
-        h.xs = append(h.xs, x)
-        h.ys = append(h.ys, y)
+        h.keys = append(h.keys, k)
+        h.coords = append(h.coords, v)
+        h.coordX = append(h.coordX, x)
+        h.coordY = append(h.coordY, y)
     }
 
     return &h, nil
