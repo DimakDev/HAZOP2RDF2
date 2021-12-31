@@ -7,13 +7,13 @@ import (
 )
 
 type Settings struct {
-    Package Package `mapstructure:"package"`
+    Program Program `mapstructure:"program"`
     Common  Common  `mapstructure:"common"`
     Hazop   Hazop   `mapstructure:"hazop"`
 }
 
-type Package struct {
-    Name        string `mapstructure:"name"`
+type Program struct {
+    Package     string `mapstructure:"package"`
     Description string `mapstructure:"description"`
     Help        string `mapstructure:"help"`
     Version     string `mapstructure:"version"`
@@ -21,9 +21,10 @@ type Package struct {
 }
 
 type Common struct {
-    DataDir   string `mapstructure:"data_dir"`
-    DataExt   string `mapstructure:"data_ext"`
-    ReportDir string `mapstructure:"report_dir"`
+    DataDir    string `mapstructure:"data_dir"`
+    DataExt    string `mapstructure:"data_ext"`
+    ReportDir  string `mapstructure:"report_dir"`
+    ReportTemp string `mapstructure:"report_temp"`
 }
 
 type DataType struct {
@@ -79,10 +80,14 @@ func groupElements(dtype int) map[int]Element {
     return elements
 }
 
+func getElement(idx int) Element {
+    return settings.Hazop.Element[idx]
+}
+
 func GetCommon() Common {
     return settings.Common
 }
 
-func getElement(idx int) Element {
-    return settings.Hazop.Element[idx]
+func GetProgram() Program {
+    return settings.Program
 }
