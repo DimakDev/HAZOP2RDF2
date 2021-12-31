@@ -2,33 +2,29 @@ package workbook
 
 import (
     "fmt"
+    "path/filepath"
+    "strings"
 
     "github.com/xuri/excelize/v2"
 )
 
 type Workbook struct {
-    File              *excelize.File
-    SheetMap          map[int]string
-    HazopData         map[int]*HazopData
-    HazopHeader       map[int]*HazopHeader
-    HazopValidity     map[int]*HazopValidity
-    HazopDataReport   map[int]*Report
-    HazopHeaderReport map[int]*Report
+    File       *excelize.File
+    PlantName  string
+    PlantHazop map[int]*NodeHazop
 }
 
-type HazopData struct {
-    NodeMetadata [][]interface{}
-    NodeHazop    [][]interface{}
+type NodeHazop struct {
+    Metadata *NodeData
+    Analysis *NodeData
 }
 
-type HazopHeader struct {
-    NodeMetadata map[int]string
-    NodeHazop    map[int]string
-}
-
-type HazopValidity struct {
-    NodeMetadata bool
-    NodeHazop    bool
+type NodeData struct {
+    Data          map[int][]interface{}
+    Header        map[int]string
+    HeaderAligned bool
+    DataReport    *Report
+    HeaderReport  *Report
 }
 
 type Report struct {
@@ -37,20 +33,19 @@ type Report struct {
     Info     []string
 }
 
-func NewWorkbook(fpath string) (*Workbook, error) {
-    f, err := excelize.OpenFile(fpath)
+func NewWorkbook(datapath string) (*Workbook, error) {
+    f, err := excelize.OpenFile(datapath)
     if err != nil {
         return nil, fmt.Errorf("Error opening file: %v", err)
     }
 
+    _, filename := filepath.Split(datapath)
+    plantname := strings.TrimSuffix(filename, filepath.Ext(filename))
+
     wb := &Workbook{
-        File:              f,
-        SheetMap:          map[int]string{},
-        HazopData:         map[int]*HazopData{},
-        HazopHeader:       map[int]*HazopHeader{},
-        HazopValidity:     map[int]*HazopValidity{},
-        HazopDataReport:   map[int]*Report{},
-        HazopHeaderReport: map[int]*Report{},
+        File:       f,
+        PlantName:  plantname,
+        PlantHazop: map[int]*NodeHazop{},
     }
 
     if err := wb.readWorkbook(); err != nil {
@@ -58,6 +53,99 @@ func NewWorkbook(fpath string) (*Workbook, error) {
     }
 
     return wb, nil
+}
+
+func (wb *Workbook) readWorkbook() error {
+    // Abbr: M — Metadata, A — Analysis
+    typeM := settings.Hazop.DataType.Metadata
+    typeA := settings.Hazop.DataType.Analysis
+
+    elementsM := groupElements(typeM)
+    elementsA := groupElements(typeA)
+
+    for i, sname := range wb.File.GetSheetMap() {
+        wb.PlantHazop[i] = &NodeHazop{
+            Metadata: &NodeData{
+                Data:         map[int][]interface{}{},
+                Header:       map[int]string{},
+                DataReport:   &Report{},
+                HeaderReport: &Report{},
+            },
+            Analysis: &NodeData{
+                Data:         map[int][]interface{}{},
+                Header:       map[int]string{},
+                DataReport:   &Report{},
+                HeaderReport: &Report{},
+            },
+        }
+
+        nodeM := wb.PlantHazop[i].Metadata
+        nodeA := wb.PlantHazop[i].Analysis
+
+        if err := wb.readHazopHeader(sname, elementsM, nodeM); err != nil {
+            return err
+        }
+
+        if err := wb.readHazopHeader(sname, elementsA, nodeA); err != nil {
+            return err
+        }
+
+        headerM, err := splitHeader(nodeM.Header)
+        if err != nil {
+            return err
+        }
+
+        headerA, err := splitHeader(nodeA.Header)
+        if err != nil {
+            return err
+        }
+
+        verifyHeaderAlignment(headerM.coordX, headerM.coords, nodeM)
+        verifyHeaderAlignment(headerA.coordY, headerA.coords, nodeA)
+
+        ncols, err := wb.getNCols(sname)
+        if err != nil {
+            return err
+        }
+
+        nrows, err := wb.getNCols(sname)
+        if err != nil {
+            return err
+        }
+
+        readerM := &reader{
+            runner: readXCoord,
+            fixer:  readYCoord,
+            cnames: readXCnames,
+        }
+
+        readerA := &reader{
+            runner: readYCoord,
+            fixer:  readXCoord,
+            cnames: readYCnames,
+        }
+
+        if err := wb.readHazopData(sname, ncols, readerM, nodeM); err != nil {
+            return nil
+        }
+
+        if err := wb.readHazopData(sname, nrows, readerA, nodeA); err != nil {
+            return nil
+        }
+
+        // log.Println(nodeM.Data)
+        // log.Println(nodeM.DataReport)
+        // log.Println(nodeM.Header)
+        // log.Println(nodeM.HeaderReport)
+        // log.Println(nodeM.HeaderAligned)
+        // log.Println(nodeA.Data)
+        // log.Println(nodeA.DataReport)
+        // log.Println(nodeA.Header)
+        // log.Println(nodeA.HeaderReport)
+        // log.Println(nodeA.HeaderAligned)
+    }
+
+    return nil
 }
 
 func (r *Report) newWarning(msg string) {
@@ -70,16 +158,4 @@ func (r *Report) newError(err error) {
 
 func (r *Report) newInfo(msg string) {
     r.Info = append(r.Info, msg)
-}
-
-func (h *HazopHeader) newHeader(i, dtype int, coord string) error {
-    switch dtype {
-    case settings.Hazop.DataType.NodeMetadata:
-        h.NodeMetadata[i] = coord
-    case settings.Hazop.DataType.NodeHazop:
-        h.NodeHazop[i] = coord
-    default:
-        return fmt.Errorf("Unknown data type %d", dtype)
-    }
-    return nil
 }
