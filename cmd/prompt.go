@@ -58,7 +58,7 @@ func run() error {
 
     files, err := ioutil.ReadDir(common.DataDir)
     if err != nil {
-        return fmt.Errorf("Error reading directory: %v", err)
+        return fmt.Errorf("Error reading `%s`: %v", common.DataDir, err)
     }
 
     var commands []Command
