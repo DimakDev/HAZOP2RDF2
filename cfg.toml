@@ -1,15 +1,16 @@
 # ========== Hazop Formula Settings ============
-[package]
-name = ""
+[program]
+package = "Hazop study: tabular evaluation"
 description = ""
 help = ""
 version = "1.1.1"
 author = "Dmytro Kostiuk <X100@X100.LINK>"
 
 [common]
-data_dir = "./data"
+data_dir = "data"
 data_ext = ".xlsx"
-report_dir = "./txt"
+report_dir = "txt"
+report_temp = "text.txt"
 
 [hazop]
 data_type = { metadata = 0, analysis = 1 }
