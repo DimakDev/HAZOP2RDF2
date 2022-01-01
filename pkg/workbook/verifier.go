@@ -10,11 +10,12 @@ import (
 
 var (
     ErrNoHeaderFound    = errors.New("No header found")
+    ErrNotEnoughHeader  = errors.New("Not enough header to align")
     ErrHeaderNotAligned = errors.New("Header not aligned")
     ErrParsingCellNames = errors.New("Error parsing cell names")
     ErrUnknownCellType  = errors.New("Uknown cell type")
-    ErrParsingInteger   = errors.New("Error parsing integer")
-    ErrParsingFloat     = errors.New("Error parsing float")
+    ErrParsingInteger   = errors.New("Failed parsing integer")
+    ErrParsingFloat     = errors.New("Failed parsing float")
     ErrValueOutOfRange  = errors.New("Out of range")
     HeaderAligned       = "Header aligned"
 )
@@ -23,6 +24,13 @@ func verifyHeaderAlignment(coord []int, cnames []string, n *NodeData) {
     if len(coord) == 0 {
         n.HeaderAligned = false
         n.HeaderReport.newError(ErrNoHeaderFound.Error())
+        return
+    }
+
+    if len(coord) == 1 {
+        n.HeaderAligned = false
+        msg := fmt.Sprintf("%v: %v", ErrNotEnoughHeader, cnames)
+        n.HeaderReport.newError(msg)
         return
     }
 
