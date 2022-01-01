@@ -53,14 +53,14 @@ func NewWorkbook(datapath string) (*Workbook, error) {
         Name: wbname,
     }
 
-    if err := wb.newWorkbook(); err != nil {
+    if err := wb.readWorkbook(); err != nil {
         return nil, err
     }
 
     return wb, nil
 }
 
-func (wb *Workbook) newWorkbook() error {
+func (wb *Workbook) readWorkbook() error {
     // Abbr: M — Metadata, A — Analysis
     elementsM := groupElements(Hazop.DataType.Metadata)
     elementsA := groupElements(Hazop.DataType.Analysis)
@@ -145,14 +145,14 @@ func (wb *Workbook) newWorkbook() error {
     return nil
 }
 
-func (r *Logger) newWarning(msg string) {
-    r.Warnings = append(r.Warnings, msg)
+func (l *Logger) newWarning(msg string) {
+    l.Warnings = append(l.Warnings, msg)
 }
 
-func (r *Logger) newError(msg string) {
-    r.Errors = append(r.Errors, msg)
+func (l *Logger) newError(msg string) {
+    l.Errors = append(l.Errors, msg)
 }
 
-func (r *Logger) newInfo(msg string) {
-    r.Info = append(r.Info, msg)
+func (l *Logger) newInfo(msg string) {
+    l.Info = append(l.Info, msg)
 }
