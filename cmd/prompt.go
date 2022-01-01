@@ -22,8 +22,10 @@ THE SOFTWARE.
 package cmd
 
 import (
+    "errors"
     "fmt"
     "io/ioutil"
+    "log"
     "path/filepath"
     "strings"
     "time"
@@ -31,7 +33,10 @@ import (
     "github.com/dimakdev/hazop-formula/pkg/workbook"
     "github.com/manifoldco/promptui"
     "github.com/spf13/cobra"
+    "github.com/spf13/viper"
 )
+
+var ErrParsingSettings = errors.New("Error parsing `.toml` settings")
 
 var promptCmd = &cobra.Command{
     Use:   "prompt",
@@ -46,6 +51,43 @@ var promptCmd = &cobra.Command{
 
 func init() {
     rootCmd.AddCommand(promptCmd)
+
+    viper.SetConfigName("settings")
+    viper.SetConfigType("toml")
+    viper.AddConfigPath(".")
+
+    if err := viper.ReadInConfig(); err != nil {
+        log.Fatalf("%v: %v", ErrParsingSettings, err)
+    }
+
+    if err := viper.UnmarshalKey("hazop", &workbook.Hazop); err != nil {
+        log.Fatalf("%v: %v", ErrParsingSettings, err)
+    }
+
+    if err := viper.UnmarshalKey("program", &program); err != nil {
+        log.Fatalf("%v: %v", ErrParsingSettings, err)
+    }
+
+    if err := viper.UnmarshalKey("common", &common); err != nil {
+        log.Fatalf("%v: %v", ErrParsingSettings, err)
+    }
+}
+
+type Program struct {
+    Package     string `mapstructure:"package"`
+    Description string `mapstructure:"description"`
+    Help        string `mapstructure:"help"`
+    Version     string `mapstructure:"version"`
+    Author      string `mapstructure:"author"`
+}
+
+type Common struct {
+    DataDir    string `mapstructure:"data_dir"`
+    DataExt    string `mapstructure:"data_ext"`
+    ReportDir  string `mapstructure:"report_dir"`
+    ReportExt  string `mapstructure:"report_ext"`
+    TempFile   string `mapstructure:"temp_file"`
+    TempStdout string `mapstructure:"temp_stdout"`
 }
 
 type Command struct {
@@ -54,10 +96,10 @@ type Command struct {
     Datapath    string
 }
 
-func run() error {
-    common := workbook.GetCommon()
-    program := workbook.GetProgram()
+var common Common
+var program Program
 
+func run() error {
     files, err := ioutil.ReadDir(common.DataDir)
     if err != nil {
         return fmt.Errorf("Error reading `%s`: %v", common.DataDir, err)
@@ -117,13 +159,13 @@ func run() error {
 
     fpath := filepath.Join(common.ReportDir, wb.Name+common.ReportExt)
 
-    r := &workbook.ReportData{
-        Package:     program.Package,
-        Version:     program.Version,
-        DateAndTime: time.Now().Format(time.UnixDate),
-        ReportPath:  fpath,
-        Workbook:    wb.Name,
-        Worksheets:  wb.Worksheets,
+    r := &workbook.Report{
+        Path:       fpath,
+        Package:    program.Package,
+        Version:    program.Version,
+        DateTime:   time.Now().Format(time.UnixDate),
+        Workbook:   wb.Name,
+        Worksheets: wb.Worksheets,
     }
 
     err = workbook.NewReport(fpath, common.TempFile, common.TempStdout, r)
