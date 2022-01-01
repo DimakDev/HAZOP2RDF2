@@ -9,21 +9,45 @@ Workbook: {{ .Workbook }}
 --------------------------------------------
 {{ .SheetIndex }}. Worksheet: {{ .SheetName }}
 {{ .SheetIndex }}.1 Metadata:
-{{ .SheetIndex }}.1.1 Header: ({{ .Metadata.HeaderReport.Warnings | len }}) Warning(s), ({{ .Metadata.HeaderReport.Errors | len }}) Error(s), ({{ .Metadata.HeaderReport.Info | len }}) Info {{ range .Metadata.HeaderReport.Warnings }}
-🔸[WARN] {{ . }} {{ end }} {{ range .Metadata.HeaderReport.Errors }}
-♦️[ERRO] {{ . }} {{ end }} {{ range .Metadata.HeaderReport.Info }}
-🔹[INFO] {{ . }} {{ end }}
-{{ .SheetIndex }}.1.2 Data: ({{ .Metadata.DataReport.Warnings | len }}) Warning(s), ({{ .Metadata.DataReport.Errors | len }}) Error(s), ({{ .Metadata.DataReport.Info | len }}) Info {{ range .Metadata.DataReport.Warnings }}
-🔸[WARN] {{ . }} {{ end }} {{ range .Metadata.DataReport.Errors }}
-♦️[ERRO] {{ . }} {{ end }} {{ range .Metadata.DataReport.Info }}
-🔹[INFO] {{ . }} {{ end }}
+{{ .SheetIndex }}.1.1 Header: ({{ .Metadata.HeaderReport.Warnings | len }}) Warning(s), ({{ .Metadata.HeaderReport.Errors | len }}) Error(s), ({{ .Metadata.HeaderReport.Info | len }}) Info
+{{- range .Metadata.HeaderReport.Warnings }}
+🔸[WARN] {{ . }}
+{{- end }}
+{{- range .Metadata.HeaderReport.Errors }}
+♦️[ERRO] {{ . }}
+{{- end }}
+{{- range .Metadata.HeaderReport.Info }}
+🔹[INFO] {{ . }}
+{{- end }}
+{{ .SheetIndex }}.1.2 Data: ({{ .Metadata.DataReport.Warnings | len }}) Warning(s), ({{ .Metadata.DataReport.Errors | len }}) Error(s), ({{ .Metadata.DataReport.Info | len }}) Info
+{{- range .Metadata.DataReport.Warnings }}
+🔸[WARN] {{ . }}
+{{- end }}
+{{- range .Metadata.DataReport.Errors }}
+♦️[ERRO] {{ . }}
+{{- end }}
+{{- range .Metadata.DataReport.Info }}
+🔹[INFO] {{ . }}
+{{- end }}
 {{ .SheetIndex }}.2 Analysis
-{{ .SheetIndex }}.2.1 Header: ({{ .Analysis.HeaderReport.Warnings | len }}) Warning(s), ({{ .Analysis.HeaderReport.Errors | len }}) Error(s), ({{ .Analysis.HeaderReport.Info | len }}) Info {{ range .Analysis.HeaderReport.Warnings }}
-🔸[WARN] {{ . }} {{ end }} {{ range .Analysis.HeaderReport.Errors }}
-♦️[ERRO] {{ . }} {{ end }} {{ range .Analysis.HeaderReport.Info }}
-🔹[INFO] {{ . }} {{ end }}
-{{ .SheetIndex }}.2.2 Data: ({{ .Analysis.DataReport.Warnings | len }}) Warning(s), ({{ .Analysis.DataReport.Errors | len }}) Error(s), ({{ .Analysis.DataReport.Info | len }}) Info {{ range .Analysis.DataReport.Warnings }}
-🔸[WARN] {{ . }} {{ end }} {{ range .Analysis.DataReport.Errors }}
-♦️[ERRO] {{ . }} {{ end }} {{ range .Analysis.DataReport.Info }}
-🔹[INFO] {{ . }} {{ end }}
+{{ .SheetIndex }}.2.1 Header: ({{ .Analysis.HeaderReport.Warnings | len }}) Warning(s), ({{ .Analysis.HeaderReport.Errors | len }}) Error(s), ({{ .Analysis.HeaderReport.Info | len }}) Info
+{{- range .Analysis.HeaderReport.Warnings }}
+🔸[WARN] {{ . }}
+{{- end }}
+{{- range .Analysis.HeaderReport.Errors }}
+♦️[ERRO] {{ . }}
+{{- end }}
+{{- range .Analysis.HeaderReport.Info }}
+🔹[INFO] {{ . }}
+{{- end }}
+{{ .SheetIndex }}.2.2 Data: ({{ .Analysis.DataReport.Warnings | len }}) Warning(s), ({{ .Analysis.DataReport.Errors | len }}) Error(s), ({{ .Analysis.DataReport.Info | len }}) Info
+{{- range .Analysis.DataReport.Warnings }}
+🔸[WARN] {{ . }}
+{{- end }}
+{{- range .Analysis.DataReport.Errors }}
+♦️[ERRO] {{ . }}
+{{- end }}
+{{- range .Analysis.DataReport.Info }}
+🔹[INFO] {{ . }}
+{{- end }}
 {{ end }}
