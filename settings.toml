@@ -9,8 +9,10 @@ author = "Dmytro Kostiuk <X100@X100.LINK>"
 [common]
 data_dir = "data"
 data_ext = ".xlsx"
-report_dir = "txt"
-report_temp = "text.txt"
+report_dir = "report"
+report_ext = ".txt"
+temp_file = "template_file.txt"
+temp_stdout = "template_stdout.txt"
 
 [hazop]
 data_type = { metadata = 0, analysis = 1 }
