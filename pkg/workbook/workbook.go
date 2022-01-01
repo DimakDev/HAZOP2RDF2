@@ -56,10 +56,6 @@ func NewWorkbook(datapath string) (*Workbook, error) {
         return nil, err
     }
 
-    // if err := newReport(wb.PlantName, wb.PlantHazop); err != nil {
-    //     return nil, err
-    // }
-
     return wb, nil
 }
 

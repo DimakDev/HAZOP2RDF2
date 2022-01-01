@@ -26,6 +26,7 @@ import (
     "io/ioutil"
     "path/filepath"
     "strings"
+    "time"
 
     "github.com/dimakdev/hazop-formula/pkg/workbook"
     "github.com/manifoldco/promptui"
@@ -55,6 +56,7 @@ type Command struct {
 
 func run() error {
     common := workbook.GetCommon()
+    program := workbook.GetProgram()
 
     files, err := ioutil.ReadDir(common.DataDir)
     if err != nil {
@@ -108,7 +110,23 @@ func run() error {
         return fmt.Errorf("Prompt failed: %v", err)
     }
 
-    _, err = workbook.NewWorkbook(commands[i].Datapath)
+    wb, err := workbook.NewWorkbook(commands[i].Datapath)
+    if err != nil {
+        return err
+    }
+
+    fpath := filepath.Join(common.ReportDir, wb.Name+common.ReportExt)
+
+    r := &workbook.ReportData{
+        Package:     program.Package,
+        Version:     program.Version,
+        DateAndTime: time.Now().Format(time.UnixDate),
+        FullReport:  fpath,
+        Workbook:    wb.Name,
+        Worksheets:  wb.Worksheets,
+    }
+
+    err = workbook.NewReport(fpath, common.TempFile, common.TempStdout, r)
     if err != nil {
         return err
     }
