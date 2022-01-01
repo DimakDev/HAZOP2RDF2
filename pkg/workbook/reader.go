@@ -15,7 +15,7 @@ var (
     ErrParsingCoordName = errors.New("Error parsing coordinate name")
     HeaderNotFound      = "Header not found"
     HeaderFound         = "Header found"
-    HeaderMulCoords     = "Header multiple coordinates"
+    HeaderMulCoords     = "Header multiple coordinates found"
     ValueParsedVerified = "Value parsed/verified"
 )
 
@@ -29,14 +29,14 @@ func (wb *Workbook) readHazopHeader(sname string, elements map[int]Element, n *N
         switch len(coord) {
         case 0:
             msg := fmt.Sprintf("%s: `%s`", HeaderNotFound, e.Name)
-            n.HeaderReport.newWarning(msg)
+            n.HeaderLogger.newWarning(msg)
         case 1:
-            n.Header[k] = coord[0]
+            n.Header[k], n.Element[k] = coord[0], e
             msg := fmt.Sprintf("%s: `%s` `%s`", HeaderFound, e.Name, coord[0])
-            n.HeaderReport.newInfo(msg)
+            n.HeaderLogger.newInfo(msg)
         default:
             msg := fmt.Sprintf("%v: `%s` %v", HeaderMulCoords, e.Name, coord)
-            n.HeaderReport.newWarning(msg)
+            n.HeaderLogger.newWarning(msg)
         }
     }
 
@@ -54,7 +54,7 @@ type reader struct {
 
 func (wb *Workbook) readHazopData(sname string, total int, r *reader, n *NodeData) error {
     for k, v := range n.Header {
-        e := getElement(k)
+        e := n.Element[k]
 
         runner, err := r.runner(v)
         if err != nil {
@@ -87,17 +87,17 @@ func (wb *Workbook) readHazopData(sname string, total int, r *reader, n *NodeDat
 
             c, err := v.parse(cell)
             if err != nil {
-                n.DataReport.newError(fmt.Sprintf("%v: `%s`", err, cnames[i]))
+                n.DataLogger.newError(fmt.Sprintf("%v: `%s`", err, cnames[i]))
                 continue
             }
 
             if err := v.check(c, e.MinLen, e.MaxLen); err != nil {
-                n.DataReport.newError(fmt.Sprintf("%v: `%s`", err, cnames[i]))
+                n.DataLogger.newError(fmt.Sprintf("%v: `%s`", err, cnames[i]))
                 continue
             }
 
             msg := fmt.Sprintf("%s: `%s`", ValueParsedVerified, cnames[i])
-            n.DataReport.newInfo(msg)
+            n.DataLogger.newInfo(msg)
 
             vec[i] = c
         }

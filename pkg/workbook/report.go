@@ -7,13 +7,13 @@ import (
     "os"
 )
 
-type ReportData struct {
-    Package     string
-    Version     string
-    DateAndTime string
-    ReportPath  string
-    Workbook    string
-    Worksheets  []*Worksheet
+type Report struct {
+    Path       string
+    Package    string
+    Version    string
+    DateTime   string
+    Workbook   string
+    Worksheets []*Worksheet
 }
 
 var (
@@ -22,7 +22,7 @@ var (
     ErrWritingReport   = errors.New("Error writing report")
 )
 
-func NewReport(fpath, ftemp, stemp string, r *ReportData) error {
+func NewReport(fpath, ftemp, stemp string, r *Report) error {
     if err := reportToFile(fpath, ftemp, r); err != nil {
         return err
     }
@@ -34,7 +34,7 @@ func NewReport(fpath, ftemp, stemp string, r *ReportData) error {
     return nil
 }
 
-func reportToFile(fpath, ftemp string, r *ReportData) error {
+func reportToFile(fpath, ftemp string, r *Report) error {
     f, err := os.Create(fpath)
     if err != nil {
         return fmt.Errorf("%v `%s`: %v", ErrCreatingFile, fpath, err)
@@ -53,7 +53,7 @@ func reportToFile(fpath, ftemp string, r *ReportData) error {
     return nil
 }
 
-func reportToStdout(stemp string, r *ReportData) error {
+func reportToStdout(stemp string, r *Report) error {
     temp, err := template.ParseFiles(stemp)
     if err != nil {
         return fmt.Errorf("%v `%s`: %v", ErrParsingTemplate, stemp, err)

@@ -27,12 +27,13 @@ type Worksheet struct {
 type NodeData struct {
     Data          map[int][]interface{}
     Header        map[int]string
+    Element       map[int]Element
     HeaderAligned bool
-    DataReport    *Report
-    HeaderReport  *Report
+    DataLogger    *Logger
+    HeaderLogger  *Logger
 }
 
-type Report struct {
+type Logger struct {
     Warnings []string
     Errors   []string
     Info     []string
@@ -61,11 +62,8 @@ func NewWorkbook(datapath string) (*Workbook, error) {
 
 func (wb *Workbook) newWorkbook() error {
     // Abbr: M — Metadata, A — Analysis
-    typeM := settings.Hazop.DataType.Metadata
-    typeA := settings.Hazop.DataType.Analysis
-
-    elementsM := groupElements(typeM)
-    elementsA := groupElements(typeA)
+    elementsM := groupElements(Hazop.DataType.Metadata)
+    elementsA := groupElements(Hazop.DataType.Analysis)
 
     for i, sname := range wb.File.GetSheetMap() {
         ws := &Worksheet{
@@ -74,14 +72,16 @@ func (wb *Workbook) newWorkbook() error {
             Metadata: &NodeData{
                 Data:         map[int][]interface{}{},
                 Header:       map[int]string{},
-                DataReport:   &Report{},
-                HeaderReport: &Report{},
+                Element:      map[int]Element{},
+                DataLogger:   &Logger{},
+                HeaderLogger: &Logger{},
             },
             Analysis: &NodeData{
                 Data:         map[int][]interface{}{},
                 Header:       map[int]string{},
-                DataReport:   &Report{},
-                HeaderReport: &Report{},
+                Element:      map[int]Element{},
+                DataLogger:   &Logger{},
+                HeaderLogger: &Logger{},
             },
         }
 
@@ -145,14 +145,14 @@ func (wb *Workbook) newWorkbook() error {
     return nil
 }
 
-func (r *Report) newWarning(msg string) {
+func (r *Logger) newWarning(msg string) {
     r.Warnings = append(r.Warnings, msg)
 }
 
-func (r *Report) newError(msg string) {
+func (r *Logger) newError(msg string) {
     r.Errors = append(r.Errors, msg)
 }
 
-func (r *Report) newInfo(msg string) {
+func (r *Logger) newInfo(msg string) {
     r.Info = append(r.Info, msg)
 }

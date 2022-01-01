@@ -9,39 +9,39 @@ import (
 )
 
 var (
-    ErrNoHeaderFound    = errors.New("No header found")
+    ErrNoHeaderFound    = errors.New("No valid header found")
     ErrNotEnoughHeader  = errors.New("Not enough header to align")
     ErrHeaderNotAligned = errors.New("Header not aligned")
     ErrParsingCellNames = errors.New("Error parsing cell names")
     ErrUnknownCellType  = errors.New("Uknown cell type")
     ErrParsingInteger   = errors.New("Failed parsing integer")
     ErrParsingFloat     = errors.New("Failed parsing float")
-    ErrValueOutOfRange  = errors.New("Out of range")
+    ErrValueOutOfRange  = errors.New("Value out of range")
     HeaderAligned       = "Header aligned"
 )
 
 func verifyHeaderAlignment(coord []int, cnames []string, n *NodeData) {
     if len(coord) == 0 {
         n.HeaderAligned = false
-        n.HeaderReport.newError(ErrNoHeaderFound.Error())
+        n.HeaderLogger.newError(ErrNoHeaderFound.Error())
         return
     }
 
     if len(coord) == 1 {
         n.HeaderAligned = false
         msg := fmt.Sprintf("%v: %v", ErrNotEnoughHeader, cnames)
-        n.HeaderReport.newError(msg)
+        n.HeaderLogger.newError(msg)
         return
     }
 
     if !checkEqualVector(coord) {
         n.HeaderAligned = false
         msg := fmt.Sprintf("%v: %v", ErrHeaderNotAligned, cnames)
-        n.HeaderReport.newError(msg)
+        n.HeaderLogger.newError(msg)
     } else {
         n.HeaderAligned = true
         msg := fmt.Sprintf("%s: %v", HeaderAligned, cnames)
-        n.HeaderReport.newInfo(msg)
+        n.HeaderLogger.newInfo(msg)
     }
 }
 
@@ -87,17 +87,17 @@ type verifier struct {
 
 func newVerifier(ctype int) (*verifier, error) {
     switch ctype {
-    case settings.Hazop.CellType.String:
+    case Hazop.CellType.String:
         return &verifier{
             parse: parseStr,
             check: checkStrLen,
         }, nil
-    case settings.Hazop.CellType.Integer:
+    case Hazop.CellType.Integer:
         return &verifier{
             parse: parseInt,
             check: checkIntRange,
         }, nil
-    case settings.Hazop.CellType.Float:
+    case Hazop.CellType.Float:
         return &verifier{
             parse: parseFloat,
             check: checkFloatRange,
