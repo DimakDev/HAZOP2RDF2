@@ -1,9 +1,12 @@
 Hazop Formula Todos:
- ☐ [report]: add report configuration @feat
  ☐ [test]: add verification tests @test
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ [report]: fix atoi encoding  @fix @done (22-01-01 03:10) @project(Hazop Formula Todos)
+ ✔ [report]: add total length to report warnings, errors, info @feat @done (22-01-01 03:10) @project(Hazop Formula Todos)
+ ✔ [report]: add multiple io.Writer (file, stdout)  @feat @done (22-01-01 03:10) @project(Hazop Formula Todos)
+ ✔ [report]: add report configuration @feat @done (21-12-31 22:47) @project(Hazop Formula Todos)
  ✘ [build]: add release for (os..., arch...) @build @cancelled (21-12-31 18:39) @project(Hazop Formula Todos)
  ✔ [cli]: build cli together `root.go` @improvement @done (21-12-31 18:39) @project(Hazop Formula Todos)
  ✔ [workbook]: add main routine for reader/verification @feat @done (21-12-31 07:18) @project(Hazop Formula Todos)
