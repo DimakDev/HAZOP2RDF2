@@ -24,7 +24,9 @@ type Common struct {
     DataDir    string `mapstructure:"data_dir"`
     DataExt    string `mapstructure:"data_ext"`
     ReportDir  string `mapstructure:"report_dir"`
-    ReportTemp string `mapstructure:"report_temp"`
+    ReportExt  string `mapstructure:"report_ext"`
+    TempFile   string `mapstructure:"temp_file"`
+    TempStdout string `mapstructure:"temp_stdout"`
 }
 
 type DataType struct {
@@ -56,7 +58,7 @@ type Hazop struct {
 var settings Settings
 
 func init() {
-    viper.SetConfigName("cfg")
+    viper.SetConfigName("settings")
     viper.SetConfigType("toml")
     viper.AddConfigPath(".")
 
