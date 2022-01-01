@@ -3,6 +3,7 @@ Hazop Formula Todos:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ 💯 @done (22-01-01 03:17) @project(Hazop Formula Todos)
  ✔ [report]: fix atoi encoding  @fix @done (22-01-01 03:10) @project(Hazop Formula Todos)
  ✔ [report]: add total length to report warnings, errors, info @feat @done (22-01-01 03:10) @project(Hazop Formula Todos)
  ✔ [report]: add multiple io.Writer (file, stdout)  @feat @done (22-01-01 03:10) @project(Hazop Formula Todos)
