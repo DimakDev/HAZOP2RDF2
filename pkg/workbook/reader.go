@@ -8,14 +8,14 @@ import (
 )
 
 var (
-    ErrScanningElements = errors.New("Error scanning elements")
+    ErrScanningHeader   = errors.New("Error scanning header")
     ErrReadingCellValue = errors.New("Error reading cell value")
     ErrReadingColumns   = errors.New("Error reading columns")
     ErrParsingCoords    = errors.New("Error parsing coordniates")
     ErrParsingCoordName = errors.New("Error parsing coordinate name")
-    ElementNotFound     = "Element not found"
-    ElementFound        = "Element found"
-    ElementMulCoords    = "Element multiple coordinates"
+    HeaderNotFound      = "Header not found"
+    HeaderFound         = "Header found"
+    HeaderMulCoords     = "Header multiple coordinates"
     ValueParsedVerified = "Value parsed/verified"
 )
 
@@ -23,19 +23,19 @@ func (wb *Workbook) readHazopHeader(sname string, elements map[int]Element, n *N
     for k, e := range elements {
         coord, err := wb.File.SearchSheet(sname, e.Regex, true)
         if err != nil {
-            return fmt.Errorf("%v: %v", ErrScanningElements, err)
+            return fmt.Errorf("%v: %v", ErrScanningHeader, err)
         }
 
         switch len(coord) {
         case 0:
-            msg := fmt.Sprintf("%s: `%s`", ElementNotFound, e.Name)
+            msg := fmt.Sprintf("%s: `%s`", HeaderNotFound, e.Name)
             n.HeaderReport.newWarning(msg)
         case 1:
             n.Header[k] = coord[0]
-            msg := fmt.Sprintf("%s: `%s`", ElementFound, e.Name)
+            msg := fmt.Sprintf("%s: `%s` `%s`", HeaderFound, e.Name, coord[0])
             n.HeaderReport.newInfo(msg)
         default:
-            msg := fmt.Sprintf("%v: `%s` %v", ElementMulCoords, e.Name, coord)
+            msg := fmt.Sprintf("%v: `%s` %v", HeaderMulCoords, e.Name, coord)
             n.HeaderReport.newWarning(msg)
         }
     }
@@ -87,12 +87,12 @@ func (wb *Workbook) readHazopData(sname string, total int, r *reader, n *NodeDat
 
             c, err := v.parse(cell)
             if err != nil {
-                n.DataReport.newError(fmt.Sprintf("`%s` %v", cnames[i], err))
+                n.DataReport.newError(fmt.Sprintf("%v: `%s`", err, cnames[i]))
                 continue
             }
 
             if err := v.check(c, e.MinLen, e.MaxLen); err != nil {
-                n.DataReport.newError(fmt.Sprintf("`%s` %v", cnames[i], err))
+                n.DataReport.newError(fmt.Sprintf("%v: `%s`", err, cnames[i]))
                 continue
             }
 
