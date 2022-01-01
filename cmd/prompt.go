@@ -121,7 +121,7 @@ func run() error {
         Package:     program.Package,
         Version:     program.Version,
         DateAndTime: time.Now().Format(time.UnixDate),
-        FullReport:  fpath,
+        ReportPath:  fpath,
         Workbook:    wb.Name,
         Worksheets:  wb.Worksheets,
     }

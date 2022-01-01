@@ -11,7 +11,7 @@ type ReportData struct {
     Package     string
     Version     string
     DateAndTime string
-    FullReport  string
+    ReportPath  string
     Workbook    string
     Worksheets  []*Worksheet
 }
