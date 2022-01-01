@@ -1,7 +1,7 @@
 ============================================
 Package: {{ .Package }}
 Version: {{ .Version }}
-Date and time: {{ .DateAndTime }}
+Date and time: {{ .DateTime }}
 
 ============================================
 Workbook: {{ .Workbook }}
@@ -9,11 +9,11 @@ Workbook: {{ .Workbook }}
 --------------------------------------------
 {{ .SheetIndex }}. Worksheet: {{ .SheetName }}
   {{ .SheetIndex }}.1 Metadata:
-    {{ .SheetIndex }}.1.1 Header:	🔸({{ .Metadata.HeaderReport.Warnings | len }}) Warning(s),	♦️ ({{ .Metadata.HeaderReport.Errors | len }}) Error(s), 	🔹({{ .Metadata.HeaderReport.Info | len }}) Info
-    {{ .SheetIndex }}.1.2 Data:		🔸({{ .Metadata.DataReport.Warnings | len }}) Warning(s),	♦️ ({{ .Metadata.DataReport.Errors | len }}) Error(s), 	🔹({{ .Metadata.DataReport.Info | len }}) Info
+    {{ .SheetIndex }}.1.1 Header:	🔸({{ .Metadata.HeaderLogger.Warnings | len }}) Warning(s),	♦️ ({{ .Metadata.HeaderLogger.Errors | len }}) Error(s), 	🔹({{ .Metadata.HeaderLogger.Info | len }}) Info
+    {{ .SheetIndex }}.1.2 Data:		🔸({{ .Metadata.DataLogger.Warnings | len }}) Warning(s),	♦️ ({{ .Metadata.DataLogger.Errors | len }}) Error(s), 	🔹({{ .Metadata.DataLogger.Info | len }}) Info
   {{ .SheetIndex }}.2 Analysis:
-    {{ .SheetIndex }}.2.1 Header:	🔸({{ .Analysis.HeaderReport.Warnings | len }}) Warning(s),	♦️ ({{ .Analysis.HeaderReport.Errors | len }}) Error(s), 	🔹({{ .Analysis.HeaderReport.Info | len }}) Info
-    {{ .SheetIndex }}.2.2 Data:		🔸({{ .Analysis.DataReport.Warnings | len }}) Warning(s),	♦️ ({{ .Analysis.DataReport.Errors | len }}) Error(s), 	🔹({{ .Analysis.DataReport.Info | len }}) Info
+    {{ .SheetIndex }}.2.1 Header:	🔸({{ .Analysis.HeaderLogger.Warnings | len }}) Warning(s),	♦️ ({{ .Analysis.HeaderLogger.Errors | len }}) Error(s), 	🔹({{ .Analysis.HeaderLogger.Info | len }}) Info
+    {{ .SheetIndex }}.2.2 Data:		🔸({{ .Analysis.DataLogger.Warnings | len }}) Warning(s),	♦️ ({{ .Analysis.DataLogger.Errors | len }}) Error(s), 	🔹({{ .Analysis.DataLogger.Info | len }}) Info
 {{ end }}
 
-🔗 Full report available under `./{{ .ReportPath }}`
+🔗 Full report available under `./{{ .Path }}`
