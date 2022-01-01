@@ -13,7 +13,9 @@ var (
     ErrHeaderNotAligned = errors.New("Header not aligned")
     ErrParsingCellNames = errors.New("Error parsing cell names")
     ErrUnknownCellType  = errors.New("Uknown cell type")
-    ErrValueOutOfRange  = errors.New("out of range")
+    ErrParsingInteger   = errors.New("Error parsing integer")
+    ErrParsingFloat     = errors.New("Error parsing float")
+    ErrValueOutOfRange  = errors.New("Out of range")
     HeaderAligned       = "Header aligned"
 )
 
@@ -103,7 +105,7 @@ func parseStr(val string) (interface{}, error) {
 
 func parseInt(val string) (interface{}, error) {
     if v, err := strconv.Atoi(val); err != nil {
-        return nil, err
+        return nil, ErrParsingInteger
     } else {
         return v, nil
     }
@@ -111,7 +113,7 @@ func parseInt(val string) (interface{}, error) {
 
 func parseFloat(val string) (interface{}, error) {
     if v, err := strconv.ParseFloat(val, 32); err == nil {
-        return nil, err
+        return nil, ErrParsingFloat
     } else {
         return v, nil
     }
