@@ -1,6 +1,6 @@
 ============================================
-Package: {{ .Package }}
-Version: {{ .Version }}
+Package: {{ .ProgramName }}
+Version: {{ .ProgramVersion }}
 Date and time: {{ .DateTime }}
 
 ============================================
@@ -16,4 +16,4 @@ Workbook: {{ .Workbook }}
     {{ .SheetIndex }}.2.2 Data:		🔸({{ .Analysis.DataLogger.Warnings | len }}) Warning(s),	♦️ ({{ .Analysis.DataLogger.Errors | len }}) Error(s), 	🔹({{ .Analysis.DataLogger.Info | len }}) Info
 {{ end }}
 
-🔗 Full report available under `./{{ .Path }}`
+🔗 Full report available under `./{{ .ReportPath }}`

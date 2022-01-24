@@ -1,6 +1,6 @@
 ============================================
-Package: {{ .Package }}
-Version: {{ .Version }}
+Package: {{ .ProgramName }}
+Version: {{ .ProgramVersion }}
 Date and time: {{ .DateTime }}
 
 ============================================
