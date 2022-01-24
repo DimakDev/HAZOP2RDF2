@@ -28,15 +28,24 @@ import (
     "log"
     "path/filepath"
     "strings"
+    "sync"
     "time"
 
+    "github.com/dimakdev/hazop-formula/pkg/report"
     "github.com/dimakdev/hazop-formula/pkg/workbook"
     "github.com/manifoldco/promptui"
     "github.com/spf13/cobra"
     "github.com/spf13/viper"
 )
 
-var ErrParsingSettings = errors.New("Error parsing `.toml` settings")
+var (
+    ErrReadingSettings        = errors.New("Error reading `settings.toml`")
+    ErrNoValidWorksheetsFound = errors.New("Error no valid worksheets found")
+    ErrDataDirectoryIsEmpty   = errors.New("Error Data directory is empty, no Excel files found")
+    ErrReadingDirecotry       = errors.New("Error reading directory")
+    ErrPromptFailed           = errors.New("Error prompt failed")
+    InfoDescription           = "Import, parse and verify"
+)
 
 var promptCmd = &cobra.Command{
     Use:   "prompt",
@@ -57,24 +66,24 @@ func init() {
     viper.AddConfigPath(".")
 
     if err := viper.ReadInConfig(); err != nil {
-        log.Fatalf("%v: %v", ErrParsingSettings, err)
+        log.Fatalf("%v: %v", ErrReadingSettings, err)
     }
 
     if err := viper.UnmarshalKey("hazop", &workbook.Hazop); err != nil {
-        log.Fatalf("%v: %v", ErrParsingSettings, err)
+        log.Fatalf("%v: %v", ErrReadingSettings, err)
     }
 
     if err := viper.UnmarshalKey("program", &program); err != nil {
-        log.Fatalf("%v: %v", ErrParsingSettings, err)
+        log.Fatalf("%v: %v", ErrReadingSettings, err)
     }
 
     if err := viper.UnmarshalKey("common", &common); err != nil {
-        log.Fatalf("%v: %v", ErrParsingSettings, err)
+        log.Fatalf("%v: %v", ErrReadingSettings, err)
     }
 }
 
 type Program struct {
-    Package     string `mapstructure:"package"`
+    Name        string `mapstructure:"name"`
     Description string `mapstructure:"description"`
     Help        string `mapstructure:"help"`
     Version     string `mapstructure:"version"`
@@ -102,7 +111,11 @@ var program Program
 func run() error {
     files, err := ioutil.ReadDir(common.DataDir)
     if err != nil {
-        return fmt.Errorf("Error reading `%s`: %v", common.DataDir, err)
+        return fmt.Errorf("%v `%s` %v",
+            ErrReadingDirecotry,
+            common.DataDir,
+            err,
+        )
     }
 
     var commands []Command
@@ -111,16 +124,23 @@ func run() error {
             datapath := filepath.Join(common.DataDir, f.Name())
             commands = append(commands,
                 Command{
-                    Name:        fmt.Sprintf("`%s`", f.Name()),
-                    Description: fmt.Sprintf("Import, parse and verify `%s`", f.Name()),
-                    Datapath:    datapath,
+                    Name: fmt.Sprintf("`%s`", f.Name()),
+                    Description: fmt.Sprintf("%s `%s`",
+                        InfoDescription,
+                        f.Name(),
+                    ),
+                    Datapath: datapath,
                 },
             )
         }
     }
 
     if len(commands) == 0 {
-        return fmt.Errorf("Directory `%s` is empty, no `%s` file(s) found", common.DataDir, common.DataExt)
+        return fmt.Errorf("%v %s %s",
+            ErrDataDirectoryIsEmpty,
+            common.DataDir,
+            common.DataExt,
+        )
     }
 
     templates := &promptui.SelectTemplates{
@@ -149,27 +169,59 @@ func run() error {
 
     i, _, err := prompt.Run()
     if err != nil {
-        return fmt.Errorf("Prompt failed: %v", err)
+        return fmt.Errorf("%v %v", ErrPromptFailed, err)
     }
 
-    wb, err := workbook.NewWorkbook(commands[i].Datapath)
+    wb, err := runWorkbookRoutine(commands[i].Datapath)
     if err != nil {
         return err
     }
 
-    fpath := filepath.Join(common.ReportDir, wb.Name+common.ReportExt)
-
-    r := &workbook.Report{
-        Path:       fpath,
-        Package:    program.Package,
-        Version:    program.Version,
-        DateTime:   time.Now().Format(time.UnixDate),
-        Workbook:   wb.Name,
-        Worksheets: wb.Worksheets,
+    if err := generateReport(wb); err != nil {
+        return err
     }
 
-    err = workbook.NewReport(fpath, common.TempFile, common.TempStdout, r)
+    return nil
+}
+
+func runWorkbookRoutine(wpath string) (*workbook.Workbook, error) {
+    var wg sync.WaitGroup
+
+    wb, err := workbook.NewWorkbook(wpath)
     if err != nil {
+        return nil, err
+    }
+
+    if err := wb.ReadVerifyWorkbook(&wg); err != nil {
+        return nil, err
+    }
+
+    wg.Wait()
+
+    if len(wb.Worksheets) == 0 {
+        return nil, ErrNoValidWorksheetsFound
+    }
+
+    return wb, nil
+}
+
+func generateReport(wb *workbook.Workbook) error {
+    rpath := filepath.Join(common.ReportDir, wb.Name+common.ReportExt)
+
+    r := &report.Report{
+        ReportPath:     rpath,
+        ProgramName:    program.Name,
+        ProgramVersion: program.Version,
+        DateTime:       time.Now().Format(time.UnixDate),
+        Workbook:       wb.Name,
+        Worksheets:     wb.Worksheets,
+    }
+
+    if err := r.ReportToFile(rpath, common.TempFile); err != nil {
+        return err
+    }
+
+    if err := r.ReportToStdout(common.TempStdout); err != nil {
         return err
     }
 
