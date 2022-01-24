@@ -8,18 +8,23 @@ import (
 )
 
 var (
-    ErrScanningHeader   = errors.New("Error scanning header")
-    ErrReadingCellValue = errors.New("Error reading cell value")
-    ErrReadingColumns   = errors.New("Error reading columns")
-    ErrParsingCoords    = errors.New("Error parsing coordniates")
-    ErrParsingCoordName = errors.New("Error parsing coordinate name")
-    HeaderNotFound      = "Header not found"
-    HeaderFound         = "Header found"
-    HeaderMulCoords     = "Header multiple coordinates found"
-    ValueParsedVerified = "Value parsed/verified"
+    ErrScanningHeader         = errors.New("Error scanning header")
+    ErrReadingCellValue       = errors.New("Error reading cell value")
+    ErrReadingColumns         = errors.New("Error reading columns")
+    ErrReadingRows            = errors.New("Error reading rows")
+    ErrParsingCoordinates     = errors.New("Error parsing coordniates")
+    ErrParsingCoordinateName  = errors.New("Error parsing coordinate name")
+    HeaderNotFound            = "Header not found"
+    HeaderFound               = "Header found"
+    HeaderMultipleCoordinates = "Header multiple coordinates found"
+    ValueParsedVerified       = "Value parsed/verified"
 )
 
-func (wb *Workbook) readHazopHeader(sname string, elements map[int]Element, n *NodeData) error {
+func (wb *Workbook) readHazopElements(
+    sname string,
+    elements map[int]Element,
+    n *NodeData,
+) error {
     for k, e := range elements {
         coord, err := wb.File.SearchSheet(sname, e.Regex, true)
         if err != nil {
@@ -28,84 +33,42 @@ func (wb *Workbook) readHazopHeader(sname string, elements map[int]Element, n *N
 
         switch len(coord) {
         case 0:
-            msg := fmt.Sprintf("%s: `%s`", HeaderNotFound, e.Name)
-            n.HeaderLogger.newWarning(msg)
+            n.HeaderLogger.newWarning(
+                fmt.Sprintf("%s: `%s`",
+                    HeaderNotFound,
+                    e.Name,
+                ),
+            )
         case 1:
             n.Header[k], n.Element[k] = coord[0], e
-            msg := fmt.Sprintf("%s: `%s` `%s`", HeaderFound, e.Name, coord[0])
-            n.HeaderLogger.newInfo(msg)
+            n.HeaderLogger.newInfo(
+                fmt.Sprintf("%s: `%s` `%s`",
+                    HeaderFound,
+                    e.Name,
+                    coord[0],
+                ),
+            )
         default:
-            msg := fmt.Sprintf("%v: `%s` %v", HeaderMulCoords, e.Name, coord)
-            n.HeaderLogger.newWarning(msg)
+            n.HeaderLogger.newWarning(
+                fmt.Sprintf("%v: `%s` %v",
+                    HeaderMultipleCoordinates,
+                    e.Name,
+                    coord,
+                ),
+            )
         }
     }
 
     return nil
 }
 
-type readXYCnames func(int, int, int) ([]string, error)
+type readXYCellNames func(int, int, int) ([]string, error)
 type readXYCoord func(string) (int, error)
 
 type reader struct {
-    runner readXYCoord
-    fixer  readXYCoord
-    cnames readXYCnames
-}
-
-func (wb *Workbook) readHazopData(sname string, total int, r *reader, n *NodeData) error {
-    for k, v := range n.Header {
-        e := n.Element[k]
-
-        runner, err := r.runner(v)
-        if err != nil {
-            return err
-        }
-
-        fixer, err := r.fixer(v)
-        if err != nil {
-            return err
-        }
-
-        cnames, err := r.cnames(runner, fixer, total-runner)
-        if err != nil {
-            return err
-        }
-
-        v, err := newVerifier(e.CellType)
-        if err != nil {
-            return err
-        }
-
-        vec := make([]interface{}, len(cnames))
-        vec[0] = e.Name
-
-        for i := 1; i < len(cnames); i++ {
-            cell, err := wb.File.GetCellValue(sname, cnames[i])
-            if err != nil {
-                return fmt.Errorf("%s: %v", ErrReadingCellValue, err)
-            }
-
-            c, err := v.parse(cell)
-            if err != nil {
-                n.DataLogger.newError(fmt.Sprintf("%v: `%s`", err, cnames[i]))
-                continue
-            }
-
-            if err := v.check(c, e.MinLen, e.MaxLen); err != nil {
-                n.DataLogger.newError(fmt.Sprintf("%v: `%s`", err, cnames[i]))
-                continue
-            }
-
-            msg := fmt.Sprintf("%s: `%s`", ValueParsedVerified, cnames[i])
-            n.DataLogger.newInfo(msg)
-
-            vec[i] = c
-        }
-
-        n.Data[k] = vec
-    }
-
-    return nil
+    varDimension readXYCoord
+    fixDimension readXYCoord
+    cellNames    readXYCellNames
 }
 
 func (wb *Workbook) getNCols(sname string) (int, error) {
@@ -120,48 +83,52 @@ func (wb *Workbook) getNCols(sname string) (int, error) {
 func (wb *Workbook) getNRows(sname string) (int, error) {
     rows, err := wb.File.GetRows(sname)
     if err != nil {
-        return 0, fmt.Errorf("%v: %v", ErrReadingColumns, err)
+        return 0, fmt.Errorf("%v: %v", ErrReadingRows, err)
     }
 
     return len(rows), nil
 }
 
-func readXCnames(x, y, length int) ([]string, error) {
+func readXCellNames(x, y, length int) ([]string, error) {
     cnames := make([]string, length)
     for i := 0; i < length; i++ {
         cname, err := excelize.CoordinatesToCellName(x+i, y)
         if err != nil {
-            return nil, fmt.Errorf("%v: %v", ErrParsingCoords, err)
+            return nil, fmt.Errorf("%v: %v", ErrParsingCoordinates, err)
         }
         cnames[i] = cname
     }
+
     return cnames, nil
 }
 
-func readYCnames(y, x, length int) ([]string, error) {
+func readYCellNames(y, x, length int) ([]string, error) {
     cnames := make([]string, length)
     for i := 0; i < length; i++ {
         cname, err := excelize.CoordinatesToCellName(x, y+i)
         if err != nil {
-            return nil, fmt.Errorf("%v: %v", ErrParsingCoords, err)
+            return nil, fmt.Errorf("%v: %v", ErrParsingCoordinates, err)
         }
         cnames[i] = cname
     }
+
     return cnames, nil
 }
 
-func readXCoord(coord string) (int, error) {
-    x, _, err := excelize.CellNameToCoordinates(coord)
+func readXCoord(cname string) (int, error) {
+    x, _, err := excelize.CellNameToCoordinates(cname)
     if err != nil {
-        return 0, fmt.Errorf("%v: %v", ErrParsingCoordName, err)
+        return 0, fmt.Errorf("%v: %v", ErrParsingCoordinateName, err)
     }
+
     return x, nil
 }
 
-func readYCoord(coord string) (int, error) {
-    _, y, err := excelize.CellNameToCoordinates(coord)
+func readYCoord(cname string) (int, error) {
+    _, y, err := excelize.CellNameToCoordinates(cname)
     if err != nil {
-        return 0, fmt.Errorf("%v: %v", ErrParsingCoordName, err)
+        return 0, fmt.Errorf("%v: %v", ErrParsingCoordinateName, err)
     }
+
     return y, nil
 }
