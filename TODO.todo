@@ -1,12 +1,12 @@
 Hazop Formula Todos:
  ☐ [test]: add verification tests @test
-
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ [workbook]: read worksheets in go routines @improvement @done (22-01-25 00:44) @project(Hazop Formula Todos)
  ✔ 💯 @done (22-01-01 03:17) @project(Hazop Formula Todos)
  ✔ [report]: fix atoi encoding  @fix @done (22-01-01 03:10) @project(Hazop Formula Todos)
  ✔ [report]: add total length to report warnings, errors, info @feat @done (22-01-01 03:10) @project(Hazop Formula Todos)
- ✔ [report]: add multiple io.Writer (file, stdout)  @feat @done (22-01-01 03:10) @project(Hazop Formula Todos)
+ ✔ [report]: add multiple writer (file, stdout)  @feat @done (22-01-01 03:10) @project(Hazop Formula Todos)
  ✔ [report]: add report configuration @feat @done (21-12-31 22:47) @project(Hazop Formula Todos)
  ✘ [build]: add release for (os..., arch...) @build @cancelled (21-12-31 18:39) @project(Hazop Formula Todos)
  ✔ [cli]: build cli together `root.go` @improvement @done (21-12-31 18:39) @project(Hazop Formula Todos)

@@ -18,4 +18,3 @@ bin
 # macOS
 .DS_Store
 *.numbers
-report
