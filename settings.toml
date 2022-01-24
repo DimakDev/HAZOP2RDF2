@@ -1,6 +1,6 @@
 # ========== Hazop Formula Settings ============
 [program]
-package = "Hazop study: tabular evaluation"
+name = "Hazop study: tabular evaluation"
 description = ""
 help = ""
 version = "1.1.1"
@@ -32,5 +32,5 @@ element = [
     { data_type = 1, name = "Action On", regex = "^(?i)(action|recommendation)\\s?on.?$", cell_type = 0, min_len = 0, max_len = 40 },
     { data_type = 1, name = "Severity", regex = "^(?i)(severity)", cell_type = 1, min_len = 0, max_len = 100 },
     { data_type = 1, name = "Likehood", regex = "^(?i)(likehood|probability)", cell_type = 1, min_len = 0, max_len = 100 },
-    { data_type = 1, name = "Risk Priotrity", regex = "^(?i)(risk|priority)", cell_type = 0, min_len = 0, max_len = 40 },
+    { data_type = 1, name = "Risk Priority", regex = "^(?i)(risk\\s?priority)", cell_type = 0, min_len = 0, max_len = 40 },
 ]
