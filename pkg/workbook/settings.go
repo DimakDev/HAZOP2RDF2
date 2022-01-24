@@ -28,7 +28,7 @@ type HazopSettings struct {
 
 var Hazop HazopSettings
 
-func groupElements(dtype int) map[int]Element {
+func (h *HazopSettings) groupHazopElements(dtype int) map[int]Element {
     elements := map[int]Element{}
     for i, e := range Hazop.Element {
         if e.DataType != dtype {
