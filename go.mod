@@ -6,7 +6,7 @@ require (
 	github.com/manifoldco/promptui v0.9.0
 	github.com/spf13/cobra v1.3.0
 	github.com/spf13/viper v1.10.0
-	github.com/xuri/excelize/v2 v2.4.1
+	github.com/xuri/excelize/v2 v2.5.0
 )
 
 require (
@@ -20,7 +20,7 @@ require (
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
-	github.com/richardlehane/mscfb v1.0.3 // indirect
+	github.com/richardlehane/mscfb v1.0.4 // indirect
 	github.com/richardlehane/msoleps v1.0.1 // indirect
 	github.com/spf13/afero v1.6.0 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
