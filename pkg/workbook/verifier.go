@@ -13,7 +13,7 @@ var (
     ErrNotEnoughHeader  = errors.New("Not enough header to align")
     ErrHeaderNotAligned = errors.New("Header not aligned")
     ErrParsingCellNames = errors.New("Error parsing cell names")
-    ErrUnknownCellType  = errors.New("Uknown cell type")
+    ErrUnknownCellType  = errors.New("Unknown cell type")
     ErrParsingInteger   = errors.New("Failed parsing integer")
     ErrParsingFloat     = errors.New("Failed parsing float")
     ErrValueOutOfRange  = errors.New("Value out of range")
@@ -29,78 +29,86 @@ func verifyHeaderAlignment(coord []int, cnames []string, n *NodeData) {
 
     if len(coord) == 1 {
         n.HeaderAligned = false
-        msg := fmt.Sprintf("%v: %v", ErrNotEnoughHeader, cnames)
-        n.HeaderLogger.newError(msg)
+        n.HeaderLogger.newError(
+            fmt.Sprintf("%v: %v",
+                ErrNotEnoughHeader,
+                cnames,
+            ),
+        )
         return
     }
 
-    if !checkEqualVector(coord) {
+    if !checkHeaderAlignment(coord) {
         n.HeaderAligned = false
-        msg := fmt.Sprintf("%v: %v", ErrHeaderNotAligned, cnames)
-        n.HeaderLogger.newError(msg)
-    } else {
-        n.HeaderAligned = true
-        msg := fmt.Sprintf("%s: %v", HeaderAligned, cnames)
-        n.HeaderLogger.newInfo(msg)
+        n.HeaderLogger.newError(
+            fmt.Sprintf("%v: %v",
+                ErrHeaderNotAligned,
+                cnames,
+            ),
+        )
+        return
     }
+
+    n.HeaderAligned = true
+    n.HeaderLogger.newInfo(fmt.Sprintf("%s: %v", HeaderAligned, cnames))
 }
 
-func checkEqualVector(a []int) bool {
-    for i := 1; i < len(a); i++ {
-        if a[0] != a[i] {
+func checkHeaderAlignment(index []int) bool {
+    for i := 1; i < len(index); i++ {
+        if index[0] != index[i] {
             return false
         }
     }
     return true
 }
 
-type header struct {
+type coordinates struct {
     keys   []int
-    coords []string
+    cnames []string
     coordX []int
     coordY []int
 }
 
-func splitHeader(cnames map[int]string) (*header, error) {
-    var h header
+func cellNamesToCoordinates(cnames map[int]string) (*coordinates, error) {
+    var coords coordinates
     for k, v := range cnames {
         x, y, err := excelize.CellNameToCoordinates(v)
         if err != nil {
             return nil, fmt.Errorf("%v: %v", ErrParsingCellNames, err)
         }
-        h.keys = append(h.keys, k)
-        h.coords = append(h.coords, v)
-        h.coordX = append(h.coordX, x)
-        h.coordY = append(h.coordY, y)
+        coords.keys = append(coords.keys, k)
+        coords.cnames = append(coords.cnames, v)
+        coords.coordX = append(coords.coordX, x)
+        coords.coordY = append(coords.coordY, y)
     }
 
-    return &h, nil
+    return &coords, nil
 }
 
 type parser func(string) (interface{}, error)
 type checker func(interface{}, int, int) error
 
 type verifier struct {
-    parse parser
-    check checker
+    parseCell parser
+    checkCell checker
 }
 
 func newVerifier(ctype int) (*verifier, error) {
     switch ctype {
     case Hazop.CellType.String:
         return &verifier{
-            parse: parseStr,
-            check: checkStrLen,
+            parseCell: parseStr,
+            checkCell: checkStrLen,
         }, nil
     case Hazop.CellType.Integer:
         return &verifier{
-            parse: parseInt,
-            check: checkIntRange,
+            parseCell: parseInt,
+            checkCell: checkIntRange,
         }, nil
     case Hazop.CellType.Float:
         return &verifier{
-            parse: parseFloat,
-            check: checkFloatRange,
+            parseCell: parseFloat,
+            checkCell: checkFloatRange,
         }, nil
     default:
         return nil, fmt.Errorf("%v: %d", ErrUnknownCellType, ctype)
