@@ -19,16 +19,16 @@ var (
     HeaderAligned       = "Header aligned"
 )
 
-func verifyHeaderAlignment(coord []int, cnames []string, n *NodeData) {
-    if len(coord) == 0 {
-        n.HeaderAligned = false
-        n.HeaderLogger.newError(ErrNoHeaderFound.Error())
+func verifyHeaderAlignment(coords []int, cnames []string, node *NodeData) {
+    if len(coords) == 0 {
+        node.HeaderAligned = false
+        node.HeaderLogger.newError(ErrNoHeaderFound.Error())
         return
     }
 
-    if len(coord) == 1 {
-        n.HeaderAligned = false
-        n.HeaderLogger.newError(
+    if len(coords) == 1 {
+        node.HeaderAligned = false
+        node.HeaderLogger.newError(
             fmt.Sprintf("%v: %v",
                 ErrNotEnoughHeader,
                 cnames,
@@ -37,9 +37,9 @@ func verifyHeaderAlignment(coord []int, cnames []string, n *NodeData) {
         return
     }
 
-    if !checkHeaderAlignment(coord) {
-        n.HeaderAligned = false
-        n.HeaderLogger.newError(
+    if !checkHeaderAlignment(coords) {
+        node.HeaderAligned = false
+        node.HeaderLogger.newError(
             fmt.Sprintf("%v: %v",
                 ErrHeaderNotAligned,
                 cnames,
@@ -48,13 +48,13 @@ func verifyHeaderAlignment(coord []int, cnames []string, n *NodeData) {
         return
     }
 
-    n.HeaderAligned = true
-    n.HeaderLogger.newInfo(fmt.Sprintf("%s: %v", HeaderAligned, cnames))
+    node.HeaderAligned = true
+    node.HeaderLogger.newInfo(fmt.Sprintf("%s: %v", HeaderAligned, cnames))
 }
 
-func checkHeaderAlignment(index []int) bool {
-    for i := 1; i < len(index); i++ {
-        if index[0] != index[i] {
+func checkHeaderAlignment(coords []int) bool {
+    for i := 1; i < len(coords); i++ {
+        if coords[0] != coords[i] {
             return false
         }
     }
@@ -62,10 +62,10 @@ func checkHeaderAlignment(index []int) bool {
 }
 
 type coordinates struct {
-    keys   []int
-    cnames []string
-    coordX []int
-    coordY []int
+    elkeys  []int
+    cnames  []string
+    coordsX []int
+    coordsY []int
 }
 
 func cellNamesToCoordinates(cnames map[int]string) (*coordinates, error) {
@@ -75,10 +75,10 @@ func cellNamesToCoordinates(cnames map[int]string) (*coordinates, error) {
         if err != nil {
             return nil, fmt.Errorf("%v: %v", ErrParsingCellNames, err)
         }
-        coords.keys = append(coords.keys, k)
+        coords.elkeys = append(coords.elkeys, k)
         coords.cnames = append(coords.cnames, v)
-        coords.coordX = append(coords.coordX, x)
-        coords.coordY = append(coords.coordY, y)
+        coords.coordsX = append(coords.coordsX, x)
+        coords.coordsY = append(coords.coordsY, y)
     }
 
     return &coords, nil
@@ -93,44 +93,44 @@ type verifyString struct{}
 type verifyFloat struct{}
 type verifyInteger struct{}
 
-func (v verifyString) checkCellType(val string) (interface{}, error) {
-    return val, nil
+func (v verifyString) checkCellType(cell string) (interface{}, error) {
+    return cell, nil
 }
 
-func (v verifyString) checkCellLength(val interface{}, min, max int) error {
-    if len(val.(string)) < min || len(val.(string)) > max {
+func (v verifyString) checkCellLength(cell interface{}, min, max int) error {
+    if len(cell.(string)) < min || len(cell.(string)) > max {
         return fmt.Errorf("%v %d-%d", ErrValueOutOfRange, min, max)
     } else {
         return nil
     }
 }
 
-func (v verifyInteger) checkCellType(val string) (interface{}, error) {
-    if v, err := strconv.Atoi(val); err != nil {
+func (v verifyInteger) checkCellType(cell string) (interface{}, error) {
+    if v, err := strconv.Atoi(cell); err != nil {
         return nil, ErrParsingInteger
     } else {
         return v, nil
     }
 }
 
-func (v verifyInteger) checkCellLength(val interface{}, min, max int) error {
-    if val.(int) < min || val.(int) > max {
+func (v verifyInteger) checkCellLength(cell interface{}, min, max int) error {
+    if cell.(int) < min || cell.(int) > max {
         return fmt.Errorf("%v %d-%d", ErrValueOutOfRange, min, max)
     } else {
         return nil
     }
 }
 
-func (v verifyFloat) checkCellType(val string) (interface{}, error) {
-    if v, err := strconv.ParseFloat(val, 32); err == nil {
+func (v verifyFloat) checkCellType(cell string) (interface{}, error) {
+    if v, err := strconv.ParseFloat(cell, 32); err == nil {
         return nil, ErrParsingFloat
     } else {
         return v, nil
     }
 }
 
-func (v verifyFloat) checkCellLength(val interface{}, min, max int) error {
-    if val.(float32) < float32(min) || val.(float32) > float32(max) {
+func (v verifyFloat) checkCellLength(cell interface{}, min, max int) error {
+    if cell.(float32) < float32(min) || cell.(float32) > float32(max) {
         return fmt.Errorf("%v %d-%d", ErrValueOutOfRange, min, max)
     } else {
         return nil

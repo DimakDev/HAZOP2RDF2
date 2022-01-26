@@ -23,37 +23,37 @@ var (
 func (wb *Workbook) readHazopElements(
     sname string,
     elements map[int]Element,
-    n *NodeData,
+    node *NodeData,
 ) error {
-    for k, e := range elements {
-        coord, err := wb.File.SearchSheet(sname, e.Regex, true)
+    for i, element := range elements {
+        coords, err := wb.File.SearchSheet(sname, element.Regex, true)
         if err != nil {
             return fmt.Errorf("%v: %v", ErrScanningHeader, err)
         }
 
-        switch len(coord) {
+        switch len(coords) {
         case 0:
-            n.HeaderLogger.newWarning(
+            node.HeaderLogger.newWarning(
                 fmt.Sprintf("%s: `%s`",
                     HeaderNotFound,
-                    e.Name,
+                    element.Name,
                 ),
             )
         case 1:
-            n.Header[k], n.Element[k] = coord[0], e
-            n.HeaderLogger.newInfo(
+            node.Header[i], node.Element[i] = coords[0], element
+            node.HeaderLogger.newInfo(
                 fmt.Sprintf("%s: `%s` `%s`",
                     HeaderFound,
-                    e.Name,
-                    coord[0],
+                    element.Name,
+                    coords[0],
                 ),
             )
         default:
-            n.HeaderLogger.newWarning(
+            node.HeaderLogger.newWarning(
                 fmt.Sprintf("%v: `%s` %v",
                     HeaderMultipleCoordinates,
-                    e.Name,
-                    coord,
+                    element.Name,
+                    coords,
                 ),
             )
         }
@@ -89,9 +89,9 @@ type reader struct {
     cellNames    readXYCellNames
 }
 
-func readXCellNames(x, y, length int) ([]string, error) {
-    cnames := make([]string, length)
-    for i := 0; i < length; i++ {
+func readXCellNames(x, y, size int) ([]string, error) {
+    cnames := make([]string, size)
+    for i := 0; i < size; i++ {
         cname, err := excelize.CoordinatesToCellName(x+i, y)
         if err != nil {
             return nil, fmt.Errorf("%v: %v", ErrParsingCoordinates, err)
@@ -102,9 +102,9 @@ func readXCellNames(x, y, length int) ([]string, error) {
     return cnames, nil
 }
 
-func readYCellNames(y, x, length int) ([]string, error) {
-    cnames := make([]string, length)
-    for i := 0; i < length; i++ {
+func readYCellNames(y, x, size int) ([]string, error) {
+    cnames := make([]string, size)
+    for i := 0; i < size; i++ {
         cname, err := excelize.CoordinatesToCellName(x, y+i)
         if err != nil {
             return nil, fmt.Errorf("%v: %v", ErrParsingCoordinates, err)
