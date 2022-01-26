@@ -41,7 +41,7 @@ import (
 var (
     ErrReadingSettings        = errors.New("Error reading `settings.toml`")
     ErrNoValidWorksheetsFound = errors.New("Error no valid worksheets found")
-    ErrDataDirectoryIsEmpty   = errors.New("Error Data directory is empty, no Excel files found")
+    ErrDataDirectoryIsEmpty   = errors.New("Error data directory is empty, no Excel files found")
     ErrReadingDirecotry       = errors.New("Error reading directory")
     ErrPromptFailed           = errors.New("Error prompt failed")
     InfoDescription           = "Import, parse and verify"

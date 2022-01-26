@@ -62,15 +62,6 @@ func (wb *Workbook) readHazopElements(
     return nil
 }
 
-type readXYCellNames func(int, int, int) ([]string, error)
-type readXYCoord func(string) (int, error)
-
-type reader struct {
-    varDimension readXYCoord
-    fixDimension readXYCoord
-    cellNames    readXYCellNames
-}
-
 func (wb *Workbook) getNCols(sname string) (int, error) {
     cols, err := wb.File.GetCols(sname)
     if err != nil {
@@ -87,6 +78,15 @@ func (wb *Workbook) getNRows(sname string) (int, error) {
     }
 
     return len(rows), nil
+}
+
+type readXYCellNames func(int, int, int) ([]string, error)
+type readXYCoordinates func(string) (int, error)
+
+type reader struct {
+    varDimension readXYCoordinates
+    fixDimension readXYCoordinates
+    cellNames    readXYCellNames
 }
 
 func readXCellNames(x, y, length int) ([]string, error) {
@@ -115,7 +115,7 @@ func readYCellNames(y, x, length int) ([]string, error) {
     return cnames, nil
 }
 
-func readXCoord(cname string) (int, error) {
+func readXCoordinates(cname string) (int, error) {
     x, _, err := excelize.CellNameToCoordinates(cname)
     if err != nil {
         return 0, fmt.Errorf("%v: %v", ErrParsingCoordinateName, err)
@@ -124,7 +124,7 @@ func readXCoord(cname string) (int, error) {
     return x, nil
 }
 
-func readYCoord(cname string) (int, error) {
+func readYCoordinates(cname string) (int, error) {
     _, y, err := excelize.CellNameToCoordinates(cname)
     if err != nil {
         return 0, fmt.Errorf("%v: %v", ErrParsingCoordinateName, err)
