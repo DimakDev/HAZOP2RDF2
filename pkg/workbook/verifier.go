@@ -19,7 +19,7 @@ var (
     HeaderAligned       = "Header aligned"
 )
 
-func verifyHeaderAlignment(coords []int, cnames []string, node *NodeData) {
+func (node *NodeData) verifyHeaderAlignment(coords []int, cnames []string) {
     if len(coords) == 0 {
         node.HeaderAligned = false
         node.HeaderLogger.newError(ErrNoHeaderFound.Error())

@@ -70,7 +70,7 @@ func (wb *Workbook) ReadVerifyWorkbook(wg *sync.WaitGroup) error {
 
             if err := wb.readHazopElements(
                 sname,
-                Hazop.groupHazopElements(Hazop.DataType.Metadata),
+                Hazop.Elements(Hazop.DataType.Metadata),
                 metadata,
             ); err != nil {
                 log.Println(err)
@@ -79,7 +79,7 @@ func (wb *Workbook) ReadVerifyWorkbook(wg *sync.WaitGroup) error {
 
             if err := wb.readHazopElements(
                 sname,
-                Hazop.groupHazopElements(Hazop.DataType.Analysis),
+                Hazop.Elements(Hazop.DataType.Analysis),
                 analysis,
             ); err != nil {
                 log.Println(err)
@@ -98,16 +98,14 @@ func (wb *Workbook) ReadVerifyWorkbook(wg *sync.WaitGroup) error {
                 return
             }
 
-            verifyHeaderAlignment(
+            metadata.verifyHeaderAlignment(
                 metadataCoords.coordsX,
                 metadataCoords.cnames,
-                metadata,
             )
 
-            verifyHeaderAlignment(
+            analysis.verifyHeaderAlignment(
                 analysisCoords.coordsY,
                 analysisCoords.cnames,
-                analysis,
             )
 
             numCols, err := wb.getNCols(sname)
