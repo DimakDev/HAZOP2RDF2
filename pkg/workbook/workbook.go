@@ -100,6 +100,7 @@ func (wb *Workbook) ReadVerifyWorkbook(wg *sync.WaitGroup) error {
                 log.Println(err)
                 return
             }
+
             verifyHeaderAlignment(coordsM.coordX, coordsM.cnames, nodeM)
             verifyHeaderAlignment(coordsA.coordY, coordsA.cnames, nodeA)
 
@@ -116,14 +117,14 @@ func (wb *Workbook) ReadVerifyWorkbook(wg *sync.WaitGroup) error {
             }
 
             readerM := &reader{
-                varDimension: readXCoordinates,
-                fixDimension: readYCoordinates,
+                varDimension: readXCoordinate,
+                fixDimension: readYCoordinate,
                 cellNames:    readXCellNames,
             }
 
             readerA := &reader{
-                varDimension: readYCoordinates,
-                fixDimension: readXCoordinates,
+                varDimension: readYCoordinate,
+                fixDimension: readXCoordinate,
                 cellNames:    readYCellNames,
             }
 
@@ -169,15 +170,15 @@ func (wb *Workbook) readVerifyHazopData(
     r *reader,
     n *NodeData,
 ) error {
-    for k, cname := range n.Header {
+    for k, hname := range n.Header {
         e := n.Element[k]
 
-        d1, err := r.varDimension(cname)
+        d1, err := r.varDimension(hname)
         if err != nil {
             return err
         }
 
-        d2, err := r.fixDimension(cname)
+        d2, err := r.fixDimension(hname)
         if err != nil {
             return err
         }

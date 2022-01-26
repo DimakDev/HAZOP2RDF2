@@ -81,11 +81,11 @@ func (wb *Workbook) getNRows(sname string) (int, error) {
 }
 
 type readXYCellNames func(int, int, int) ([]string, error)
-type readXYCoordinates func(string) (int, error)
+type readXYCoordinate func(string) (int, error)
 
 type reader struct {
-    varDimension readXYCoordinates
-    fixDimension readXYCoordinates
+    varDimension readXYCoordinate
+    fixDimension readXYCoordinate
     cellNames    readXYCellNames
 }
 
@@ -115,7 +115,7 @@ func readYCellNames(y, x, length int) ([]string, error) {
     return cnames, nil
 }
 
-func readXCoordinates(cname string) (int, error) {
+func readXCoordinate(cname string) (int, error) {
     x, _, err := excelize.CellNameToCoordinates(cname)
     if err != nil {
         return 0, fmt.Errorf("%v: %v", ErrParsingCoordinateName, err)
@@ -124,7 +124,7 @@ func readXCoordinates(cname string) (int, error) {
     return x, nil
 }
 
-func readYCoordinates(cname string) (int, error) {
+func readYCoordinate(cname string) (int, error) {
     _, y, err := excelize.CellNameToCoordinates(cname)
     if err != nil {
         return 0, fmt.Errorf("%v: %v", ErrParsingCoordinateName, err)
