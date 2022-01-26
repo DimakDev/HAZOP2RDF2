@@ -13,7 +13,6 @@ var (
     ErrNotEnoughHeader  = errors.New("Not enough header to align")
     ErrHeaderNotAligned = errors.New("Header not aligned")
     ErrParsingCellNames = errors.New("Error parsing cell names")
-    ErrUnknownCellType  = errors.New("Unknown cell type")
     ErrParsingInteger   = errors.New("Failed parsing integer")
     ErrParsingFloat     = errors.New("Failed parsing float")
     ErrValueOutOfRange  = errors.New("Value out of range")
@@ -85,57 +84,20 @@ func cellNamesToCoordinates(cnames map[int]string) (*coordinates, error) {
     return &coords, nil
 }
 
-type parser func(string) (interface{}, error)
-type checker func(interface{}, int, int) error
-
-type verifier struct {
-    parseCell parser
-    checkCell checker
+type cellVerifier interface {
+    checkCellType(string) (interface{}, error)
+    checkCellLength(interface{}, int, int) error
 }
 
-func newVerifier(ctype int) (*verifier, error) {
-    switch ctype {
-    case Hazop.CellType.String:
-        return &verifier{
-            parseCell: parseStr,
-            checkCell: checkStrLen,
-        }, nil
-    case Hazop.CellType.Integer:
-        return &verifier{
-            parseCell: parseInt,
-            checkCell: checkIntRange,
-        }, nil
-    case Hazop.CellType.Float:
-        return &verifier{
-            parseCell: parseFloat,
-            checkCell: checkFloatRange,
-        }, nil
-    default:
-        return nil, fmt.Errorf("%v: %d", ErrUnknownCellType, ctype)
-    }
-}
+type verifyString struct{}
+type verifyFloat struct{}
+type verifyInteger struct{}
 
-func parseStr(val string) (interface{}, error) {
+func (v verifyString) checkCellType(val string) (interface{}, error) {
     return val, nil
 }
 
-func parseInt(val string) (interface{}, error) {
-    if v, err := strconv.Atoi(val); err != nil {
-        return nil, ErrParsingInteger
-    } else {
-        return v, nil
-    }
-}
-
-func parseFloat(val string) (interface{}, error) {
-    if v, err := strconv.ParseFloat(val, 32); err == nil {
-        return nil, ErrParsingFloat
-    } else {
-        return v, nil
-    }
-}
-
-func checkStrLen(val interface{}, min, max int) error {
+func (v verifyString) checkCellLength(val interface{}, min, max int) error {
     if len(val.(string)) < min || len(val.(string)) > max {
         return fmt.Errorf("%v %d-%d", ErrValueOutOfRange, min, max)
     } else {
@@ -143,7 +105,15 @@ func checkStrLen(val interface{}, min, max int) error {
     }
 }
 
-func checkIntRange(val interface{}, min, max int) error {
+func (v verifyInteger) checkCellType(val string) (interface{}, error) {
+    if v, err := strconv.Atoi(val); err != nil {
+        return nil, ErrParsingInteger
+    } else {
+        return v, nil
+    }
+}
+
+func (v verifyInteger) checkCellLength(val interface{}, min, max int) error {
     if val.(int) < min || val.(int) > max {
         return fmt.Errorf("%v %d-%d", ErrValueOutOfRange, min, max)
     } else {
@@ -151,7 +121,15 @@ func checkIntRange(val interface{}, min, max int) error {
     }
 }
 
-func checkFloatRange(val interface{}, min, max int) error {
+func (v verifyFloat) checkCellType(val string) (interface{}, error) {
+    if v, err := strconv.ParseFloat(val, 32); err == nil {
+        return nil, ErrParsingFloat
+    } else {
+        return v, nil
+    }
+}
+
+func (v verifyFloat) checkCellLength(val interface{}, min, max int) error {
     if val.(float32) < float32(min) || val.(float32) > float32(max) {
         return fmt.Errorf("%v %d-%d", ErrValueOutOfRange, min, max)
     } else {

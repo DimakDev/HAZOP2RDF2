@@ -14,6 +14,7 @@ import (
 var (
     ErrOpeningExcelFile = errors.New("Error opening Excel file")
     ErrClosingExcelFile = errors.New("Error closing Excel file")
+    ErrUnknownCellType  = errors.New("Unknown cell type")
 )
 
 type Workbook struct {
@@ -115,14 +116,14 @@ func (wb *Workbook) ReadVerifyWorkbook(wg *sync.WaitGroup) error {
             }
 
             readerM := &reader{
-                varDimension: readXCoord,
-                fixDimension: readYCoord,
+                varDimension: readXCoordinates,
+                fixDimension: readYCoordinates,
                 cellNames:    readXCellNames,
             }
 
             readerA := &reader{
-                varDimension: readYCoord,
-                fixDimension: readXCoord,
+                varDimension: readYCoordinates,
+                fixDimension: readXCoordinates,
                 cellNames:    readYCellNames,
             }
 
@@ -186,9 +187,17 @@ func (wb *Workbook) readVerifyHazopData(
             return err
         }
 
-        v, err := newVerifier(e.CellType)
-        if err != nil {
-            return err
+        var v cellVerifier
+
+        switch e.CellType {
+        case Hazop.CellType.String:
+            v = verifyString{}
+        case Hazop.CellType.Integer:
+            v = verifyInteger{}
+        case Hazop.CellType.Float:
+            v = verifyFloat{}
+        default:
+            return fmt.Errorf("%v: %d", ErrUnknownCellType, e.CellType)
         }
 
         vec := make([]interface{}, len(cnames))
@@ -200,13 +209,13 @@ func (wb *Workbook) readVerifyHazopData(
                 return fmt.Errorf("%s: %v", ErrReadingCellValue, err)
             }
 
-            c, err := v.parseCell(cell)
+            c, err := v.checkCellType(cell)
             if err != nil {
                 n.DataLogger.newError(fmt.Sprintf("%v: `%s`", err, cnames[i]))
                 continue
             }
 
-            if err := v.checkCell(c, e.MinLen, e.MaxLen); err != nil {
+            if err := v.checkCellLength(c, e.MinLen, e.MaxLen); err != nil {
                 n.DataLogger.newError(fmt.Sprintf("%v: `%s`", err, cnames[i]))
                 continue
             }
