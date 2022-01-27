@@ -13,7 +13,7 @@ var (
 )
 
 type verifier interface {
-    checkCellType(string) (interface{}, error)
+    checkCellType(interface{}) (interface{}, error)
     checkCellLength(interface{}, int, int) error
 }
 
@@ -34,20 +34,20 @@ func newCellVerifier(ctype int) (verifier, error) {
     }
 }
 
-func (v verifierString) checkCellType(cell string) (interface{}, error) {
-    return cell, nil
+func (v verifierString) checkCellType(cell interface{}) (interface{}, error) {
+    return cell.(string), nil
 }
 
-func (v verifierInteger) checkCellType(cell string) (interface{}, error) {
-    if v, err := strconv.Atoi(cell); err != nil {
+func (v verifierInteger) checkCellType(cell interface{}) (interface{}, error) {
+    if v, err := strconv.Atoi(cell.(string)); err != nil {
         return nil, ErrParsingInteger
     } else {
         return v, nil
     }
 }
 
-func (v verifierFloat) checkCellType(cell string) (interface{}, error) {
-    if v, err := strconv.ParseFloat(cell, 32); err == nil {
+func (v verifierFloat) checkCellType(cell interface{}) (interface{}, error) {
+    if v, err := strconv.ParseFloat(cell.(string), 32); err == nil {
         return nil, ErrParsingFloat
     } else {
         return v, nil
