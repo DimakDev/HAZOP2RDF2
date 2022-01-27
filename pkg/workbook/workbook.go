@@ -335,6 +335,29 @@ func (node *NodeData) verifyHeaderAlignment(coords []int, cnames []string) {
     node.HeaderLogger.newInfo(fmt.Sprintf("%s: %v", HeaderAligned, cnames))
 }
 
+type coordinates struct {
+    elkeys  []int
+    cnames  []string
+    coordsX []int
+    coordsY []int
+}
+
+func cellNamesToCoordinates(cnames map[int]string) (*coordinates, error) {
+    var coords coordinates
+    for k, v := range cnames {
+        x, y, err := excelize.CellNameToCoordinates(v)
+        if err != nil {
+            return nil, fmt.Errorf("%v: %v", ErrParsingCellNames, err)
+        }
+        coords.elkeys = append(coords.elkeys, k)
+        coords.cnames = append(coords.cnames, v)
+        coords.coordsX = append(coords.coordsX, x)
+        coords.coordsY = append(coords.coordsY, y)
+    }
+
+    return &coords, nil
+}
+
 func (l *Logger) newWarning(msg string) {
     l.Warnings = append(l.Warnings, msg)
 }
