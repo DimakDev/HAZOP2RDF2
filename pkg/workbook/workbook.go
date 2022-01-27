@@ -93,6 +93,18 @@ func ReadVerifyWorkbook(fpath string, wg *sync.WaitGroup) (*Workbook, error) {
                 HeaderLogger: &Logger{},
             }
 
+            metadataElements, err := Hazop.Elements(Hazop.DataType.Metadata)
+            if err != nil {
+                log.Println(err)
+                return
+            }
+
+            analysisElements, err := Hazop.Elements(Hazop.DataType.Analysis)
+            if err != nil {
+                log.Println(err)
+                return
+            }
+
             metadataArgs := &args{
                 sname: sname,
                 nsize: ncols,
@@ -102,7 +114,7 @@ func ReadVerifyWorkbook(fpath string, wg *sync.WaitGroup) (*Workbook, error) {
                     fixDimension: readYCoordinate,
                     cellNames:    readXCellNames,
                 },
-                elements: Hazop.Elements(Hazop.DataType.Metadata),
+                elements: metadataElements,
             }
 
             analysisArgs := &args{
@@ -114,18 +126,12 @@ func ReadVerifyWorkbook(fpath string, wg *sync.WaitGroup) (*Workbook, error) {
                     fixDimension: readXCoordinate,
                     cellNames:    readYCellNames,
                 },
-                elements: Hazop.Elements(Hazop.DataType.Analysis),
+                elements: analysisElements,
             }
 
-            if err := wb.readVerifyNodeData(metadataArgs); err != nil {
-                log.Println(err)
-                return
-            }
-
-            if err := wb.readVerifyNodeData(analysisArgs); err != nil {
-                log.Println(err)
-                return
-            }
+            wg.Add(2)
+            go wb.readVerifyNodeData(metadataArgs, wg)
+            go wb.readVerifyNodeData(analysisArgs, wg)
 
             wb.Worksheets = append(wb.Worksheets, &Worksheet{
                 SheetIndex: sindex,
@@ -151,24 +157,27 @@ type args struct {
     elements []Element
 }
 
-func (wb *Workbook) readVerifyNodeData(args *args) error {
+func (wb *Workbook) readVerifyNodeData(args *args, wg *sync.WaitGroup) {
+    defer wg.Done()
     if err := wb.readNodeHeader(args); err != nil {
-        return err
+        log.Println(err)
+        return
     }
 
     if err := verifyNodeHeader(args); err != nil {
-        return err
+        log.Println(err)
+        return
     }
 
     if err := wb.readNodeData(args); err != nil {
-        return err
+        log.Println(err)
+        return
     }
 
     if err := verifyNodeData(args); err != nil {
-        return err
+        log.Println(err)
+        return
     }
-
-    return nil
 }
 
 func (wb *Workbook) readNodeHeader(args *args) error {
