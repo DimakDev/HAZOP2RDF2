@@ -84,11 +84,3 @@ func readYCoordinate(cname string) (int, error) {
 
     return y, nil
 }
-func checkHeaderAlignment(coords []int) bool {
-    for i := 1; i < len(coords); i++ {
-        if coords[0] != coords[i] {
-            return false
-        }
-    }
-    return true
-}

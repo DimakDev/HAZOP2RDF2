@@ -358,6 +358,15 @@ func cellNamesToCoordinates(cnames map[int]string) (*coordinates, error) {
     return &coords, nil
 }
 
+func checkHeaderAlignment(coords []int) bool {
+    for i := 1; i < len(coords); i++ {
+        if coords[0] != coords[i] {
+            return false
+        }
+    }
+    return true
+}
+
 func (l *Logger) newWarning(msg string) {
     l.Warnings = append(l.Warnings, msg)
 }
