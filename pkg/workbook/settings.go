@@ -1,5 +1,12 @@
 package workbook
 
+import (
+    "errors"
+    "fmt"
+)
+
+var ErrNoHazopElementsFound = errors.New("Error no Hazop elements found")
+
 type DataType struct {
     Metadata int `mapstructure:"metadata"`
     Analysis int `mapstructure:"analysis"`
@@ -28,7 +35,7 @@ type HazopSettings struct {
 
 var Hazop HazopSettings
 
-func (h *HazopSettings) Elements(dtype int) []Element {
+func (h *HazopSettings) Elements(dtype int) ([]Element, error) {
     elements := []Element{}
     for _, e := range Hazop.Element {
         if e.DataType != dtype {
@@ -36,5 +43,10 @@ func (h *HazopSettings) Elements(dtype int) []Element {
         }
         elements = append(elements, e)
     }
-    return elements
+
+    if len(elements) == 0 {
+        return nil, fmt.Errorf("%v %d", ErrNoHazopElementsFound, dtype)
+    }
+
+    return elements, nil
 }
