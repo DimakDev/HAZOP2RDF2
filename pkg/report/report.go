@@ -24,33 +24,33 @@ var (
     ErrWritingReport       = errors.New("Error writing report")
 )
 
-func (r *Report) ReportToFile(fpath, ftemp string) error {
-    f, err := os.Create(fpath)
+func (r *Report) ReportToFile(path, temp string) error {
+    f, err := os.Create(path)
     if err != nil {
-        return fmt.Errorf("%v `%s`: %v", ErrCreatingReportFile, fpath, err)
+        return fmt.Errorf("%v `%s`: %v", ErrCreatingReportFile, path, err)
     }
     defer f.Close()
 
-    temp, err := template.ParseFiles(ftemp)
+    t, err := template.ParseFiles(temp)
     if err != nil {
-        return fmt.Errorf("%v `%s`: %v", ErrParsingTemplateFile, ftemp, err)
+        return fmt.Errorf("%v `%s`: %v", ErrParsingTemplateFile, temp, err)
     }
 
-    if err := temp.Execute(f, r); err != nil {
-        return fmt.Errorf("%v `%s`: %v", ErrWritingReport, ftemp, err)
+    if err := t.Execute(f, r); err != nil {
+        return fmt.Errorf("%v `%s`: %v", ErrWritingReport, temp, err)
     }
 
     return nil
 }
 
-func (r *Report) ReportToStdout(stemp string) error {
-    temp, err := template.ParseFiles(stemp)
+func (r *Report) ReportToStdout(temp string) error {
+    t, err := template.ParseFiles(temp)
     if err != nil {
-        return fmt.Errorf("%v `%s`: %v", ErrParsingTemplateFile, stemp, err)
+        return fmt.Errorf("%v `%s`: %v", ErrParsingTemplateFile, temp, err)
     }
 
-    if err := temp.Execute(os.Stdout, r); err != nil {
-        return fmt.Errorf("%v `%s`: %v", ErrWritingReport, stemp, err)
+    if err := t.Execute(os.Stdout, r); err != nil {
+        return fmt.Errorf("%v `%s`: %v", ErrWritingReport, temp, err)
     }
 
     return nil
