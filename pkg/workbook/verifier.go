@@ -47,7 +47,7 @@ func (v verifierInteger) checkCellType(cell interface{}) (interface{}, error) {
 }
 
 func (v verifierFloat) checkCellType(cell interface{}) (interface{}, error) {
-    if v, err := strconv.ParseFloat(cell.(string), 32); err == nil {
+    if v, err := strconv.ParseFloat(cell.(string), 32); err != nil {
         return nil, ErrParsingFloat
     } else {
         return v, nil
