@@ -93,9 +93,12 @@ func (wb *Workbook) ReadVerifyWorkbook(wg *sync.WaitGroup) error {
                 HeaderLogger: &Logger{},
             }
 
+            metadataElements := Hazop.Elements(Hazop.DataType.Metadata)
+            analysisElements := Hazop.Elements(Hazop.DataType.Analysis)
+
             if err := wb.readHazopElements(
                 sname,
-                Hazop.Elements(Hazop.DataType.Metadata),
+                metadataElements,
                 metadata,
             ); err != nil {
                 log.Println(err)
@@ -104,7 +107,7 @@ func (wb *Workbook) ReadVerifyWorkbook(wg *sync.WaitGroup) error {
 
             if err := wb.readHazopElements(
                 sname,
-                Hazop.Elements(Hazop.DataType.Analysis),
+                analysisElements,
                 analysis,
             ); err != nil {
                 log.Println(err)
@@ -145,6 +148,9 @@ func (wb *Workbook) ReadVerifyWorkbook(wg *sync.WaitGroup) error {
                 return
             }
 
+            ncols := len(cols)
+            nrows := len(rows)
+
             metadataReader := &reader{
                 varDimension: readXCoordinate,
                 fixDimension: readYCoordinate,
@@ -159,7 +165,7 @@ func (wb *Workbook) ReadVerifyWorkbook(wg *sync.WaitGroup) error {
 
             if err := wb.readVerifyHazopData(
                 sname,
-                len(cols),
+                ncols,
                 metadataReader,
                 metadata,
             ); err != nil {
@@ -169,7 +175,7 @@ func (wb *Workbook) ReadVerifyWorkbook(wg *sync.WaitGroup) error {
 
             if err := wb.readVerifyHazopData(
                 sname,
-                len(rows),
+                nrows,
                 analysisReader,
                 analysis,
             ); err != nil {
