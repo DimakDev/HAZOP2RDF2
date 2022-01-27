@@ -33,7 +33,7 @@ func (r *reader) readCellNames(start string, end int) ([]string, error) {
         return nil, err
     }
 
-    cnames, err := r.cellNames(d1, d2, end-d1)
+    cnames, err := r.cellNames(d1, d2, end-d1+1)
     if err != nil {
         return nil, err
     }
