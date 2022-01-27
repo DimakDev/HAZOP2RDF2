@@ -91,12 +91,12 @@ type Program struct {
 }
 
 type Common struct {
-    DataDir    string `mapstructure:"data_dir"`
-    DataExt    string `mapstructure:"data_ext"`
-    ReportDir  string `mapstructure:"report_dir"`
-    ReportExt  string `mapstructure:"report_ext"`
-    TempFile   string `mapstructure:"temp_file"`
-    TempStdout string `mapstructure:"temp_stdout"`
+    DataDir        string `mapstructure:"data_dir"`
+    DataExt        string `mapstructure:"data_ext"`
+    ReportDir      string `mapstructure:"report_dir"`
+    ReportExt      string `mapstructure:"report_ext"`
+    TemplateFile   string `mapstructure:"template_file"`
+    TemplateStdout string `mapstructure:"template_stdout"`
 }
 
 type Command struct {
@@ -184,15 +184,11 @@ func run() error {
     return nil
 }
 
-func runWorkbookRoutine(wpath string) (*workbook.Workbook, error) {
+func runWorkbookRoutine(fpath string) (*workbook.Workbook, error) {
     var wg sync.WaitGroup
 
-    wb, err := workbook.NewWorkbook(wpath)
+    wb, err := workbook.ReadVerifyWorkbook(fpath, &wg)
     if err != nil {
-        return nil, err
-    }
-
-    if err := wb.ReadVerifyWorkbook(&wg); err != nil {
         return nil, err
     }
 
@@ -206,22 +202,24 @@ func runWorkbookRoutine(wpath string) (*workbook.Workbook, error) {
 }
 
 func generateReport(wb *workbook.Workbook) error {
-    rpath := filepath.Join(common.ReportDir, wb.Name+common.ReportExt)
+    _, fname := filepath.Split(wb.File.Path)
+    wbname := strings.TrimSuffix(fname, filepath.Ext(fname))
+    rpath := filepath.Join(common.ReportDir, wbname+common.ReportExt)
 
     r := &report.Report{
         ReportPath:     rpath,
         ProgramName:    program.Name,
         ProgramVersion: program.Version,
         DateTime:       time.Now().Format(time.UnixDate),
-        Workbook:       wb.Name,
+        Workbook:       wbname,
         Worksheets:     wb.Worksheets,
     }
 
-    if err := r.ReportToFile(rpath, common.TempFile); err != nil {
+    if err := r.ReportToFile(rpath, common.TemplateFile); err != nil {
         return err
     }
 
-    if err := r.ReportToStdout(common.TempStdout); err != nil {
+    if err := r.ReportToStdout(common.TemplateStdout); err != nil {
         return err
     }
 
