@@ -12,9 +12,21 @@ import (
 )
 
 var (
-    ErrOpeningExcelFile = errors.New("Error opening Excel file")
-    ErrClosingExcelFile = errors.New("Error closing Excel file")
-    ErrUnknownCellType  = errors.New("Unknown cell type")
+    ErrOpeningExcelFile       = errors.New("Error opening Excel file")
+    ErrClosingExcelFile       = errors.New("Error closing Excel file")
+    ErrNoHeaderFound          = errors.New("Error no valid header found")
+    ErrNotEnoughHeader        = errors.New("Error not enough headers")
+    ErrHeaderNotAligned       = errors.New("Error header not aligned")
+    ErrUnknownCellType        = errors.New("Error unknown cell type")
+    ErrSearchingHeader        = errors.New("Error searching header")
+    ErrReadingCellValue       = errors.New("Error reading cell value")
+    ErrReadingColumns         = errors.New("Error reading columns")
+    ErrReadingRows            = errors.New("Error reading rows")
+    HeaderAligned             = "Header aligned"
+    HeaderNotFound            = "Header not found"
+    HeaderFound               = "Header found"
+    HeaderMultipleCoordinates = "Header multiple coordinates found"
+    ValueParsedVerified       = "Value parsed/verified"
 )
 
 type Workbook struct {
@@ -65,8 +77,21 @@ func (wb *Workbook) ReadVerifyWorkbook(wg *sync.WaitGroup) error {
         wg.Add(1)
         go func(sindex int, sname string) {
             defer wg.Done()
-            metadata := newNodeData()
-            analysis := newNodeData()
+            metadata := &NodeData{
+                Data:         map[int][]interface{}{},
+                Header:       map[int]string{},
+                Element:      map[int]Element{},
+                DataLogger:   &Logger{},
+                HeaderLogger: &Logger{},
+            }
+
+            analysis := &NodeData{
+                Data:         map[int][]interface{}{},
+                Header:       map[int]string{},
+                Element:      map[int]Element{},
+                DataLogger:   &Logger{},
+                HeaderLogger: &Logger{},
+            }
 
             if err := wb.readHazopElements(
                 sname,
@@ -168,12 +193,7 @@ func (wb *Workbook) ReadVerifyWorkbook(wg *sync.WaitGroup) error {
     return nil
 }
 
-func (wb *Workbook) readVerifyHazopData(
-    sname string,
-    size int,
-    reader *reader,
-    node *NodeData,
-) error {
+func (wb *Workbook) readVerifyHazopData(sname string, size int, reader *reader, node *NodeData) error {
     for hindex, hname := range node.Header {
         element := node.Element[hindex]
 
@@ -256,14 +276,93 @@ func (wb *Workbook) readVerifyHazopData(
     return nil
 }
 
-func newNodeData() *NodeData {
-    return &NodeData{
-        Data:         map[int][]interface{}{},
-        Header:       map[int]string{},
-        Element:      map[int]Element{},
-        DataLogger:   &Logger{},
-        HeaderLogger: &Logger{},
+func (wb *Workbook) readHazopElements(sname string, elements map[int]Element, node *NodeData) error {
+    for i, element := range elements {
+        coords, err := wb.File.SearchSheet(sname, element.Regex, true)
+        if err != nil {
+            return fmt.Errorf("%v: %v", ErrSearchingHeader, err)
+        }
+
+        switch len(coords) {
+        case 0:
+            node.HeaderLogger.newWarning(
+                fmt.Sprintf("%s: `%s`",
+                    HeaderNotFound,
+                    element.Name,
+                ),
+            )
+        case 1:
+            node.Header[i], node.Element[i] = coords[0], element
+            node.HeaderLogger.newInfo(
+                fmt.Sprintf("%s: `%s` `%s`",
+                    HeaderFound,
+                    element.Name,
+                    coords[0],
+                ),
+            )
+        default:
+            node.HeaderLogger.newWarning(
+                fmt.Sprintf("%v: `%s` %v",
+                    HeaderMultipleCoordinates,
+                    element.Name,
+                    coords,
+                ),
+            )
+        }
     }
+
+    return nil
+}
+
+func (node *NodeData) verifyHeaderAlignment(coords []int, cnames []string) {
+    if len(coords) == 0 {
+        node.HeaderAligned = false
+        node.HeaderLogger.newError(ErrNoHeaderFound.Error())
+        return
+    }
+
+    if len(coords) == 1 {
+        node.HeaderAligned = false
+        node.HeaderLogger.newError(
+            fmt.Sprintf("%v: %v",
+                ErrNotEnoughHeader,
+                cnames,
+            ),
+        )
+        return
+    }
+
+    if !checkHeaderAlignment(coords) {
+        node.HeaderAligned = false
+        node.HeaderLogger.newError(
+            fmt.Sprintf("%v: %v",
+                ErrHeaderNotAligned,
+                cnames,
+            ),
+        )
+        return
+    }
+
+    node.HeaderAligned = true
+    node.HeaderLogger.newInfo(fmt.Sprintf("%s: %v", HeaderAligned, cnames))
+}
+
+func (wb *Workbook) getNCols(sname string) (int, error) {
+    cols, err := wb.File.GetCols(sname)
+    if err != nil {
+        return 0, fmt.Errorf("%v: %v", ErrReadingColumns, err)
+    }
+
+    return len(cols), nil
+}
+
+func (wb *Workbook) getNRows(sname string) (int, error) {
+    rows, err := wb.File.GetRows(sname)
+    if err != nil {
+        return 0, fmt.Errorf("%v: %v", ErrReadingRows, err)
+    }
+
+    return len(rows), nil
 }
 
 func (l *Logger) newWarning(msg string) {

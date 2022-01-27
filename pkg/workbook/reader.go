@@ -8,77 +8,10 @@ import (
 )
 
 var (
-    ErrScanningHeader         = errors.New("Error scanning header")
-    ErrReadingCellValue       = errors.New("Error reading cell value")
-    ErrReadingColumns         = errors.New("Error reading columns")
-    ErrReadingRows            = errors.New("Error reading rows")
-    ErrParsingCoordinates     = errors.New("Error parsing coordniates")
-    ErrParsingCoordinateName  = errors.New("Error parsing coordinate name")
-    HeaderNotFound            = "Header not found"
-    HeaderFound               = "Header found"
-    HeaderMultipleCoordinates = "Header multiple coordinates found"
-    ValueParsedVerified       = "Value parsed/verified"
+    ErrParsingCoordinate     = errors.New("Error parsing coordniate")
+    ErrParsingCoordinateName = errors.New("Error parsing coordinate name")
+    ErrParsingCellNames      = errors.New("Error parsing cell names")
 )
-
-func (wb *Workbook) readHazopElements(
-    sname string,
-    elements map[int]Element,
-    node *NodeData,
-) error {
-    for i, element := range elements {
-        coords, err := wb.File.SearchSheet(sname, element.Regex, true)
-        if err != nil {
-            return fmt.Errorf("%v: %v", ErrScanningHeader, err)
-        }
-
-        switch len(coords) {
-        case 0:
-            node.HeaderLogger.newWarning(
-                fmt.Sprintf("%s: `%s`",
-                    HeaderNotFound,
-                    element.Name,
-                ),
-            )
-        case 1:
-            node.Header[i], node.Element[i] = coords[0], element
-            node.HeaderLogger.newInfo(
-                fmt.Sprintf("%s: `%s` `%s`",
-                    HeaderFound,
-                    element.Name,
-                    coords[0],
-                ),
-            )
-        default:
-            node.HeaderLogger.newWarning(
-                fmt.Sprintf("%v: `%s` %v",
-                    HeaderMultipleCoordinates,
-                    element.Name,
-                    coords,
-                ),
-            )
-        }
-    }
-
-    return nil
-}
-
-func (wb *Workbook) getNCols(sname string) (int, error) {
-    cols, err := wb.File.GetCols(sname)
-    if err != nil {
-        return 0, fmt.Errorf("%v: %v", ErrReadingColumns, err)
-    }
-
-    return len(cols), nil
-}
-
-func (wb *Workbook) getNRows(sname string) (int, error) {
-    rows, err := wb.File.GetRows(sname)
-    if err != nil {
-        return 0, fmt.Errorf("%v: %v", ErrReadingRows, err)
-    }
-
-    return len(rows), nil
-}
 
 type readXYCellNames func(int, int, int) ([]string, error)
 type readXYCoordinate func(string) (int, error)
@@ -94,7 +27,7 @@ func readXCellNames(x, y, size int) ([]string, error) {
     for i := 0; i < size; i++ {
         cname, err := excelize.CoordinatesToCellName(x+i, y)
         if err != nil {
-            return nil, fmt.Errorf("%v: %v", ErrParsingCoordinates, err)
+            return nil, fmt.Errorf("%v: %v", ErrParsingCoordinate, err)
         }
         cnames[i] = cname
     }
@@ -107,7 +40,7 @@ func readYCellNames(y, x, size int) ([]string, error) {
     for i := 0; i < size; i++ {
         cname, err := excelize.CoordinatesToCellName(x, y+i)
         if err != nil {
-            return nil, fmt.Errorf("%v: %v", ErrParsingCoordinates, err)
+            return nil, fmt.Errorf("%v: %v", ErrParsingCoordinate, err)
         }
         cnames[i] = cname
     }
@@ -131,4 +64,35 @@ func readYCoordinate(cname string) (int, error) {
     }
 
     return y, nil
+}
+func checkHeaderAlignment(coords []int) bool {
+    for i := 1; i < len(coords); i++ {
+        if coords[0] != coords[i] {
+            return false
+        }
+    }
+    return true
+}
+
+type coordinates struct {
+    elkeys  []int
+    cnames  []string
+    coordsX []int
+    coordsY []int
+}
+
+func cellNamesToCoordinates(cnames map[int]string) (*coordinates, error) {
+    var coords coordinates
+    for k, v := range cnames {
+        x, y, err := excelize.CellNameToCoordinates(v)
+        if err != nil {
+            return nil, fmt.Errorf("%v: %v", ErrParsingCellNames, err)
+        }
+        coords.elkeys = append(coords.elkeys, k)
+        coords.cnames = append(coords.cnames, v)
+        coords.coordsX = append(coords.coordsX, x)
+        coords.coordsY = append(coords.coordsY, y)
+    }
+
+    return &coords, nil
 }
