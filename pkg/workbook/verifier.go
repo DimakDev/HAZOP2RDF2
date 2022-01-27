@@ -12,20 +12,33 @@ var (
     ErrValueOutOfRange = errors.New("Error value out of range")
 )
 
-type cellVerifier interface {
+type verifier interface {
     checkCellType(string) (interface{}, error)
     checkCellLength(interface{}, int, int) error
 }
 
-type verifyString struct{}
-type verifyFloat struct{}
-type verifyInteger struct{}
+type verifierString struct{}
+type verifierFloat struct{}
+type verifierInteger struct{}
 
-func (v verifyString) checkCellType(cell string) (interface{}, error) {
+func newCellVerifier(ctype int) (verifier, error) {
+    switch ctype {
+    case Hazop.CellType.String:
+        return verifierString{}, nil
+    case Hazop.CellType.Integer:
+        return verifierInteger{}, nil
+    case Hazop.CellType.Float:
+        return verifierFloat{}, nil
+    default:
+        return nil, fmt.Errorf("%v: %d", ErrUnknownCellType, ctype)
+    }
+}
+
+func (v verifierString) checkCellType(cell string) (interface{}, error) {
     return cell, nil
 }
 
-func (v verifyInteger) checkCellType(cell string) (interface{}, error) {
+func (v verifierInteger) checkCellType(cell string) (interface{}, error) {
     if v, err := strconv.Atoi(cell); err != nil {
         return nil, ErrParsingInteger
     } else {
@@ -33,7 +46,7 @@ func (v verifyInteger) checkCellType(cell string) (interface{}, error) {
     }
 }
 
-func (v verifyFloat) checkCellType(cell string) (interface{}, error) {
+func (v verifierFloat) checkCellType(cell string) (interface{}, error) {
     if v, err := strconv.ParseFloat(cell, 32); err == nil {
         return nil, ErrParsingFloat
     } else {
@@ -41,7 +54,7 @@ func (v verifyFloat) checkCellType(cell string) (interface{}, error) {
     }
 }
 
-func (v verifyString) checkCellLength(cell interface{}, min, max int) error {
+func (v verifierString) checkCellLength(cell interface{}, min, max int) error {
     if len(cell.(string)) < min || len(cell.(string)) > max {
         return fmt.Errorf("%v %d-%d", ErrValueOutOfRange, min, max)
     } else {
@@ -49,7 +62,7 @@ func (v verifyString) checkCellLength(cell interface{}, min, max int) error {
     }
 }
 
-func (v verifyInteger) checkCellLength(cell interface{}, min, max int) error {
+func (v verifierInteger) checkCellLength(cell interface{}, min, max int) error {
     if cell.(int) < min || cell.(int) > max {
         return fmt.Errorf("%v %d-%d", ErrValueOutOfRange, min, max)
     } else {
@@ -57,7 +70,7 @@ func (v verifyInteger) checkCellLength(cell interface{}, min, max int) error {
     }
 }
 
-func (v verifyFloat) checkCellLength(cell interface{}, min, max int) error {
+func (v verifierFloat) checkCellLength(cell interface{}, min, max int) error {
     if cell.(float32) < float32(min) || cell.(float32) > float32(max) {
         return fmt.Errorf("%v %d-%d", ErrValueOutOfRange, min, max)
     } else {

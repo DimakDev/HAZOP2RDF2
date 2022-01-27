@@ -22,6 +22,25 @@ type reader struct {
     cellNames    readXYCellNames
 }
 
+func (r *reader) readCellNames(start string, end int) ([]string, error) {
+    d1, err := r.varDimension(start)
+    if err != nil {
+        return nil, err
+    }
+
+    d2, err := r.fixDimension(start)
+    if err != nil {
+        return nil, err
+    }
+
+    cnames, err := r.cellNames(d1, d2, end-d1)
+    if err != nil {
+        return nil, err
+    }
+
+    return cnames, nil
+}
+
 func readXCellNames(x, y, size int) ([]string, error) {
     cnames := make([]string, size)
     for i := 0; i < size; i++ {

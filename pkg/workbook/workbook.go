@@ -133,15 +133,15 @@ func (wb *Workbook) ReadVerifyWorkbook(wg *sync.WaitGroup) error {
                 analysisCoords.cnames,
             )
 
-            numCols, err := wb.getNCols(sname)
+            cols, err := wb.File.GetCols(sname)
             if err != nil {
-                log.Println(err)
+                log.Println(fmt.Errorf("%v: %v", ErrReadingColumns, err))
                 return
             }
 
-            numRows, err := wb.getNRows(sname)
+            rows, err := wb.File.GetRows(sname)
             if err != nil {
-                log.Println(err)
+                log.Println(fmt.Errorf("%v: %v", ErrReadingRows, err))
                 return
             }
 
@@ -159,7 +159,7 @@ func (wb *Workbook) ReadVerifyWorkbook(wg *sync.WaitGroup) error {
 
             if err := wb.readVerifyHazopData(
                 sname,
-                numCols,
+                len(cols),
                 metadataReader,
                 metadata,
             ); err != nil {
@@ -169,7 +169,7 @@ func (wb *Workbook) ReadVerifyWorkbook(wg *sync.WaitGroup) error {
 
             if err := wb.readVerifyHazopData(
                 sname,
-                numRows,
+                len(rows),
                 analysisReader,
                 analysis,
             ); err != nil {
@@ -194,42 +194,24 @@ func (wb *Workbook) ReadVerifyWorkbook(wg *sync.WaitGroup) error {
 }
 
 func (wb *Workbook) readVerifyHazopData(sname string, size int, reader *reader, node *NodeData) error {
-    for hindex, hname := range node.Header {
-        element := node.Element[hindex]
+    for i, cname := range node.Header {
+        element := node.Element[i]
 
-        d1, err := reader.varDimension(hname)
+        cnames, err := reader.readCellNames(cname, size)
         if err != nil {
             return err
         }
 
-        d2, err := reader.fixDimension(hname)
+        verifier, err := newCellVerifier(element.CellType)
         if err != nil {
             return err
-        }
-
-        cnames, err := reader.cellNames(d1, d2, size-d1)
-        if err != nil {
-            return err
-        }
-
-        var verifier cellVerifier
-
-        switch element.CellType {
-        case Hazop.CellType.String:
-            verifier = verifyString{}
-        case Hazop.CellType.Integer:
-            verifier = verifyInteger{}
-        case Hazop.CellType.Float:
-            verifier = verifyFloat{}
-        default:
-            return fmt.Errorf("%v: %d", ErrUnknownCellType, element.CellType)
         }
 
         data := make([]interface{}, len(cnames))
         data[0] = element.Name
 
-        for i := 1; i < len(cnames); i++ {
-            value, err := wb.File.GetCellValue(sname, cnames[i])
+        for k := 1; k < len(cnames); k++ {
+            value, err := wb.File.GetCellValue(sname, cnames[k])
             if err != nil {
                 return fmt.Errorf("%s: %v", ErrReadingCellValue, err)
             }
@@ -239,7 +221,7 @@ func (wb *Workbook) readVerifyHazopData(sname string, size int, reader *reader, 
                 node.DataLogger.newError(
                     fmt.Sprintf("%v: `%s`",
                         err,
-                        cnames[i],
+                        cnames[k],
                     ),
                 )
                 continue
@@ -254,7 +236,7 @@ func (wb *Workbook) readVerifyHazopData(sname string, size int, reader *reader, 
                 node.DataLogger.newError(
                     fmt.Sprintf("%v: `%s`",
                         err,
-                        cnames[i],
+                        cnames[k],
                     ),
                 )
                 continue
@@ -263,14 +245,14 @@ func (wb *Workbook) readVerifyHazopData(sname string, size int, reader *reader, 
             node.DataLogger.newInfo(
                 fmt.Sprintf("%s: `%s`",
                     ValueParsedVerified,
-                    cnames[i],
+                    cnames[k],
                 ),
             )
 
-            data[i] = cell
+            data[k] = cell
         }
 
-        node.Data[hindex] = data
+        node.Data[i] = data
     }
 
     return nil
@@ -345,24 +327,6 @@ func (node *NodeData) verifyHeaderAlignment(coords []int, cnames []string) {
 
     node.HeaderAligned = true
     node.HeaderLogger.newInfo(fmt.Sprintf("%s: %v", HeaderAligned, cnames))
-}
-
-func (wb *Workbook) getNCols(sname string) (int, error) {
-    cols, err := wb.File.GetCols(sname)
-    if err != nil {
-        return 0, fmt.Errorf("%v: %v", ErrReadingColumns, err)
-    }
-
-    return len(cols), nil
-}
-
-func (wb *Workbook) getNRows(sname string) (int, error) {
-    rows, err := wb.File.GetRows(sname)
-    if err != nil {
-        return 0, fmt.Errorf("%v: %v", ErrReadingRows, err)
-    }
-
-    return len(rows), nil
 }
 
 func (l *Logger) newWarning(msg string) {
