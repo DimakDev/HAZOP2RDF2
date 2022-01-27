@@ -28,13 +28,13 @@ type HazopSettings struct {
 
 var Hazop HazopSettings
 
-func (h *HazopSettings) Elements(dtype int) map[int]Element {
-    elements := map[int]Element{}
-    for i, e := range Hazop.Element {
+func (h *HazopSettings) Elements(dtype int) []Element {
+    elements := []Element{}
+    for _, e := range Hazop.Element {
         if e.DataType != dtype {
             continue
         }
-        elements[i] = e
+        elements = append(elements, e)
     }
     return elements
 }
