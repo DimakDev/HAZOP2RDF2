@@ -224,17 +224,30 @@ func (wb *Workbook) readHazopElements(rv *readVerifier) error {
 func filterHazopElements(coords []string, element Element, node *NodeData) {
     switch len(coords) {
     case 0:
-        msg := fmt.Sprintf("%s: `%s`", HeaderNotFound, element.Name)
-        node.HeaderLogger.newWarning(msg)
+        node.HeaderLogger.newWarning(
+            fmt.Sprintf("%s: `%s`",
+                HeaderNotFound,
+                element.Name,
+            ),
+        )
     case 1:
         node.NodeHeader = append(node.NodeHeader, coords[0])
         node.HazopElements = append(node.HazopElements, element)
-        name, coord := element.Name, coords[0]
-        msg := fmt.Sprintf("%s: `%s` `%s`", HeaderFound, name, coord)
-        node.HeaderLogger.newInfo(msg)
+        node.HeaderLogger.newInfo(
+            fmt.Sprintf("%s: `%s` `%s`",
+                HeaderFound,
+                element.Name,
+                coords[0],
+            ),
+        )
     default:
-        msg := fmt.Sprintf("%v: `%s` %v", HeaderMultipleCoordinates, element.Name, coords)
-        node.HeaderLogger.newWarning(msg)
+        node.HeaderLogger.newWarning(
+            fmt.Sprintf("%v: `%s` %v",
+                HeaderMultipleCoordinates,
+                element.Name,
+                coords,
+            ),
+        )
     }
 }
 
@@ -247,8 +260,12 @@ func (node *NodeData) verifyElementsAlignment(r reader) error {
 
     if len(node.NodeHeader) == 1 {
         node.HeaderAligned = false
-        msg := fmt.Sprintf("%v: %v", ErrNotEnoughHeader, node.NodeHeader)
-        node.HeaderLogger.newError(msg)
+        node.HeaderLogger.newError(
+            fmt.Sprintf("%v: %v",
+                ErrNotEnoughHeader,
+                node.NodeHeader,
+            ),
+        )
         return nil
     }
 
@@ -259,13 +276,21 @@ func (node *NodeData) verifyElementsAlignment(r reader) error {
 
     if !aligned {
         node.HeaderAligned = false
-        msg := fmt.Sprintf("%v: %v", ErrHeaderNotAligned, node.NodeHeader)
-        node.HeaderLogger.newError(msg)
+        node.HeaderLogger.newError(
+            fmt.Sprintf("%v: %v",
+                ErrHeaderNotAligned,
+                node.NodeHeader,
+            ),
+        )
     }
 
     node.HeaderAligned = true
-    msg := fmt.Sprintf("%s: %v", HeaderAligned, node.NodeHeader)
-    node.HeaderLogger.newInfo(msg)
+    node.HeaderLogger.newInfo(
+        fmt.Sprintf("%s: %v",
+            HeaderAligned,
+            node.NodeHeader,
+        ),
+    )
 
     return nil
 }
@@ -332,18 +357,22 @@ func (node *NodeData) verifyNodeData() error {
                 continue
             }
 
-            min := node.HazopElements[i].MinLen
-            max := node.HazopElements[i].MaxLen
-
-            if err := verifier.checkCellLength(cell, min, max); err != nil {
+            if err := verifier.checkCellLength(
+                cell,
+                node.HazopElements[i].MinLen,
+                node.HazopElements[i].MaxLen,
+            ); err != nil {
                 msg := fmt.Sprintf("%v: `%s`", err, node.CellNames[i][k])
                 node.DataLogger.newError(msg)
                 continue
             }
 
-            cname := node.CellNames[i][k]
-            msg := fmt.Sprintf("%s: `%s`", ValueParsedVerified, cname)
-            node.DataLogger.newInfo(msg)
+            node.DataLogger.newInfo(
+                fmt.Sprintf("%s: `%s`",
+                    ValueParsedVerified,
+                    node.CellNames[i][k],
+                ),
+            )
         }
     }
 
