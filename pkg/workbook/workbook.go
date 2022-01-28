@@ -65,68 +65,14 @@ func ReadVerifyWorkbook(fpath string, wg *sync.WaitGroup) (*Workbook, error) {
 
     for sindex, sname := range wb.File.GetSheetMap() {
         wg.Add(1)
+
         go func(sindex int, sname string) {
             defer wg.Done()
 
-            cols, err := wb.File.GetCols(sname)
-            if err != nil {
-                log.Println(fmt.Errorf("%v: %v", ErrReadingColumns, err))
-                return
-            }
-
-            rows, err := wb.File.GetRows(sname)
-            if err != nil {
-                log.Println(fmt.Errorf("%v: %v", ErrReadingRows, err))
-                return
-            }
-
-            ncols := len(cols)
-            nrows := len(rows)
-
-            metadata := &NodeData{
-                DataLogger:   &Logger{},
-                HeaderLogger: &Logger{},
-            }
-
-            analysis := &NodeData{
-                DataLogger:   &Logger{},
-                HeaderLogger: &Logger{},
-            }
-
-            metadataElements, err := Hazop.Elements(Hazop.DataType.Metadata)
+            metadataArgs, analysisArgs, err := wb.initArgs(sname)
             if err != nil {
                 log.Println(err)
                 return
-            }
-
-            analysisElements, err := Hazop.Elements(Hazop.DataType.Analysis)
-            if err != nil {
-                log.Println(err)
-                return
-            }
-
-            metadataArgs := &args{
-                sname: sname,
-                nsize: ncols,
-                node:  metadata,
-                reader: &reader{
-                    varDimension: readXCoordinate,
-                    fixDimension: readYCoordinate,
-                    cellNames:    readXCellNames,
-                },
-                elements: metadataElements,
-            }
-
-            analysisArgs := &args{
-                sname: sname,
-                nsize: nrows,
-                node:  analysis,
-                reader: &reader{
-                    varDimension: readYCoordinate,
-                    fixDimension: readXCoordinate,
-                    cellNames:    readYCellNames,
-                },
-                elements: analysisElements,
             }
 
             wg.Add(2)
@@ -136,8 +82,8 @@ func ReadVerifyWorkbook(fpath string, wg *sync.WaitGroup) (*Workbook, error) {
             wb.Worksheets = append(wb.Worksheets, &Worksheet{
                 SheetIndex: sindex,
                 SheetName:  sname,
-                Metadata:   metadata,
-                Analysis:   analysis,
+                Metadata:   metadataArgs.node,
+                Analysis:   analysisArgs.node,
             })
         }(sindex, sname)
     }
@@ -155,6 +101,63 @@ type args struct {
     node     *NodeData
     reader   *reader
     elements []Element
+}
+
+func (wb *Workbook) initArgs(sname string) (*args, *args, error) {
+    cols, err := wb.File.GetCols(sname)
+    if err != nil {
+        return nil, nil, fmt.Errorf("%v: %v", ErrReadingColumns, err)
+    }
+
+    rows, err := wb.File.GetRows(sname)
+    if err != nil {
+        return nil, nil, fmt.Errorf("%v: %v", ErrReadingRows, err)
+    }
+
+    ncols := len(cols)
+    nrows := len(rows)
+
+    metadataElements, err := Hazop.Elements(Hazop.DataType.Metadata)
+    if err != nil {
+        return nil, nil, err
+    }
+
+    analysisElements, err := Hazop.Elements(Hazop.DataType.Analysis)
+    if err != nil {
+        return nil, nil, err
+    }
+
+    metadataArgs := &args{
+        sname: sname,
+        nsize: ncols,
+        node: &NodeData{
+            DataLogger:   &Logger{},
+            HeaderLogger: &Logger{},
+        },
+        reader: &reader{
+            varDimension: readXCoordinate,
+            fixDimension: readYCoordinate,
+            cellNames:    readXCellNames,
+        },
+        elements: metadataElements,
+    }
+
+    analysisArgs := &args{
+        sname: sname,
+        nsize: nrows,
+        node: &NodeData{
+            DataLogger:   &Logger{},
+            HeaderLogger: &Logger{},
+        },
+        reader: &reader{
+            varDimension: readYCoordinate,
+            fixDimension: readXCoordinate,
+            cellNames:    readYCellNames,
+        },
+        elements: analysisElements,
+    }
+
+    return metadataArgs, analysisArgs, nil
 }
 
 func (wb *Workbook) readVerifyNodeData(args *args, wg *sync.WaitGroup) {
