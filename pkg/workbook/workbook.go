@@ -56,36 +56,77 @@ type Logger struct {
 }
 
 func ReadVerifyWorkbook(fpath string, wg *sync.WaitGroup) (*Workbook, error) {
-    file, err := excelize.OpenFile(fpath)
+    wb, err := newWorkbook(fpath)
     if err != nil {
-        return nil, fmt.Errorf("%v: %v", ErrOpeningExcelFile, err)
+        return nil, err
     }
 
-    var wb = &Workbook{File: file}
-
-    for sindex, sname := range wb.File.GetSheetMap() {
+    for i, name := range wb.File.GetSheetMap() {
         wg.Add(1)
 
-        go func(sindex int, sname string) {
+        go func(i int, name string) {
             defer wg.Done()
 
-            metadataArgs, analysisArgs, err := wb.initArgs(sname)
+            ws := wb.newWorksheet(i, name)
+
+            ncols, err := wb.getNCols(name)
             if err != nil {
                 log.Println(err)
                 return
             }
 
-            wg.Add(2)
-            go wb.readVerifyNodeData(metadataArgs, wg)
-            go wb.readVerifyNodeData(analysisArgs, wg)
+            nrows, err := wb.getNRows(name)
+            if err != nil {
+                log.Println(err)
+                return
+            }
 
-            wb.Worksheets = append(wb.Worksheets, &Worksheet{
-                SheetIndex: sindex,
-                SheetName:  sname,
-                Metadata:   metadataArgs.node,
-                Analysis:   analysisArgs.node,
-            })
-        }(sindex, sname)
+            metadataElements, err := Hazop.Elements(Hazop.DataType.Metadata)
+            if err != nil {
+                log.Println(err)
+                return
+            }
+
+            analysisElements, err := Hazop.Elements(Hazop.DataType.Analysis)
+            if err != nil {
+                log.Println(err)
+                return
+            }
+
+            metadataReader := reader{
+                varDimension: readXCoordinate,
+                fixDimension: readYCoordinate,
+                cellNames:    readXCellNames,
+            }
+
+            analysisReader := reader{
+                varDimension: readYCoordinate,
+                fixDimension: readXCoordinate,
+                cellNames:    readYCellNames,
+            }
+
+            metadataReadVerifier := &readVerifier{
+                nsize:    ncols,
+                elements: metadataElements,
+                sname:    ws.SheetName,
+                node:     ws.Metadata,
+                reader:   metadataReader,
+            }
+
+            analysisReadVerifier := &readVerifier{
+                nsize:    nrows,
+                elements: analysisElements,
+                sname:    ws.SheetName,
+                node:     ws.Analysis,
+                reader:   analysisReader,
+            }
+
+            wg.Add(2)
+            go wb.readVerifyNodeData(metadataReadVerifier, wg)
+            go wb.readVerifyNodeData(analysisReadVerifier, wg)
+
+            wb.Worksheets = append(wb.Worksheets, ws)
+        }(i, name)
     }
 
     if err := wb.File.Close(); err != nil {
@@ -95,252 +136,214 @@ func ReadVerifyWorkbook(fpath string, wg *sync.WaitGroup) (*Workbook, error) {
     return wb, nil
 }
 
-type args struct {
-    sname    string
+func newWorkbook(fpath string) (*Workbook, error) {
+    f, err := excelize.OpenFile(fpath)
+    if err != nil {
+        return nil, fmt.Errorf("%v: %v", ErrOpeningExcelFile, err)
+    }
+
+    return &Workbook{File: f}, nil
+}
+
+func (wb *Workbook) newWorksheet(sheetIndex int, sheetName string) *Worksheet {
+    return &Worksheet{
+        SheetIndex: sheetIndex,
+        SheetName:  sheetName,
+        Metadata: &NodeData{
+            DataLogger:   &Logger{},
+            HeaderLogger: &Logger{},
+        },
+        Analysis: &NodeData{
+            DataLogger:   &Logger{},
+            HeaderLogger: &Logger{},
+        },
+    }
+}
+
+func (wb *Workbook) getNCols(name string) (int, error) {
+    cols, err := wb.File.GetCols(name)
+    if err != nil {
+        return 0, fmt.Errorf("%v: %v", ErrReadingColumns, err)
+    }
+
+    return len(cols), nil
+}
+
+func (wb *Workbook) getNRows(name string) (int, error) {
+    rows, err := wb.File.GetRows(name)
+    if err != nil {
+        return 0, fmt.Errorf("%v: %v", ErrReadingRows, err)
+    }
+    return len(rows), nil
+}
+
+type readVerifier struct {
     nsize    int
-    node     *NodeData
-    reader   *reader
     elements []Element
+    sname    string
+    node     *NodeData
+    reader   reader
 }
 
-func (wb *Workbook) initArgs(sname string) (*args, *args, error) {
-    cols, err := wb.File.GetCols(sname)
-    if err != nil {
-        return nil, nil, fmt.Errorf("%v: %v", ErrReadingColumns, err)
-    }
-
-    rows, err := wb.File.GetRows(sname)
-    if err != nil {
-        return nil, nil, fmt.Errorf("%v: %v", ErrReadingRows, err)
-    }
-
-    ncols := len(cols)
-    nrows := len(rows)
-
-    metadataElements, err := Hazop.Elements(Hazop.DataType.Metadata)
-    if err != nil {
-        return nil, nil, err
-    }
-
-    analysisElements, err := Hazop.Elements(Hazop.DataType.Analysis)
-    if err != nil {
-        return nil, nil, err
-    }
-
-    metadataArgs := &args{
-        sname: sname,
-        nsize: ncols,
-        node: &NodeData{
-            DataLogger:   &Logger{},
-            HeaderLogger: &Logger{},
-        },
-        reader: &reader{
-            varDimension: readXCoordinate,
-            fixDimension: readYCoordinate,
-            cellNames:    readXCellNames,
-        },
-        elements: metadataElements,
-    }
-
-    analysisArgs := &args{
-        sname: sname,
-        nsize: nrows,
-        node: &NodeData{
-            DataLogger:   &Logger{},
-            HeaderLogger: &Logger{},
-        },
-        reader: &reader{
-            varDimension: readYCoordinate,
-            fixDimension: readXCoordinate,
-            cellNames:    readYCellNames,
-        },
-        elements: analysisElements,
-    }
-
-    return metadataArgs, analysisArgs, nil
-}
-
-func (wb *Workbook) readVerifyNodeData(args *args, wg *sync.WaitGroup) {
+func (wb *Workbook) readVerifyNodeData(rv *readVerifier, wg *sync.WaitGroup) {
     defer wg.Done()
-    if err := wb.readNodeHeader(args); err != nil {
+
+    if err := wb.readHazopElements(rv); err != nil {
         log.Println(err)
         return
     }
 
-    if err := verifyNodeHeader(args); err != nil {
+    if err := rv.node.verifyElementsAlignment(rv.reader); err != nil {
         log.Println(err)
         return
     }
 
-    if err := wb.readNodeData(args); err != nil {
+    if err := wb.readNodeData(rv); err != nil {
         log.Println(err)
         return
     }
 
-    if err := verifyNodeData(args); err != nil {
+    if err := rv.node.verifyNodeData(); err != nil {
         log.Println(err)
         return
     }
 }
 
-func (wb *Workbook) readNodeHeader(args *args) error {
-    for _, element := range args.elements {
-        coords, err := wb.File.SearchSheet(args.sname, element.Regex, true)
+func (wb *Workbook) readHazopElements(rv *readVerifier) error {
+    for _, element := range rv.elements {
+        coords, err := wb.File.SearchSheet(rv.sname, element.Regex, true)
         if err != nil {
             return fmt.Errorf("%v: %v", ErrSearchingHeader, err)
         }
 
-        switch len(coords) {
-        case 0:
-            args.node.HeaderLogger.newWarning(
-                fmt.Sprintf("%s: `%s`",
-                    HeaderNotFound,
-                    element.Name,
-                ),
-            )
-        case 1:
-            args.node.NodeHeader = append(args.node.NodeHeader, coords[0])
-            args.node.HazopElements = append(args.node.HazopElements, element)
-
-            args.node.HeaderLogger.newInfo(
-                fmt.Sprintf("%s: `%s` `%s`",
-                    HeaderFound,
-                    element.Name,
-                    coords[0],
-                ),
-            )
-        default:
-            args.node.HeaderLogger.newWarning(
-                fmt.Sprintf("%v: `%s` %v",
-                    HeaderMultipleCoordinates,
-                    element.Name,
-                    coords,
-                ),
-            )
-        }
+        filterHazopElements(coords, element, rv.node)
     }
-
     return nil
 }
 
-func verifyNodeHeader(args *args) error {
-    if len(args.node.NodeHeader) == 0 {
-        args.node.HeaderAligned = false
-        args.node.HeaderLogger.newError(ErrNoHeaderFound.Error())
+func filterHazopElements(coords []string, element Element, node *NodeData) {
+    switch len(coords) {
+    case 0:
+        msg := fmt.Sprintf("%s: `%s`", HeaderNotFound, element.Name)
+        node.HeaderLogger.newWarning(msg)
+    case 1:
+        node.NodeHeader = append(node.NodeHeader, coords[0])
+        node.HazopElements = append(node.HazopElements, element)
+        name, coord := element.Name, coords[0]
+        msg := fmt.Sprintf("%s: `%s` `%s`", HeaderFound, name, coord)
+        node.HeaderLogger.newInfo(msg)
+    default:
+        msg := fmt.Sprintf("%v: `%s` %v", HeaderMultipleCoordinates, element.Name, coords)
+        node.HeaderLogger.newWarning(msg)
+    }
+}
+
+func (node *NodeData) verifyElementsAlignment(r reader) error {
+    if len(node.NodeHeader) == 0 {
+        node.HeaderAligned = false
+        node.HeaderLogger.newError(ErrNoHeaderFound.Error())
         return nil
     }
 
-    if len(args.node.NodeHeader) == 1 {
-        args.node.HeaderAligned = false
-        args.node.HeaderLogger.newError(
-            fmt.Sprintf("%v: %v",
-                ErrNotEnoughHeader,
-                args.node.NodeHeader,
-            ),
-        )
+    if len(node.NodeHeader) == 1 {
+        node.HeaderAligned = false
+        msg := fmt.Sprintf("%v: %v", ErrNotEnoughHeader, node.NodeHeader)
+        node.HeaderLogger.newError(msg)
         return nil
     }
 
-    ref, err := args.reader.varDimension(args.node.NodeHeader[0])
+    aligned, err := node.elementsAligned(r)
     if err != nil {
         return err
     }
 
-    for i := 1; i < len(args.node.NodeHeader); i++ {
-        v, err := args.reader.varDimension(args.node.NodeHeader[i])
-        if err != nil {
-            return err
-        }
-
-        if ref != v {
-            args.node.HeaderAligned = false
-            args.node.HeaderLogger.newError(
-                fmt.Sprintf("%v: %v",
-                    ErrHeaderNotAligned,
-                    args.node.NodeHeader,
-                ),
-            )
-            return nil
-        }
+    if !aligned {
+        node.HeaderAligned = false
+        msg := fmt.Sprintf("%v: %v", ErrHeaderNotAligned, node.NodeHeader)
+        node.HeaderLogger.newError(msg)
     }
 
-    args.node.HeaderAligned = true
-    args.node.HeaderLogger.newInfo(
-        fmt.Sprintf("%s: %v",
-            HeaderAligned,
-            args.node.NodeHeader,
-        ),
-    )
+    node.HeaderAligned = true
+    msg := fmt.Sprintf("%s: %v", HeaderAligned, node.NodeHeader)
+    node.HeaderLogger.newInfo(msg)
 
     return nil
 }
 
-func (wb *Workbook) readNodeData(args *args) error {
-    args.node.NodeData = make([][]interface{}, len(args.node.NodeHeader))
-    args.node.CellNames = make([][]string, len(args.node.NodeHeader))
+func (node *NodeData) elementsAligned(r reader) (bool, error) {
+    ref, err := r.varDimension(node.NodeHeader[0])
+    if err != nil {
+        return false, err
+    }
 
-    for i, cname := range args.node.NodeHeader {
-        cnames, err := args.reader.readCellNames(cname, args.nsize)
+    for i := 1; i < len(node.NodeHeader); i++ {
+        v, err := r.varDimension(node.NodeHeader[i])
+        if err != nil {
+            return false, err
+        }
+
+        if ref != v {
+            return false, nil
+        }
+    }
+
+    return true, nil
+}
+
+func (wb *Workbook) readNodeData(rv *readVerifier) error {
+    rv.node.NodeData = make([][]interface{}, len(rv.node.NodeHeader))
+    rv.node.CellNames = make([][]string, len(rv.node.NodeHeader))
+
+    for i, cname := range rv.node.NodeHeader {
+        cnames, err := rv.reader.readCellNames(cname, rv.nsize)
         if err != nil {
             return err
         }
 
-        data := make([]interface{}, len(cnames))
+        cols := make([]interface{}, len(cnames))
         for k := 0; k < len(cnames); k++ {
-            cell, err := wb.File.GetCellValue(args.sname, cnames[k])
+            value, err := wb.File.GetCellValue(rv.sname, cnames[k])
             if err != nil {
                 return fmt.Errorf("%s: %v", ErrReadingCellValue, err)
             }
 
-            data[k] = cell
+            cols[k] = value
         }
 
-        args.node.NodeData[i] = data
-        args.node.CellNames[i] = cnames
+        rv.node.NodeData[i] = cols
+        rv.node.CellNames[i] = cnames
     }
 
     return nil
 }
 
-func verifyNodeData(args *args) error {
-    for i := 0; i < len(args.node.NodeHeader); i++ {
-        verifier, err := newCellVerifier(args.node.HazopElements[i].CellType)
+func (node *NodeData) verifyNodeData() error {
+    for i := 0; i < len(node.NodeHeader); i++ {
+        verifier, err := newCellVerifier(node.HazopElements[i].CellType)
         if err != nil {
             return err
         }
 
-        for k, c := range args.node.NodeData[i] {
-            cell, err := verifier.checkCellType(c)
+        for k, v := range node.NodeData[i] {
+            cell, err := verifier.checkCellType(v)
             if err != nil {
-                args.node.DataLogger.newError(
-                    fmt.Sprintf("%v: `%s`",
-                        err,
-                        args.node.CellNames[i][k],
-                    ),
-                )
+                msg := fmt.Sprintf("%v: `%s`", err, node.CellNames[i][k])
+                node.DataLogger.newError(msg)
                 continue
             }
 
-            if err := verifier.checkCellLength(
-                cell,
-                args.node.HazopElements[i].MinLen,
-                args.node.HazopElements[i].MaxLen,
-            ); err != nil {
-                args.node.DataLogger.newError(
-                    fmt.Sprintf("%v: `%s`",
-                        err,
-                        args.node.CellNames[i][k],
-                    ),
-                )
+            min := node.HazopElements[i].MinLen
+            max := node.HazopElements[i].MaxLen
+
+            if err := verifier.checkCellLength(cell, min, max); err != nil {
+                msg := fmt.Sprintf("%v: `%s`", err, node.CellNames[i][k])
+                node.DataLogger.newError(msg)
                 continue
             }
 
-            args.node.DataLogger.newInfo(
-                fmt.Sprintf("%s: `%s`",
-                    ValueParsedVerified,
-                    args.node.CellNames[i][k],
-                ),
-            )
+            cname := node.CellNames[i][k]
+            msg := fmt.Sprintf("%s: `%s`", ValueParsedVerified, cname)
+            node.DataLogger.newInfo(msg)
         }
     }
 
