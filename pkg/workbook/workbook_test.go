@@ -1,7 +1,6 @@
 package workbook
 
 import (
-    "fmt"
     "io/ioutil"
     "log"
     "path/filepath"
@@ -19,14 +18,12 @@ func BenchmarkReadVerifyWorkbook(b *testing.B) {
     }
 
     var wg sync.WaitGroup
-    for _, file := range files {
-        if strings.HasSuffix(file.Name(), ".xlsx") {
-            fpath := filepath.Join("data", file.Name())
-            b.Run(fmt.Sprintf("Workbook: %s\n", fpath), func(b *testing.B) {
-                for i := 0; i < b.N; i++ {
-                    ReadVerifyWorkbook(fpath, &wg)
-                }
-            })
+    for i := 0; i < b.N; i++ {
+        for _, file := range files {
+            if strings.HasSuffix(file.Name(), ".xlsx") {
+                fpath := filepath.Join("data", file.Name())
+                ReadVerifyWorkbook(fpath, &wg)
+            }
         }
     }
 
