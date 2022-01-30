@@ -10,21 +10,22 @@ import (
 )
 
 var (
-    ErrOpeningExcelFile       = errors.New("Error opening Excel file")
-    ErrClosingExcelFile       = errors.New("Error closing Excel file")
-    ErrNoHeaderFound          = errors.New("Error no valid header found")
-    ErrNotEnoughHeader        = errors.New("Error not enough headers")
-    ErrHeaderNotAligned       = errors.New("Error header not aligned")
-    ErrUnknownCellType        = errors.New("Error unknown cell type")
-    ErrSearchingHeader        = errors.New("Error searching header")
-    ErrReadingCellValue       = errors.New("Error reading cell value")
-    ErrReadingColumns         = errors.New("Error reading columns")
-    ErrReadingRows            = errors.New("Error reading rows")
-    HeaderAligned             = "Header aligned"
-    HeaderNotFound            = "Header not found"
-    HeaderFound               = "Header found"
-    HeaderMultipleCoordinates = "Header multiple coordinates found"
-    ValueParsedVerified       = "Value parsed/verified"
+    ErrOpeningExcelFile  = errors.New("Error opening Excel file")
+    ErrClosingExcelFile  = errors.New("Error closing Excel file")
+    ErrNoHeaderFound     = errors.New("Error no header found")
+    ErrInvalidLength     = errors.New("Error invalid object length")
+    ErrOnlyOneHeader     = errors.New("Error only one header found")
+    ErrReadingCoords     = errors.New("Error reading coordniates")
+    ErrHeaderNotAligned  = errors.New("Error header not aligned")
+    ErrSearchingElements = errors.New("Error searching elements")
+    ErrReadingValue      = errors.New("Error reading cell value")
+    ErrReadingColumns    = errors.New("Error reading columns")
+    ErrReadingRows       = errors.New("Error reading rows")
+    WarnMultipleCoords   = errors.New("Warning multiple coords for one header")
+    InfoHeaderAligned    = errors.New("Info header aligned")
+    ErrHeaderNotFound    = errors.New("Error header not found")
+    InfoHeaderFound      = errors.New("Info header found")
+    InfoValueIsValid     = errors.New("Info value parsed/verified")
 )
 
 type Workbook struct {
@@ -33,26 +34,15 @@ type Workbook struct {
 }
 
 type Worksheet struct {
-    SheetIndex int
-    SheetName  string
-    Metadata   *NodeData
-    Analysis   *NodeData
-}
-
-type NodeData struct {
-    NodeData      [][]interface{}
-    CellNames     [][]string
-    NodeHeader    []string
-    HazopElements []Element
-    HeaderAligned bool
-    DataLogger    *Logger
-    HeaderLogger  *Logger
-}
-
-type Logger struct {
-    Warnings []string
-    Errors   []string
-    Info     []string
+    Index    int
+    Name     string
+    NCols    int
+    NRows    int
+    IsValid  bool
+    Data     map[int][]interface{}
+    Header   map[int]string
+    Elements map[int]HazopElement
+    Logger   *Logger
 }
 
 func ReadVerifyWorkbook(fpath string, wg *sync.WaitGroup) (*Workbook, error) {
@@ -62,24 +52,14 @@ func ReadVerifyWorkbook(fpath string, wg *sync.WaitGroup) (*Workbook, error) {
     }
 
     var wb = &Workbook{File: f}
-    for i, name := range wb.File.GetSheetMap() {
+    sheetMap := wb.File.GetSheetMap()
+    wb.Worksheets = make([]*Worksheet, len(sheetMap))
+
+    for i, name := range sheetMap {
         wg.Add(1)
 
         go func(i int, name string) {
             defer wg.Done()
-
-            ws := &Worksheet{
-                SheetIndex: i,
-                SheetName:  name,
-                Metadata: &NodeData{
-                    DataLogger:   &Logger{},
-                    HeaderLogger: &Logger{},
-                },
-                Analysis: &NodeData{
-                    DataLogger:   &Logger{},
-                    HeaderLogger: &Logger{},
-                },
-            }
 
             cols, err := wb.File.GetCols(name)
             if err != nil {
@@ -93,51 +73,23 @@ func ReadVerifyWorkbook(fpath string, wg *sync.WaitGroup) (*Workbook, error) {
                 return
             }
 
-            metadataElements, err := Hazop.Elements(Hazop.DataType.Metadata)
-            if err != nil {
+            ws := &Worksheet{
+                Index:    i,
+                Name:     name,
+                NCols:    len(cols),
+                NRows:    len(rows),
+                Data:     map[int][]interface{}{},
+                Header:   map[int]string{},
+                Elements: map[int]HazopElement{},
+                Logger:   &Logger{},
+            }
+
+            if err := wb.readVerifyWorksheet(ws); err != nil {
                 log.Println(err)
                 return
             }
 
-            analysisElements, err := Hazop.Elements(Hazop.DataType.Analysis)
-            if err != nil {
-                log.Println(err)
-                return
-            }
-
-            metadataReader := reader{
-                varDimension: readXCoordinate,
-                fixDimension: readYCoordinate,
-                cellNames:    readXCellNames,
-            }
-
-            analysisReader := reader{
-                varDimension: readYCoordinate,
-                fixDimension: readXCoordinate,
-                cellNames:    readYCellNames,
-            }
-
-            metadataReadVerifier := &readVerifier{
-                nsize:    len(cols),
-                elements: metadataElements,
-                sname:    ws.SheetName,
-                node:     ws.Metadata,
-                reader:   metadataReader,
-            }
-
-            analysisReadVerifier := &readVerifier{
-                nsize:    len(rows),
-                elements: analysisElements,
-                sname:    ws.SheetName,
-                node:     ws.Analysis,
-                reader:   analysisReader,
-            }
-
-            wg.Add(2)
-            go wb.readVerifyNodeData(metadataReadVerifier, wg)
-            go wb.readVerifyNodeData(analysisReadVerifier, wg)
-
-            wb.Worksheets = append(wb.Worksheets, ws)
+            wb.Worksheets[i-1] = ws
         }(i, name)
     }
 
@@ -148,185 +100,152 @@ func ReadVerifyWorkbook(fpath string, wg *sync.WaitGroup) (*Workbook, error) {
     return wb, nil
 }
 
-type readVerifier struct {
-    nsize    int
-    elements []Element
-    sname    string
-    node     *NodeData
-    reader   reader
-}
-
-func (wb *Workbook) readVerifyNodeData(rv *readVerifier, wg *sync.WaitGroup) {
-    defer wg.Done()
-
-    for _, element := range rv.elements {
-        coords, err := wb.File.SearchSheet(rv.sname, element.Regex, true)
-        if err != nil {
-            log.Println(fmt.Errorf("%v: %v", ErrSearchingHeader, err))
-            return
-        }
-
-        rv.node.verifyElementCoords(coords, element)
+func (wb *Workbook) readVerifyWorksheet(ws *Worksheet) error {
+    if err := wb.searchHazopElements(ws); err != nil {
+        return err
     }
 
-    if err := rv.node.verifyHeaderAlignment(rv.reader); err != nil {
-        log.Println(err)
-        return
-    }
-
-    rv.node.NodeData = make([][]interface{}, len(rv.node.NodeHeader))
-    rv.node.CellNames = make([][]string, len(rv.node.NodeHeader))
-
-    for i := 0; i < len(rv.node.NodeHeader); i++ {
-        cnames, err := rv.reader.readCellNames(rv.node.NodeHeader[i], rv.nsize)
-        if err != nil {
-            log.Println(err)
-            return
-        }
-
-        verifier, err := newCellVerifier(rv.node.HazopElements[i].CellType)
-        if err != nil {
-            log.Println(err)
-            return
-        }
-
-        cols := make([]interface{}, len(cnames))
-        for k := 0; k < len(cnames); k++ {
-            value, err := wb.File.GetCellValue(rv.sname, cnames[k])
-            if err != nil {
-                log.Println(fmt.Errorf("%s: %v", ErrReadingCellValue, err))
-                return
-            }
-
-            cell, err := verifier.checkCellType(value)
-            if err != nil {
-                rv.node.DataLogger.newError(
-                    fmt.Sprintf("%v: `%s`",
-                        err,
-                        cnames[k],
-                    ),
-                )
-                continue
-            }
-
-            if err := verifier.checkCellLength(
-                cell,
-                rv.node.HazopElements[i].MinLen,
-                rv.node.HazopElements[i].MaxLen,
-            ); err != nil {
-                rv.node.DataLogger.newError(
-                    fmt.Sprintf("%v: `%s`",
-                        err,
-                        cnames[k],
-                    ),
-                )
-                continue
-            }
-
-            rv.node.DataLogger.newInfo(
-                fmt.Sprintf("%s: `%s`",
-                    ValueParsedVerified,
-                    cnames[k],
-                ),
-            )
-
-            cols[k] = value
-        }
-
-        rv.node.NodeData[i] = cols
-        rv.node.CellNames[i] = cnames
-    }
-}
-
-func (node *NodeData) verifyElementCoords(coords []string, element Element) {
-    switch len(coords) {
-    case 0:
-        node.HeaderLogger.newWarning(
-            fmt.Sprintf("%s: `%s`",
-                HeaderNotFound,
-                element.Name,
-            ),
-        )
-    case 1:
-        node.NodeHeader = append(node.NodeHeader, coords[0])
-        node.HazopElements = append(node.HazopElements, element)
-        node.HeaderLogger.newInfo(
-            fmt.Sprintf("%s: `%s` `%s`",
-                HeaderFound,
-                element.Name,
-                coords[0],
-            ),
-        )
-    default:
-        node.HeaderLogger.newWarning(
-            fmt.Sprintf("%v: `%s` %v",
-                HeaderMultipleCoordinates,
-                element.Name,
-                coords,
-            ),
-        )
-    }
-}
-
-func (node *NodeData) verifyHeaderAlignment(r reader) error {
-    if len(node.NodeHeader) == 0 {
-        node.HeaderAligned = false
-        node.HeaderLogger.newError(ErrNoHeaderFound.Error())
-        return nil
-    }
-
-    if len(node.NodeHeader) == 1 {
-        node.HeaderAligned = false
-        node.HeaderLogger.newError(
-            fmt.Sprintf("%v: %v",
-                ErrNotEnoughHeader,
-                node.NodeHeader,
-            ),
-        )
-        return nil
-    }
-
-    ref, err := r.varDimension(node.NodeHeader[0])
+    header := getSliceHeader(ws.Header)
+    aligned, msg, err := testHeaderAlignment(header)
     if err != nil {
         return err
     }
 
-    for i := 1; i < len(node.NodeHeader); i++ {
-        v, err := r.varDimension(node.NodeHeader[i])
+    if err := ws.Logger.newMessage(msg.Error()); err != nil {
+        return err
+    }
+    if !aligned {
+        ws.IsValid = false
+        ws.Header = make(map[int]string)
+        return nil
+    }
+
+    ws.IsValid = true
+    for k, v := range ws.Header {
+        coords, err := getDataCoordinates(v, ws.NRows)
         if err != nil {
             return err
         }
 
-        if ref != v {
-            node.HeaderAligned = false
-            node.HeaderLogger.newError(
-                fmt.Sprintf("%v: %v",
-                    ErrHeaderNotAligned,
-                    node.NodeHeader,
-                ),
-            )
+        tester, err := newTester(ws.Elements[k].Type)
+        if err != nil {
+            return err
         }
+
+        col := make([]interface{}, len(coords))
+        for i := 0; i < len(coords); i++ {
+            value, err := wb.File.GetCellValue(ws.Name, coords[i])
+            if err != nil {
+                return fmt.Errorf("%s: %v", ErrReadingValue, err)
+            }
+
+            v, err := tester.testValueType(value)
+            if err != nil {
+                msg := fmt.Sprintf("%v `%v`", err, coords[i])
+                if err := ws.Logger.newMessage(msg); err != nil {
+                    return err
+                }
+                continue
+            }
+
+            minLen, maxLen := ws.Elements[k].Min, ws.Elements[k].Max
+            if err := tester.testValueLength(v, minLen, maxLen); err != nil {
+                msg := fmt.Sprintf("%v `%v`", err, coords[i])
+                if err := ws.Logger.newMessage(msg); err != nil {
+                    return err
+                }
+                continue
+            }
+
+            msg := fmt.Sprintf("%s: `%s`", InfoValueIsValid, coords[i])
+            if err := ws.Logger.newMessage(msg); err != nil {
+                return err
+            }
+
+            col[i] = v
+        }
+
+        ws.Data[k] = col
     }
-
-    node.HeaderAligned = true
-    node.HeaderLogger.newInfo(
-        fmt.Sprintf("%s: %v",
-            HeaderAligned,
-            node.NodeHeader,
-        ),
-    )
-
     return nil
 }
 
-func (l *Logger) newWarning(msg string) {
-    l.Warnings = append(l.Warnings, msg)
+func getSliceHeader(coords map[int]string) (header []string) {
+    for _, v := range coords {
+        header = append(header, v)
+    }
+    return
 }
 
-func (l *Logger) newError(msg string) {
-    l.Errors = append(l.Errors, msg)
+func getDataCoordinates(coord string, length int) ([]string, error) {
+    x, y, err := excelize.CellNameToCoordinates(coord)
+    if err != nil {
+        return nil, fmt.Errorf("%v %v", ErrReadingCoords, err)
+    }
+
+    coords := make([]string, length)
+    for i := 0; i < length; i++ {
+        coord, err := excelize.CoordinatesToCellName(x, y+i)
+        if err != nil {
+            return nil, fmt.Errorf("%v: %v", ErrReadingCoords, err)
+        }
+        coords[i] = coord
+    }
+    return coords, nil
 }
 
-func (l *Logger) newInfo(msg string) {
-    l.Info = append(l.Info, msg)
+func (wb *Workbook) searchHazopElements(ws *Worksheet) error {
+    for _, el := range Hazop.Elements {
+        coords, err := wb.File.SearchSheet(ws.Name, el.Regex, true)
+        if err != nil {
+            return fmt.Errorf("%v: %v", ErrSearchingElements, err)
+        }
+        coord, err := testCoordinats(coords)
+        msg := fmt.Sprintf("%v `%v` %v", err, el.Name, coords)
+        if err := ws.Logger.newMessage(msg); err != nil {
+            return err
+        }
+        if coord != "" {
+            ws.Header[el.Id] = coord
+        }
+        ws.Elements[el.Id] = el
+    }
+    return nil
+}
+
+func testCoordinats(coords []string) (string, error) {
+    switch len(coords) {
+    case 0:
+        return "", ErrHeaderNotFound
+    case 1:
+        return coords[0], InfoHeaderFound
+    default:
+        return "", WarnMultipleCoords
+    }
+}
+
+func testHeaderAlignment(coords []string) (bool, error, error) {
+    switch l := len(coords); {
+    case l == 0:
+        return false, ErrNoHeaderFound, nil
+    case l == 1:
+        return false, fmt.Errorf("%v %v", ErrOnlyOneHeader, coords), nil
+    case l > 1:
+        _, yref, err := excelize.CellNameToCoordinates(coords[0])
+        if err != nil {
+            return false, nil, fmt.Errorf("%v %v", ErrReadingCoords, err)
+        }
+        for i := 1; i < len(coords); i++ {
+            _, y, err := excelize.CellNameToCoordinates(coords[i])
+            if err != nil {
+                return false, nil, fmt.Errorf("%v %v", ErrReadingCoords, err)
+            }
+            if yref != y {
+                return false, fmt.Errorf("%v %v", ErrHeaderNotAligned, coords), nil
+            }
+        }
+        return true, fmt.Errorf("%v %v", InfoHeaderAligned, coords), nil
+    default:
+        return false, nil, fmt.Errorf("%v %d", ErrInvalidLength, l)
+    }
 }
