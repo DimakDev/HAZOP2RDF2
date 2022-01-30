@@ -1,0 +1,37 @@
+# ========== Hazop Formula Settings ============
+[program]
+author = "Dmytro Kostiuk <X100@X100.LINK>"
+name = "hazop-formula"
+description = "Data -> Information -> Knowledge"
+version = "1.0.0"
+
+[data]
+data_dir = "data"
+data_ext = ".xlsx"
+report_dir = "reports"
+report_ext = ".txt"
+graph_dir = "graphs"
+graph_ext = ".ttl"
+base_uri = "https://tu-dresden.de/ing/elektrotechnik/ifa/plt/"
+graph_template = "pkg/template/graph_template.txt"
+report_template_long = "pkg/template/report_template_long.txt"
+report_template_short = "pkg/template/report_template_short.txt"
+
+[hazop]
+elements = [
+    # { id = 0, name = "Label", regex = "^(?i)(name|label|parameter)", data_type = 0, min_len = 1, max_len = 40 },
+    # { id = 1, name = "Description", regex = "^(?i)(description)", data_type = 0, min_len = 1, max_len = 160 },
+    { id = 2, name = "Reference", regex = "^(?i)(^ref.?|^no.?)", data_type = 1, min_len = 1, max_len = 320 },
+    { id = 3, name = "GuideWord", regex = "^(?i)(guide\\s?word)", data_type = 0, min_len = 1, max_len = 40 },
+    { id = 4, name = "Parameter", regex = "^(?i)(parameter)", data_type = 0, min_len = 1, max_len = 40 },
+    { id = 5, name = "Deviation", regex = "^(?i)(deviation)", data_type = 0, min_len = 1, max_len = 80 },
+    { id = 6, name = "Cause", regex = "^(?i)(cause)", data_type = 0, min_len = 1, max_len = 160 },
+    { id = 7, name = "Consequence", regex = "^(?i)(consequence|effect)", data_type = 0, min_len = 1, max_len = 160 },
+    { id = 8, name = "Safeguard", regex = "^(?i)(safeguard|protect(ion|ive)|systems?)", data_type = 0, min_len = 1, max_len = 160 },
+    { id = 9, name = "ActionReference", regex = "^(?i)(action|recommendation)\\s?(ref.?|no.?)$", data_type = 1, min_len = 1, max_len = 1000 },
+    { id = 10, name = "Action", regex = "^(?i)(action|recommendation)$", data_type = 0, min_len = 1, max_len = 160 },
+    { id = 11, name = "ActionOn", regex = "^(?i)(action|recommendation)\\s?on.?$", data_type = 0, min_len = 1, max_len = 40 },
+    { id = 12, name = "Severity", regex = "^(?i)(severity)", data_type = 1, min_len = 1, max_len = 100 },
+    { id = 13, name = "Probability", regex = "^(?i)(likehood|probability)", data_type = 2, min_len = 1, max_len = 100 },
+    { id = 14, name = "RiskPriority", regex = "^(?i)(risk\\s?priority)", data_type = 0, min_len = 1, max_len = 40 },
+]
