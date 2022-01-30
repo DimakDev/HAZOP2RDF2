@@ -1,5 +1,8 @@
 Hazop Formula Todos:
- ☐ [test]: add verification tests @test
+ ☐ [test]: add package tests @test
+ ☐ [test]: add package benchmarks @test
+ ☐ [test]: add cpu, mem profiling @test
+ ☐ [graph]: add graph template @feat
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
  ✔ [workbook]: read worksheets in go routines @improvement @done (22-01-25 00:44) @project(Hazop Formula Todos)
