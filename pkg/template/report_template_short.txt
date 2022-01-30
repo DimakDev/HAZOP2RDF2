@@ -1,0 +1,18 @@
+============================================
+Program: {{ .ProgramName }}
+Version: {{ .ProgramVersion }}
+Date and time: {{ .DateTime }}
+
+============================================
+Workbook: {{ .Workbook }}
+{{ range .Worksheets }}
+
+--------------------------------------------
+{{ .Index }}. Worksheet: {{ .Name }}
+  🔸({{ .Logger.Warnings | len }}) Warning(s)
+  🔺({{ .Logger.Errors | len }}) Error(s)
+  🔹({{ .Logger.Info | len }}) Info
+{{- end }}
+
+🔗 Full report available under `./{{ .ReportPath }}`
+🔗 Graph available under `./{{ .GraphPath }}`

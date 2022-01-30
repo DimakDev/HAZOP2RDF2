@@ -1,4 +1,4 @@
-package report
+package template
 
 import (
     "errors"
@@ -11,6 +11,7 @@ import (
 
 type Report struct {
     ReportPath     string
+    GraphPath      string
     ProgramName    string
     ProgramVersion string
     DateTime       string
@@ -24,7 +25,7 @@ var (
     ErrWritingReport       = errors.New("Error writing report")
 )
 
-func (r *Report) ReportToFile(path, temp string) error {
+func (r *Report) WriteToFile(path, temp string) error {
     f, err := os.Create(path)
     if err != nil {
         return fmt.Errorf("%v `%s`: %v", ErrCreatingReportFile, path, err)
@@ -43,7 +44,7 @@ func (r *Report) ReportToFile(path, temp string) error {
     return nil
 }
 
-func (r *Report) ReportToStdout(temp string) error {
+func (r *Report) WriteToStdout(temp string) error {
     t, err := template.ParseFiles(temp)
     if err != nil {
         return fmt.Errorf("%v `%s`: %v", ErrParsingTemplateFile, temp, err)
