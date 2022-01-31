@@ -13,9 +13,9 @@ report_ext = ".txt"
 graph_dir = "graphs"
 graph_ext = ".ttl"
 base_uri = "https://tu-dresden.de/ing/elektrotechnik/ifa/plt/"
-graph_template = "pkg/template/graph_template.txt"
-report_template_long = "pkg/template/report_template_long.txt"
-report_template_short = "pkg/template/report_template_short.txt"
+graph_template = "pkg/exporter/graph_template.txt"
+report_template_long = "pkg/exporter/report_template_long.txt"
+report_template_short = "pkg/exporter/report_template_short.txt"
 
 [hazop]
 elements = [

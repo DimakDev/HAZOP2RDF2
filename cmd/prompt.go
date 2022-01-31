@@ -31,7 +31,7 @@ import (
     "sync"
     "time"
 
-    "github.com/dimakdev/hazop-formula/pkg/template"
+    "github.com/dimakdev/hazop-formula/pkg/exporter"
     "github.com/dimakdev/hazop-formula/pkg/workbook"
     "github.com/manifoldco/promptui"
     "github.com/spf13/cobra"
@@ -172,9 +172,7 @@ func run() error {
         return err
     }
 
-    // serializeWorkbook(wb)
-
-    if err := writeReport(wb); err != nil {
+    if err := writeTemplateOutput(wb); err != nil {
         return err
     }
 
@@ -198,47 +196,34 @@ func readWorkbook(fpath string) (*workbook.Workbook, error) {
     return wb, nil
 }
 
-// func serializeWorkbook(wb *workbook.Workbook) {
-//     _, gpath := getFilepath(wb.File.Path, data.GraphDir, data.GraphExt)
+func writeTemplateOutput(wb *workbook.Workbook) error {
+    _, wbname := filepath.Split(wb.File.Path)
+    fname := strings.TrimSuffix(wbname, filepath.Ext(wbname))
+    rpath := filepath.Join(data.ReportDir, fname+data.ReportExt)
+    gpath := filepath.Join(data.GraphDir, fname+data.GraphExt)
 
-//     g := &graph.Graph{
-//         Path:       gpath,
-//         BaseUri:    data.BaseUri + program.Name,
-//         Worksheets: wb.Worksheets,
-//     }
-
-//     g.Serialize()
-// }
-
-func writeReport(wb *workbook.Workbook) error {
-    wbname, rpath := getFilepath(wb.File.Path, data.ReportDir, data.ReportExt)
-    _, gpath := getFilepath(wb.File.Path, data.GraphDir, data.GraphExt)
-
-    report := &template.Report{
+    exp := &exporter.Exporter{
         ReportPath:     rpath,
         GraphPath:      gpath,
         ProgramName:    program.Name,
         ProgramVersion: program.Version,
         DateTime:       time.Now().Format(time.UnixDate),
+        BaseUri:        data.BaseUri + program.Name,
         Workbook:       wbname,
         Worksheets:     wb.Worksheets,
     }
 
-    if err := report.WriteToFile(rpath, data.ReportTemplateLong); err != nil {
+    if err := exp.WriteToFile(gpath, data.GraphTemplate); err != nil {
         return err
     }
 
-    if err := report.WriteToStdout(data.ReportTemplateShort); err != nil {
+    if err := exp.WriteToFile(rpath, data.ReportTemplateLong); err != nil {
+        return err
+    }
+
+    if err := exp.WriteToStdout(data.ReportTemplateShort); err != nil {
         return err
     }
 
     return nil
-}
-
-func getFilepath(base, dir, ext string) (string, string) {
-    _, n := filepath.Split(base)
-    name := strings.TrimSuffix(n, filepath.Ext(n))
-    path := filepath.Join(dir, name+ext)
-
-    return name, path
 }

@@ -6,7 +6,6 @@ Date and time: {{ .DateTime }}
 ============================================
 Workbook: {{ .Workbook }}
 {{ range .Worksheets }}
-
 --------------------------------------------
 {{ .Index }}. Worksheet: {{ .Name }}
   🔸({{ .Logger.Warnings | len }}) Warning(s)

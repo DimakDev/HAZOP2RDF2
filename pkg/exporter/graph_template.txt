@@ -1,0 +1,6 @@
+@base <{{ .BaseUri }}> .
+@prefix hazopnode: <{{ .BaseUri }}/hazopnode#> .
+@prefix hazopedge: <{{ .BaseUri }}/hazopedge#> .
+@prefix reference: <{{ .BaseUri }}/reference#> .
+
+
