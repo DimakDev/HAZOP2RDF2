@@ -1,16 +1,15 @@
 package workbook
 
 import (
-    "errors"
     "fmt"
     "strconv"
 )
 
 var (
-    ErrParsingInteger  = errors.New("Error parsing integer")
-    ErrParsingFloat    = errors.New("Error parsing float")
-    ErrValueOutOfRange = errors.New("Error value out of range")
-    ErrUnknownDatatype = errors.New("Error unknown data type")
+    ErrParsingInteger  = "Error parsing integer"
+    ErrParsingFloat    = "Error parsing float"
+    ErrValueOutOfRange = "Error value out of range"
+    ErrUnknownDatatype = "Error unknown data type"
 )
 
 type tester interface {
@@ -31,7 +30,7 @@ func newTester(dtype datatype) (tester, error) {
     case FLOAT:
         return testFloat{}, nil
     default:
-        return nil, fmt.Errorf("%v: %d", ErrUnknownDatatype, dtype)
+        return nil, fmt.Errorf("%s: %d", ErrUnknownDatatype, dtype)
     }
 }
 
@@ -41,7 +40,7 @@ func (v testString) testValueType(value interface{}) (interface{}, error) {
 
 func (v testInteger) testValueType(value interface{}) (interface{}, error) {
     if v, err := strconv.Atoi(value.(string)); err != nil {
-        return nil, fmt.Errorf("%v", ErrParsingInteger)
+        return nil, fmt.Errorf(ErrParsingInteger)
     } else {
         return v, nil
     }
@@ -49,7 +48,7 @@ func (v testInteger) testValueType(value interface{}) (interface{}, error) {
 
 func (v testFloat) testValueType(value interface{}) (interface{}, error) {
     if v, err := strconv.ParseFloat(value.(string), 32); err != nil {
-        return nil, fmt.Errorf("%v", ErrParsingFloat)
+        return nil, fmt.Errorf(ErrParsingFloat)
     } else {
         return v, nil
     }
@@ -57,7 +56,7 @@ func (v testFloat) testValueType(value interface{}) (interface{}, error) {
 
 func (v testString) testValueLength(value interface{}, min, max int) error {
     if len(value.(string)) < min || len(value.(string)) > max {
-        return fmt.Errorf("%v %d-%d", ErrValueOutOfRange, min, max)
+        return fmt.Errorf("%s %d-%d", ErrValueOutOfRange, min, max)
     } else {
         return nil
     }
@@ -65,7 +64,7 @@ func (v testString) testValueLength(value interface{}, min, max int) error {
 
 func (v testInteger) testValueLength(value interface{}, min, max int) error {
     if value.(int) < min || value.(int) > max {
-        return fmt.Errorf("%v %d-%d", ErrValueOutOfRange, min, max)
+        return fmt.Errorf("%s %d-%d", ErrValueOutOfRange, min, max)
     } else {
         return nil
     }
@@ -73,7 +72,7 @@ func (v testInteger) testValueLength(value interface{}, min, max int) error {
 
 func (v testFloat) testValueLength(value interface{}, min, max int) error {
     if value.(float32) < float32(min) || value.(float32) > float32(max) {
-        return fmt.Errorf("%v %d-%d", ErrValueOutOfRange, min, max)
+        return fmt.Errorf("%s %d-%d", ErrValueOutOfRange, min, max)
     } else {
         return nil
     }

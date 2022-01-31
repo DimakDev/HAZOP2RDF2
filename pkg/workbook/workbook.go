@@ -1,7 +1,6 @@
 package workbook
 
 import (
-    "errors"
     "fmt"
     "log"
     "sync"
@@ -10,22 +9,15 @@ import (
 )
 
 var (
-    ErrOpeningExcelFile  = errors.New("Error opening Excel file")
-    ErrClosingExcelFile  = errors.New("Error closing Excel file")
-    ErrNoHeaderFound     = errors.New("Error no header found")
-    ErrInvalidLength     = errors.New("Error invalid object length")
-    ErrOnlyOneHeader     = errors.New("Error only one header found")
-    ErrReadingCoords     = errors.New("Error reading coordniates")
-    ErrHeaderNotAligned  = errors.New("Error header not aligned")
-    ErrSearchingElements = errors.New("Error searching elements")
-    ErrReadingValue      = errors.New("Error reading cell value")
-    ErrReadingColumns    = errors.New("Error reading columns")
-    ErrReadingRows       = errors.New("Error reading rows")
-    WarnMultipleCoords   = errors.New("Warning multiple coords for one header")
-    InfoHeaderAligned    = errors.New("Info header aligned")
-    ErrHeaderNotFound    = errors.New("Error header not found")
-    InfoHeaderFound      = errors.New("Info header found")
-    InfoValueIsValid     = errors.New("Info value parsed/verified")
+    ErrNoHeaderFound    = "Error no header found"
+    ErrInvalidLength    = "Error invalid object length"
+    ErrOnlyOneHeader    = "Error only one header found"
+    ErrHeaderNotAligned = "Error header not aligned"
+    InfoHeaderAligned   = "Info header aligned"
+    ErrHeaderNotFound   = "Error header not found"
+    InfoHeaderFound     = "Info header found"
+    WarnMultipleCooeds  = "Warning header multiple coordinates"
+    InfoValueIsValid    = "Info value parsed/verified"
 )
 
 type Workbook struct {
@@ -48,7 +40,7 @@ type Worksheet struct {
 func ReadVerifyWorkbook(fpath string, wg *sync.WaitGroup) (*Workbook, error) {
     f, err := excelize.OpenFile(fpath)
     if err != nil {
-        return nil, fmt.Errorf("%v: %v", ErrOpeningExcelFile, err)
+        return nil, err
     }
 
     var wb = &Workbook{File: f}
@@ -63,13 +55,13 @@ func ReadVerifyWorkbook(fpath string, wg *sync.WaitGroup) (*Workbook, error) {
 
             cols, err := wb.File.GetCols(name)
             if err != nil {
-                log.Println(fmt.Errorf("%v: %v", ErrReadingColumns, err))
+                log.Println(err)
                 return
             }
 
             rows, err := wb.File.GetRows(name)
             if err != nil {
-                log.Println(fmt.Errorf("%v: %v", ErrReadingRows, err))
+                log.Println(err)
                 return
             }
 
@@ -94,7 +86,7 @@ func ReadVerifyWorkbook(fpath string, wg *sync.WaitGroup) (*Workbook, error) {
     }
 
     if err := wb.File.Close(); err != nil {
-        return nil, fmt.Errorf("%v %v", ErrClosingExcelFile, err)
+        return nil, err
     }
 
     return wb, nil
@@ -111,7 +103,7 @@ func (wb *Workbook) readVerifyWorksheet(ws *Worksheet) error {
         return err
     }
 
-    if err := ws.Logger.newMessage(msg.Error()); err != nil {
+    if err := ws.Logger.newMessage(msg); err != nil {
         return err
     }
     if !aligned {
@@ -136,7 +128,7 @@ func (wb *Workbook) readVerifyWorksheet(ws *Worksheet) error {
         for i := 0; i < len(coords); i++ {
             value, err := wb.File.GetCellValue(ws.Name, coords[i])
             if err != nil {
-                return fmt.Errorf("%s: %v", ErrReadingValue, err)
+                return err
             }
 
             v, err := tester.testValueType(value)
@@ -180,14 +172,14 @@ func getSliceHeader(coords map[int]string) (header []string) {
 func getDataCoordinates(coord string, length int) ([]string, error) {
     x, y, err := excelize.CellNameToCoordinates(coord)
     if err != nil {
-        return nil, fmt.Errorf("%v %v", ErrReadingCoords, err)
+        return nil, err
     }
 
     coords := make([]string, length)
     for i := 0; i < length; i++ {
         coord, err := excelize.CoordinatesToCellName(x, y+i)
         if err != nil {
-            return nil, fmt.Errorf("%v: %v", ErrReadingCoords, err)
+            return nil, err
         }
         coords[i] = coord
     }
@@ -198,54 +190,49 @@ func (wb *Workbook) searchHazopElements(ws *Worksheet) error {
     for _, el := range Hazop.Elements {
         coords, err := wb.File.SearchSheet(ws.Name, el.Regex, true)
         if err != nil {
-            return fmt.Errorf("%v: %v", ErrSearchingElements, err)
-        }
-        coord, err := testCoordinats(coords)
-        msg := fmt.Sprintf("%v `%v` %v", err, el.Name, coords)
-        if err := ws.Logger.newMessage(msg); err != nil {
             return err
         }
-        if coord != "" {
-            ws.Header[el.Id] = coord
+
+        var msg string
+        switch len(coords) {
+        case 0:
+            msg = ErrHeaderNotFound
+        case 1:
+            ws.Header[el.Id] = coords[0]
+            msg = fmt.Sprintf("%s `%s` %v", InfoHeaderFound, el.Name, coords)
+        default:
+            msg = fmt.Sprintf("%s %v", WarnMultipleCooeds, coords)
+        }
+        if err := ws.Logger.newMessage(msg); err != nil {
+            return err
         }
         ws.Elements[el.Id] = el
     }
     return nil
 }
 
-func testCoordinats(coords []string) (string, error) {
-    switch len(coords) {
-    case 0:
-        return "", ErrHeaderNotFound
-    case 1:
-        return coords[0], InfoHeaderFound
-    default:
-        return "", WarnMultipleCoords
-    }
-}
-
-func testHeaderAlignment(coords []string) (bool, error, error) {
+func testHeaderAlignment(coords []string) (bool, string, error) {
     switch l := len(coords); {
     case l == 0:
         return false, ErrNoHeaderFound, nil
     case l == 1:
-        return false, fmt.Errorf("%v %v", ErrOnlyOneHeader, coords), nil
+        return false, fmt.Sprintf("%s %v", ErrOnlyOneHeader, coords), nil
     case l > 1:
         _, yref, err := excelize.CellNameToCoordinates(coords[0])
         if err != nil {
-            return false, nil, fmt.Errorf("%v %v", ErrReadingCoords, err)
+            return false, "", err
         }
         for i := 1; i < len(coords); i++ {
             _, y, err := excelize.CellNameToCoordinates(coords[i])
             if err != nil {
-                return false, nil, fmt.Errorf("%v %v", ErrReadingCoords, err)
+                return false, "", err
             }
             if yref != y {
-                return false, fmt.Errorf("%v %v", ErrHeaderNotAligned, coords), nil
+                return false, fmt.Sprintf("%s %v", ErrHeaderNotAligned, coords), nil
             }
         }
-        return true, fmt.Errorf("%v %v", InfoHeaderAligned, coords), nil
+        return true, fmt.Sprintf("%s %v", InfoHeaderAligned, coords), nil
     default:
-        return false, nil, fmt.Errorf("%v %d", ErrInvalidLength, l)
+        return false, "", fmt.Errorf("%s %d", ErrInvalidLength, l)
     }
 }
