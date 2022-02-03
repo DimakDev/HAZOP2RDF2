@@ -5,6 +5,7 @@ Hazop Formula Todos:
  ☐ [graph]: add graph template @feat
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ add quality metric @feat @done (22-02-03 18:42) @project(Hazop Formula Todos)
  ✔ [workbook]: read worksheets in go routines @improvement @done (22-01-25 00:44) @project(Hazop Formula Todos)
  ✔ 💯 @done (22-01-01 03:17) @project(Hazop Formula Todos)
  ✔ [report]: fix atoi encoding  @fix @done (22-01-01 03:10) @project(Hazop Formula Todos)
