@@ -5,9 +5,11 @@ Date and time: {{ .DateTime }}
 
 ============================================
 Workbook: {{ .Workbook }}
-{{ range .Worksheets }}
+{{- range .Worksheets }}
+
 --------------------------------------------
 {{ .Index }}. Worksheet: {{ .Name }}
+({{ .TotalSize }}) Total Cell(s), ({{ .ValidSize }}) Parsed Cell(s), Quality ({{ .ValidPart }}%)
 ({{ .Logger.Warnings | len }}) Warning(s), ({{ .Logger.Errors | len }}) Error(s), ({{ .Logger.Info | len }}) Info
   {{- range .Logger.Warnings }}
   🔸[WARN] {{ . }}
@@ -18,4 +20,4 @@ Workbook: {{ .Workbook }}
   {{- range .Logger.Info }}
   🔹[INFO] {{ . }}
   {{- end }}
-{{ end }}
+{{- end }}
