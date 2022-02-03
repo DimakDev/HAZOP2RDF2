@@ -3,6 +3,7 @@ package workbook
 import (
     "fmt"
     "log"
+    "math"
     "sync"
 
     "github.com/xuri/excelize/v2"
@@ -26,15 +27,18 @@ type Workbook struct {
 }
 
 type Worksheet struct {
-    Index    int
-    Name     string
-    NCols    int
-    NRows    int
-    IsValid  bool
-    Data     map[int][]interface{}
-    Header   map[int]string
-    Elements map[int]HazopElement
-    Logger   *Logger
+    Index     int
+    Name      string
+    NCols     int
+    NRows     int
+    TotalSize int
+    ValidSize int
+    ValidPart float64
+    Data      map[int][]interface{}
+    Header    map[int]string
+    Elements  map[int]HazopElement
+    IsValid   bool
+    Logger    *Logger
 }
 
 func ReadVerifyWorkbook(fpath string, wg *sync.WaitGroup) (*Workbook, error) {
@@ -66,14 +70,15 @@ func ReadVerifyWorkbook(fpath string, wg *sync.WaitGroup) (*Workbook, error) {
             }
 
             ws := &Worksheet{
-                Index:    i,
-                Name:     name,
-                NCols:    len(cols),
-                NRows:    len(rows),
-                Data:     map[int][]interface{}{},
-                Header:   map[int]string{},
-                Elements: map[int]HazopElement{},
-                Logger:   &Logger{},
+                Index:     i,
+                Name:      name,
+                NCols:     len(cols),
+                NRows:     len(rows),
+                TotalSize: len(cols) * len(rows),
+                Data:      map[int][]interface{}{},
+                Header:    map[int]string{},
+                Elements:  map[int]HazopElement{},
+                Logger:    &Logger{},
             }
 
             if err := wb.readVerifyWorksheet(ws); err != nil {
@@ -97,7 +102,10 @@ func (wb *Workbook) readVerifyWorksheet(ws *Worksheet) error {
         return err
     }
 
-    header := getSliceHeader(ws.Header)
+    var header []string
+    for _, v := range ws.Header {
+        header = append(header, v)
+    }
     aligned, msg, err := testHeaderAlignment(header)
     if err != nil {
         return err
@@ -113,6 +121,7 @@ func (wb *Workbook) readVerifyWorksheet(ws *Worksheet) error {
     }
 
     ws.IsValid = true
+
     for k, v := range ws.Header {
         coords, err := getDataCoordinates(v, ws.NRows)
         if err != nil {
@@ -154,19 +163,40 @@ func (wb *Workbook) readVerifyWorksheet(ws *Worksheet) error {
                 return err
             }
 
+            ws.ValidSize += 1
             col[i] = v
         }
 
         ws.Data[k] = col
     }
+
+    ws.ValidPart = math.Round((float64(ws.ValidSize)/float64(ws.TotalSize))*10000) / 100
     return nil
 }
 
-func getSliceHeader(coords map[int]string) (header []string) {
-    for _, v := range coords {
-        header = append(header, v)
+func (wb *Workbook) searchHazopElements(ws *Worksheet) error {
+    for _, el := range Hazop.Elements {
+        coords, err := wb.File.SearchSheet(ws.Name, el.Regex, true)
+        if err != nil {
+            return err
+        }
+
+        var msg string
+        switch len(coords) {
+        case 0:
+            msg = fmt.Sprintf("%s `%s`", ErrHeaderNotFound, el.Name)
+        case 1:
+            ws.Header[el.Id] = coords[0]
+            msg = fmt.Sprintf("%s `%s` %v", InfoHeaderFound, el.Name, coords)
+        default:
+            msg = fmt.Sprintf("%s `%s` %v", WarnMultipleCooeds, el.Name, coords)
+        }
+        if err := ws.Logger.newMessage(msg); err != nil {
+            return err
+        }
+        ws.Elements[el.Id] = el
     }
-    return
+    return nil
 }
 
 func getDataCoordinates(coord string, length int) ([]string, error) {
@@ -184,31 +214,6 @@ func getDataCoordinates(coord string, length int) ([]string, error) {
         coords[i] = coord
     }
     return coords, nil
-}
-
-func (wb *Workbook) searchHazopElements(ws *Worksheet) error {
-    for _, el := range Hazop.Elements {
-        coords, err := wb.File.SearchSheet(ws.Name, el.Regex, true)
-        if err != nil {
-            return err
-        }
-
-        var msg string
-        switch len(coords) {
-        case 0:
-            msg = ErrHeaderNotFound
-        case 1:
-            ws.Header[el.Id] = coords[0]
-            msg = fmt.Sprintf("%s `%s` %v", InfoHeaderFound, el.Name, coords)
-        default:
-            msg = fmt.Sprintf("%s %v", WarnMultipleCooeds, coords)
-        }
-        if err := ws.Logger.newMessage(msg); err != nil {
-            return err
-        }
-        ws.Elements[el.Id] = el
-    }
-    return nil
 }
 
 func testHeaderAlignment(coords []string) (bool, string, error) {
