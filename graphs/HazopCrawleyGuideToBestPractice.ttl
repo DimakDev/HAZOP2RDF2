@@ -1,0 +1,1823 @@
+@base <https://tu-dresden.de/ing/elektrotechnik/ifa/plt/hazop-formula> .
+@prefix hazopnode: <https://tu-dresden.de/ing/elektrotechnik/ifa/plt/hazop-formula/hazopnode#> .
+@prefix hazopedge: <https://tu-dresden.de/ing/elektrotechnik/ifa/plt/hazop-formula/hazopedge#> .
+@prefix hazoperro: <https://tu-dresden.de/ing/elektrotechnik/ifa/plt/hazop-formula/hazoperro#> .
+@prefix reference: <https://tu-dresden.de/ing/elektrotechnik/ifa/plt/hazop-formula/reference#> .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation "No flow" ;
+	hazopedge:cause "Wrong initiating sequence used by the customer" ;
+	hazopedge:consequence "Delay. Possible damage from wrong sequence. Sale may be lost." ;
+	hazopedge:safeguard "Required sequence is usual for the UK and uses illuminated buttons on the pump panel. The site operator can select and speak to each station." ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "A1: Consider installing an alert to the operator whenever delay between removing hose and start of pumping exceeds selected time (say 20 s)." ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation "No flow" ;
+	hazopedge:cause "Supply tank at low cutoff level" ;
+	hazopedge:consequence "Delay and frustration for customer as cause not apparent." ;
+	hazopedge:safeguard "Alarm to site operator of impending loss of supply. Operating procedure to cone off pumps with prepared signage." ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "A2: Review restocking arrangements against the expected demands to minimize this situation." ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation "No flow" ;
+	hazopedge:cause "Supply tank at low cutoff level" ;
+	hazopedge:consequence "Delay and frustration for customer as cause not apparent." ;
+	hazopedge:safeguard "Alarm to site operator of impending loss of supply. Operating procedure to cone off pumps with prepared signage." ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "A3: Review operator training and testing." ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation "More quantity" ;
+	hazopedge:cause "Customer error" ;
+	hazopedge:consequence "Customer cannot pay; delay at till and at pump." ;
+	hazopedge:safeguard "None" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "A5: Cover in training procedures." ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation "More (high) fuel flow" ;
+	hazopedge:cause "Dead man’s handle on pump fails or the flow fails to shut off on high level in tank" ;
+	hazopedge:consequence "Fuel spillage over side of car, onto ground, and into drain system. Possible fire." ;
+	hazopedge:safeguard "Maintenance of the pumps. Interceptor within the drains." ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "A6: Check on the recommended maintenance procedures." ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation "More (high) fuel flow" ;
+	hazopedge:cause "Dead man’s handle on pump fails or the flow fails to shut off on high level in tank" ;
+	hazopedge:consequence "Fuel spillage over side of car, onto ground, and into drain system. Possible fire." ;
+	hazopedge:safeguard "Maintenance of the pumps. Interceptor within the drains." ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "A7: Check for level indicator and warning of interceptor overload." ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation "More (high) fuel flow" ;
+	hazopedge:cause "Dead man’s handle on pump fails or the flow fails to shut off on high level in tank" ;
+	hazopedge:consequence "Fuel spillage over side of car, onto ground, and into drain system. Possible fire." ;
+	hazopedge:safeguard "Maintenance of the pumps. Interceptor within the drains." ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "A8: Review location and effectiveness of the first aid firefighting facilities." ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation "More time" ;
+	hazopedge:cause "Driver leaves car unattended (e.g., to shop in main store)" ;
+	hazopedge:consequence "Pump blocked to other users. Uncertainty over “abandoned” vehicle." ;
+	hazopedge:safeguard "None" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "A9: Establish procedure to deal with “abandoned” vehicles including emergency evacuation of the area." ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation "Less quantity" ;
+	hazopedge:cause "Low level in main supply tank" ;
+	hazopedge:consequence "Customers cannot get fuel." ;
+	hazopedge:safeguard "Low level warning on main supply tank." ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "A11: Check that resupply arrangements cover all likely rates of sale. See also A2." ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation "Less quantity" ;
+	hazopedge:cause "Low level in main supply tank" ;
+	hazopedge:consequence "Customers cannot get fuel." ;
+	hazopedge:safeguard "Operator training to cone off the affected pumps." ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "A12: Review" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation "Reverse entry of car into the pump lanes" ;
+	hazopedge:cause "Driver mistake or deliberate short cut taken" ;
+	hazopedge:consequence "Confusion among other users and increased likelihood of on-site collision." ;
+	hazopedge:safeguard "Signage" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "A13: Review the position and instructions on signs." ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation "Reverse entry of car into the pump lanes" ;
+	hazopedge:cause "Driver mistake or deliberate short cut taken" ;
+	hazopedge:consequence "Confusion among other users and increased likelihood of on-site collision." ;
+	hazopedge:safeguard "Signage" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "A14: Consider if routing of entry/exit slip lanes can reduce occurrence." ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation "As well as— customer uses mobile phone" ;
+	hazopedge:cause "Customer ignores warnings" ;
+	hazopedge:consequence "Possible ignition source—not likely with diesel but could be with petrol." ;
+	hazopedge:safeguard "Warning notice at every pump station." ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "A15: Check on reality of the rumors of fuel ignition from mobile phones." ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation "As well as— customer uses mobile phone" ;
+	hazopedge:cause "Customer ignores warnings" ;
+	hazopedge:consequence "Possible ignition source—not likely with diesel but could be with petrol." ;
+	hazopedge:safeguard "Warning notice at every pump station." ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "A16: Consider requiring till operator to warn phone users over built in speakers on pump station." ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation "Only part of sequence completed" ;
+	hazopedge:cause "Customer does not properly replace fuel nozzle on its stand" ;
+	hazopedge:consequence "Transfer pump continues to run against closed valve. Payment cannot be made and customer must return to the pump." ;
+	hazopedge:safeguard "Till operator can notify customer using the pump speaker but is unlikely to spot the problem before customer leaves the pump." ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "A17: Check with manufacturer how likely this is with the chosen design and what the alternatives are." ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation "Other fuel container filled" ;
+	hazopedge:cause "Customer uses fuel can (perhaps as well as filling car fuel tank)" ;
+	hazopedge:consequence "Pump is stopped and then restarted. May attempt to pump a different fuel. High-level cutoff may not work if container has a wide neck." ;
+	hazopedge:safeguard "Not possible to pump separate fuel until payment made for first and pump zeroed. Restart with same fuel is possible provided nozzle not replaced first." ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "A18: Decide whether a timed cutoff should be included so restart is not possible after a selected time." ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation "Other fuel container filled" ;
+	hazopedge:cause "Customer uses fuel can (perhaps as well as filling car fuel tank)" ;
+	hazopedge:consequence "Pump is stopped and then restarted. May attempt to pump a different fuel. High-level cutoff may not work if container has a wide neck." ;
+	hazopedge:safeguard "Not possible to pump separate fuel until payment made for first and pump zeroed. Restart with same fuel is possible provided nozzle not replaced first." ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "A19: Check whether high-level cutoff works in wide necked containers." ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation "Other event— carjacking attempted" ;
+	hazopedge:cause "Planned criminal activity" ;
+	hazopedge:consequence "Risk of violence with injury (or death)." ;
+	hazopedge:safeguard "Warning to customers to remove car keys and not to leave car unlocked." ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "A20: Check wording and prominence of notices." ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation "Other event— carjacking attempted" ;
+	hazopedge:cause "Planned criminal activity" ;
+	hazopedge:consequence "Bad publicity inevitable." ;
+	hazopedge:safeguard "Warning to customers to remove car keys and not to leave car unlocked." ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "A21: Put up clear notice that CCTV is in use as a deterrent." ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "No" ;
+	hazopedge:parameter "Flow" ;
+	hazopedge:deviation "SSSV closed" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "LINE OUT THE METHANOL FROM THE INJECTION PUMPS THROUGH 2v 15 CS TO EQUALIZE THE PRESSURE DIFFERENCE ACROSS THE SSSV" ;
+	hazopedge:consequence "LINE OUT THE METHANOL FROM THE INJECTION PUMPS THROUGH 2v 15 CS TO EQUALIZE THE PRESSURE DIFFERENCE ACROSS THE SSSV" ;
+	hazopedge:safeguard "LINE OUT THE METHANOL FROM THE INJECTION PUMPS THROUGH 2v 15 CS TO EQUALIZE THE PRESSURE DIFFERENCE ACROSS THE SSSV" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "LINE OUT THE METHANOL FROM THE INJECTION PUMPS THROUGH 2v 15 CS TO EQUALIZE THE PRESSURE DIFFERENCE ACROSS THE SSSV" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Low" ;
+	hazopedge:parameter "Pressure" ;
+	hazopedge:deviation "SSSV cannot be opened" ;
+	hazopedge:cause "• Pressure drop in M1 2v 15CS is too high due to the need to inject methanol into online wells
+• The pump capacity is inadequate" ;
+	hazopedge:consequence "SSSV cannot be opened" ;
+	hazopedge:safeguard "RV on methanol pump is set to avoid overpressure of the methanol. Pump, pipeline and M1 2v 15 CS (this pump is on shore)" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "2.1" ;
+	hazopedge:actionon "CD" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Low" ;
+	hazopedge:parameter "Pressure" ;
+	hazopedge:deviation "SSSV cannot be opened" ;
+	hazopedge:cause "• Pressure drop in M1 2v 15CS is too high due to the need to inject methanol into online wells
+• The pump capacity is inadequate" ;
+	hazopedge:consequence "SSSV cannot be opened" ;
+	hazopedge:safeguard "RV on methanol pump is set to avoid overpressure of the methanol. Pump, pipeline and M1 2v 15 CS (this pump is on shore)" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "2.2" ;
+	hazopedge:actionon "CD" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Low" ;
+	hazopedge:parameter "Pressure" ;
+	hazopedge:deviation "SSSV closed—no flow of methanol" ;
+	hazopedge:cause "Closed in system with a PD pump" ;
+	hazopedge:consequence "Potential system overpressure" ;
+	hazopedge:safeguard "RV on pump will lift" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "3.1" ;
+	hazopedge:actionon "CD" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "SSSV OPENED, MV OPENED, AND WV OPENED" ;
+	hazopedge:parameter "SSSV OPENED, MV OPENED, AND WV OPENED" ;
+	hazopedge:deviation "SSSV OPENED, MV OPENED, AND WV OPENED" ;
+	hazopedge:cause "SSSV OPENED, MV OPENED, AND WV OPENED" ;
+	hazopedge:consequence "SSSV OPENED, MV OPENED, AND WV OPENED" ;
+	hazopedge:safeguard "SSSV OPENED, MV OPENED, AND WV OPENED" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "SSSV OPENED, MV OPENED, AND WV OPENED" ;
+	hazopedge:actionon "SSSV OPENED, MV OPENED, AND WV OPENED" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Higher" ;
+	hazopedge:parameter "Pressure" ;
+	hazopedge:deviation "Wellhead pressure at closed-in condition" ;
+	hazopedge:cause "Normal start- up" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "• NRV fitted in methanol feed lines M1-2”, 15 CS, M2-2” 15 CS
+• PD pump is a form of NRV" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "4.1" ;
+	hazopedge:actionon "CD/MN" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Higher" ;
+	hazopedge:parameter "Pressure" ;
+	hazopedge:deviation "Shut in wellhead pressure is higher than anticipated" ;
+	hazopedge:cause "Poor reservoir predictions" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "• NRV fitted in methanol feed lines M1-2”, 15 CS, M2-2” 15 CS
+• PD pump is a form of NRV" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "4.2" ;
+	hazopedge:actionon "CD/MN" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "4.3" ;
+	hazopedge:actionon "CD" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Pressure Temperature Flow" ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "4.4" ;
+	hazopedge:actionon "CD/EF" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "NORMAL OPERATION" ;
+	hazopedge:parameter "NORMAL OPERATION" ;
+	hazopedge:deviation "NORMAL OPERATION" ;
+	hazopedge:cause "NORMAL OPERATION" ;
+	hazopedge:consequence "NORMAL OPERATION" ;
+	hazopedge:safeguard "NORMAL OPERATION" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "NORMAL OPERATION" ;
+	hazopedge:actionon "NORMAL OPERATION" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Lower" ;
+	hazopedge:parameter "Flow" ;
+	hazopedge:deviation "Restriction in reservoir or downstream of choke" ;
+	hazopedge:cause "• Poor PI
+• Hydrate/ice" ;
+	hazopedge:consequence "Loss of production" ;
+	hazopedge:safeguard "1. None" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "5.1" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Lower" ;
+	hazopedge:parameter "Flow" ;
+	hazopedge:deviation "Restriction in reservoir or downstream of choke" ;
+	hazopedge:cause "• Poor PI
+• Hydrate/ice" ;
+	hazopedge:consequence "Loss of production" ;
+	hazopedge:safeguard "2. Methanol" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "5.2" ;
+	hazopedge:actionon "EF" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Higher" ;
+	hazopedge:parameter "Flow" ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "Choke opened too far" ;
+	hazopedge:consequence "Possible sand production leading to erosion in piping and the choke" ;
+	hazopedge:safeguard "Sand probe (AE)" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "6.1" ;
+	hazopedge:actionon "MN/EF" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Higher" ;
+	hazopedge:parameter "Flow" ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "Choke opened too far" ;
+	hazopedge:consequence "Possible sand production leading to erosion in piping and the choke" ;
+	hazopedge:safeguard "Sand probe (AE)" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "6.2" ;
+	hazopedge:actionon "IJ/EF" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "As well as" ;
+	hazopedge:parameter "Flow" ;
+	hazopedge:deviation "Sand production or well debris from drilling/ perforation" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "• Erosion on piping or choke
+• Possible choking of condensate control valve in V1" ;
+	hazopedge:safeguard "Sand probe (AE)" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "7.1" ;
+	hazopedge:actionon "MN" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "As well as" ;
+	hazopedge:parameter "Flow" ;
+	hazopedge:deviation "Sand production or well debris from drilling/ perforation" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "• Erosion on piping or choke
+• Possible choking of condensate control valve in V1" ;
+	hazopedge:safeguard "Sand probe (AE)" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "7.2" ;
+	hazopedge:actionon "EF" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Lower" ;
+	hazopedge:parameter "Pressure" ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "None" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Higher" ;
+	hazopedge:parameter "Pressure" ;
+	hazopedge:deviation "Production higher than off-take" ;
+	hazopedge:cause "Production platform upset or shutdown and ESDV3 and 4 closed" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "• Relief valves on V1
+• Pipelines full pressure rated
+• PSHH on V1" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "9.1" ;
+	hazopedge:actionon "IJ" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Higher" ;
+	hazopedge:parameter "Pressure" ;
+	hazopedge:deviation "Production higher than off-take" ;
+	hazopedge:cause "Production platform upset or shutdown and ESDV3 and 4 closed" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "• Relief valves on V1
+• Pipelines full pressure rated
+• PSHH on V1" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "9.2" ;
+	hazopedge:actionon "EF/CD" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Higher" ;
+	hazopedge:parameter "Pressure" ;
+	hazopedge:deviation "Production higher than off-take" ;
+	hazopedge:cause "Production platform upset or shutdown and ESDV3 and 4 closed" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "• Relief valves on V1
+• Pipelines full pressure rated
+• PSHH on V1" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "9.3" ;
+	hazopedge:actionon "CD" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Higher" ;
+	hazopedge:parameter "Pressure" ;
+	hazopedge:deviation "Production higher than off-take" ;
+	hazopedge:cause "Production platform upset or shutdown and ESDV3 and 4 closed" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "• Relief valves on V1
+• Pipelines full pressure rated
+• PSHH on V1" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "9.4" ;
+	hazopedge:actionon "EF/GH" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Lower" ;
+	hazopedge:parameter "Pressure" ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "Choke leaks and ESDV4 leaks plus platform blow down plus WV closed" ;
+	hazopedge:consequence "• Lower temperatures
+• scenario unlikely" ;
+	hazopedge:safeguard "None" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "10.1" ;
+	hazopedge:actionon "MN" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Lower" ;
+	hazopedge:parameter "Pressure" ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "Choke leaks and ESDV4 leaks plus platform blow down plus WV closed" ;
+	hazopedge:consequence "• Lower temperatures
+• scenario unlikely" ;
+	hazopedge:safeguard "None" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "10.2" ;
+	hazopedge:actionon "AB" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "See 10.1 and 10.2" ;
+	hazopedge:parameter "See 10.1 and 10.2" ;
+	hazopedge:deviation "See 10.1 and 10.2" ;
+	hazopedge:cause "See 10.1 and 10.2" ;
+	hazopedge:consequence "See 10.1 and 10.2" ;
+	hazopedge:safeguard "See 10.1 and 10.2" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "See 10.1 and 10.2" ;
+	hazopedge:actionon "See 10.1 and 10.2" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Lower" ;
+	hazopedge:parameter "Temperature" ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "See 10.1 and 10.2" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "None" ;
+	hazopedge:parameter "Maintenance" ;
+	hazopedge:deviation "Can the items up to and including the choke be maintained" ;
+	hazopedge:cause "Poor isolation standards" ;
+	hazopedge:consequence "Loss of production" ;
+	hazopedge:safeguard "Isolation valve" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "12.1" ;
+	hazopedge:actionon "IJ/CD" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "None" ;
+	hazopedge:parameter "Maintenance" ;
+	hazopedge:deviation "Can the items up to and including the choke be maintained" ;
+	hazopedge:cause "Poor isolation standards" ;
+	hazopedge:consequence "Loss of production" ;
+	hazopedge:safeguard "Isolation valve" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "12.2" ;
+	hazopedge:actionon "MN/CD" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "None" ;
+	hazopedge:parameter "Maintenance" ;
+	hazopedge:deviation "Can the items up to and including the choke be maintained" ;
+	hazopedge:cause "Poor isolation standards" ;
+	hazopedge:consequence "Loss of production" ;
+	hazopedge:safeguard "Isolation valve" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "12.3" ;
+	hazopedge:actionon "MN/CD" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Slowly open choke" ;
+	hazopedge:parameter "Slowly open choke" ;
+	hazopedge:deviation "Slowly open choke" ;
+	hazopedge:cause "Slowly open choke" ;
+	hazopedge:consequence "Slowly open choke" ;
+	hazopedge:safeguard "Slowly open choke" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Slowly open choke" ;
+	hazopedge:actionon "Slowly open choke" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Low/lower" ;
+	hazopedge:parameter "Pressure" ;
+	hazopedge:deviation "Pipeline pressure lowadas dsa a" ;
+	hazopedge:cause "Pressuring" ;
+	hazopedge:consequence "Low-temperature ice or hydrate formation" ;
+	hazopedge:safeguard "Methanol injection" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "13.1" ;
+	hazopedge:actionon "CD" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Low/lower" ;
+	hazopedge:parameter "Pressure" ;
+	hazopedge:deviation "Pipeline pressure lowadas dsa a" ;
+	hazopedge:cause "Pressuring" ;
+	hazopedge:consequence "Low-temperature ice or hydrate formation" ;
+	hazopedge:safeguard "Methanol injection" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "13.2" ;
+	hazopedge:actionon "GH, CD, EF" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "High" ;
+	hazopedge:parameter "Pressure" ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "Pipeline fully pressure rated" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Low" ;
+	hazopedge:parameter "Temperature" ;
+	hazopedge:deviation "See 13" ;
+	hazopedge:cause "See 13" ;
+	hazopedge:consequence "See 13" ;
+	hazopedge:safeguard "See 13" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon "AB" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "High" ;
+	hazopedge:parameter "Temperature" ;
+	hazopedge:deviation "Adiabatic compression of nitrogen" ;
+	hazopedge:cause "Nitrogen piston compressed by incoming gas" ;
+	hazopedge:consequence "None" ;
+	hazopedge:safeguard "None" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "16" ;
+	hazopedge:actionon "GH, CD, EF" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Low/no/ high" ;
+	hazopedge:parameter "Flow" ;
+	hazopedge:deviation "No logical meaning during start- up" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Change" ;
+	hazopedge:parameter "Phase" ;
+	hazopedge:deviation "Production of ice, hydrate, condensate" ;
+	hazopedge:cause "Expansion of gas into the pipeline" ;
+	hazopedge:consequence "Potential choke" ;
+	hazopedge:safeguard "Methanol injection" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Change" ;
+	hazopedge:parameter "Phase" ;
+	hazopedge:deviation "Production of ice, hydrate, condensate" ;
+	hazopedge:cause "Expansion of gas into the pipeline" ;
+	hazopedge:consequence "Potential choke" ;
+	hazopedge:safeguard "Methanol injection" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "18.1" ;
+	hazopedge:actionon "EF" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "NORMAL OPERATION" ;
+	hazopedge:parameter "NORMAL OPERATION" ;
+	hazopedge:deviation "NORMAL OPERATION" ;
+	hazopedge:cause "NORMAL OPERATION" ;
+	hazopedge:consequence "NORMAL OPERATION" ;
+	hazopedge:safeguard "NORMAL OPERATION" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "NORMAL OPERATION" ;
+	hazopedge:actionon "NORMAL OPERATION" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Low" ;
+	hazopedge:parameter "Flow" ;
+	hazopedge:deviation "Low production" ;
+	hazopedge:cause "Low off take at terminal" ;
+	hazopedge:consequence "Potential slugging regime" ;
+	hazopedge:safeguard "None" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "20.1" ;
+	hazopedge:actionon "GH" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Higher" ;
+	hazopedge:parameter "Flow" ;
+	hazopedge:deviation "Rate increase" ;
+	hazopedge:cause "Higher off take at the terminal" ;
+	hazopedge:consequence "Potential slug formation and reactions forces on the riser" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "21.1" ;
+	hazopedge:actionon "GH" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Higher" ;
+	hazopedge:parameter "Flow" ;
+	hazopedge:deviation "Rate increase" ;
+	hazopedge:cause "Higher off take at the terminal" ;
+	hazopedge:consequence "Potential slug formation and reactions forces on the riser" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "21.2" ;
+	hazopedge:actionon "CD" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "High" ;
+	hazopedge:parameter "Flow" ;
+	hazopedge:deviation "High demands" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Possible sand formation and erosion" ;
+	hazopedge:safeguard "Sand probes in each well" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "22.1" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Lower" ;
+	hazopedge:parameter "Flow" ;
+	hazopedge:deviation "Restricted flows of the pipeline" ;
+	hazopedge:cause "Hydrate formation" ;
+	hazopedge:consequence "Line choked ice/ hydrate slug may move causing reactions forces on the riser and sudden high flow into V1" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "23.1" ;
+	hazopedge:actionon "EF" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Lower" ;
+	hazopedge:parameter "Flow" ;
+	hazopedge:deviation "Restricted flows of the pipeline" ;
+	hazopedge:cause "Hydrate formation" ;
+	hazopedge:consequence "Line choked ice/ hydrate slug may move causing reactions forces on the riser and sudden high flow into V1" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "23.2" ;
+	hazopedge:actionon "EF" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "High" ;
+	hazopedge:parameter "Flow" ;
+	hazopedge:deviation "High flow" ;
+	hazopedge:cause "Hydrate slug moves when under high pressure differential" ;
+	hazopedge:consequence "Higher pressure in V1" ;
+	hazopedge:safeguard "Methanol" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "24.1" ;
+	hazopedge:actionon "EF/GH" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "High" ;
+	hazopedge:parameter "Flow" ;
+	hazopedge:deviation "High flow" ;
+	hazopedge:cause "Hydrate slug moves when under high pressure differential" ;
+	hazopedge:consequence "Higher pressure in V1" ;
+	hazopedge:safeguard "Methanol" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "24.2" ;
+	hazopedge:actionon "EF/GH" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Lower" ;
+	hazopedge:parameter "Temperature" ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "Pipeline depressured" ;
+	hazopedge:consequence "Possible hydrate formation" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "25.1" ;
+	hazopedge:actionon "GH" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Higher" ;
+	hazopedge:parameter "Temperature" ;
+	hazopedge:deviation "Pipe warmer than when laid" ;
+	hazopedge:cause "Hotter fluids flowing in pipeline after start-up" ;
+	hazopedge:consequence "Thermal expansion of the pipeline" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "26.1" ;
+	hazopedge:actionon "EF/GH" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "High differential" ;
+	hazopedge:parameter "Electro potential" ;
+	hazopedge:deviation "Possible loss to cathodic protection" ;
+	hazopedge:cause "Localize corrosion outside the pipeline" ;
+	hazopedge:consequence "• Sacrificial anodes
+• Isolation flanges" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "27" ;
+	hazopedge:actionon "EF/IJ" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "To be continued" ;
+	hazopedge:parameter "To be continued" ;
+	hazopedge:deviation "To be continued" ;
+	hazopedge:cause "To be continued" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Quantity/ step" ;
+	hazopedge:deviation "No B is added— step omitted" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Spoilt batch" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Start-up check to confirm that MV307 is open" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Quantity/ step" ;
+	hazopedge:deviation "No B is added— step omitted" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Spoilt batch" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Operating procedure to include a sight glass check that flow is established" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Quantity" ;
+	hazopedge:deviation "Excess of B is added" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Excess of B in product: batch will be out of specification" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Operating procedure to include a check on vessel F2 before B is measured out" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Quantity" ;
+	hazopedge:deviation "Too little of B is added" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Batch out of specification and process delay" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Check procedure for clearing line and OP1 when transfer line holds component B" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Quantity" ;
+	hazopedge:deviation "Too little of B is added" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Batch out of specification and process delay" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Batch sheet to require a check that F2 is empty at end of the addition stage" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Quantity" ;
+	hazopedge:deviation "Too much of A is present" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Batch out of specification and process delay" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Check that procedure will be written to cover this case and include in training program" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Quantity" ;
+	hazopedge:deviation "Too little A is present" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Batch out of specification and process delay. Not easily corrected" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Evaluate likelihood of this deviation and, if necessary, draw up procedure" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Flow (rate)" ;
+	hazopedge:deviation "Too fast" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Reaction rate and heat release increased. May eventually exceed vessel cooling capacity leading to over-temperature" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Check that OP1 material is compatible with component B" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Flow (rate)" ;
+	hazopedge:deviation "Too fast" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Could quickly exceed the vessel cooling capacity, causing a reaction runaway and demand on BD2" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Specify OP1 size in operating procedure and ensure problem is covered in operator training" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Flow (rate)" ;
+	hazopedge:deviation "Too fast" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Could quickly exceed the vessel cooling capacity, causing a reaction runaway and demand on BD2" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Confirm flowrate at OP1 at the water trials stage" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Flow (rate)" ;
+	hazopedge:deviation "Too fast" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Could quickly exceed the vessel cooling capacity, causing a reaction runaway and demand on BD2" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Control sequence to include trip closure of AV203 and fully open CV303 in the event of over- temperature" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Flow (rate)" ;
+	hazopedge:deviation "Too fast" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Will very quickly exceed the vessel cooling capacity and lead to a reaction runaway and demand on BD2" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "MV306 to be locked closed as it is not used in this process" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Flow (rate)" ;
+	hazopedge:deviation "Too fast" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Will very quickly exceed the vessel cooling capacity and lead to a reaction runaway and demand on BD2" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Include sensing of BD action to give alarm and to close AV203" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Flow (rate)" ;
+	hazopedge:deviation "Too fast" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Will very quickly exceed the vessel cooling capacity and lead to a reaction runaway and demand on BD2" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Flow (rate)" ;
+	hazopedge:deviation "Too slow" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Batch time extended" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Covered by actions 3.1 and 3.2" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Flow (rate)" ;
+	hazopedge:deviation "Too slow" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Batch time extended" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Covered by actions 3.1 and 3.2" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Flow" ;
+	hazopedge:deviation "Elsewhere" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Loss of contaminated nitrogen to dump tank and eventually to atmosphere" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Put BD2 on a regular checking schedule" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Temperature" ;
+	hazopedge:deviation "High" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Check whether it is possible to physically separate the two temperature probes (control and protection) to reduce common cause effects" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Temperature" ;
+	hazopedge:deviation "High" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Overheating. Runaway if cooling water is not restored or the addition halted" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Covered by action 7.3" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Temperature" ;
+	hazopedge:deviation "High" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Overheating with possible reaction runaway" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Control program to include checks that valve CV301 on the steam line is closed" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Temperature" ;
+	hazopedge:deviation "Low" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Poor quality batch. Extreme outcome is cessation of reaction and accumulation of unreacted B" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Take TAL from both the control and the protection temperature sensors" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Temperature" ;
+	hazopedge:deviation "Low" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Poor quality batch. Extreme outcome is cessation of reaction and accumulation of unreacted B" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Determine suitable interval for calibration checks on TICs" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Pressure" ;
+	hazopedge:deviation "High/low" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Reaction rate" ;
+	hazopedge:deviation "High/low" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Mix" ;
+	hazopedge:deviation "No mixing" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Risk of accumulation of unmixed B leading to uncontrolled reaction" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Add a rotation sensor to the shaft of the stirrer; interlock to reactant feed valve AV203" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Mix" ;
+	hazopedge:deviation "No mixing" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Risk of accumulation of unmixed B leading to uncontrolled reaction" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Existing safeguard adequate provided action 17.1 is implemented" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Mix" ;
+	hazopedge:deviation "No mixing" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Risk of accumulation of unmixed B leading to uncontrolled reaction" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Develop a safe operating procedure for restarting a batch after accumulation has occurred" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Mix" ;
+	hazopedge:deviation "Less mixing" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Stirring becomes inefficient and unmixed B may accumulate" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Check viscosity under extreme conditions to decide if action is needed. If so, include an alarm on high motor current" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Mix" ;
+	hazopedge:deviation "Reverse" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Stirring becomes inefficient and unmixed B may accumulate" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Include a check on stirrer operation in the commissioning trials and in the maintenance procedures" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Composition" ;
+	hazopedge:deviation "Part of" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Composition" ;
+	hazopedge:deviation "As well as" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Unpredictable but minimum will be a spoilt batch" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Review actions from earlier HAZOP and ensure that the purchasing department specifies a distinct drum color" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Control" ;
+	hazopedge:deviation "None" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "System moves to fail safe condition" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Check that fail safe settings include isolation of feed of B, continued stirring and full cooling to vessel jacket" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Control" ;
+	hazopedge:deviation "Part of" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Possible undetected overheating" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Check that the temperature sensors connect to different input boards" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Control" ;
+	hazopedge:deviation "Part of" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Possible undetected overheating" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Include temperature comparison (TICA32/22) in the checks and add a difference alarm" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Operator action" ;
+	hazopedge:deviation "Sooner" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Starting temperature is low. Reactant may accumulate and then cause runaway reaction once mixing starts" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Specify the lowest safe starting temperature" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Operator action" ;
+	hazopedge:deviation "Sooner" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Starting temperature is low. Reactant may accumulate and then cause runaway reaction once mixing starts" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Provide software interlock to prevent low temperature start" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Operator action" ;
+	hazopedge:deviation "Part of" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Uncertain—basis for inclusion of the workout period is not clear" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Carry out further laboratory work to determine the importance of the workout and to define the minimum allowable time" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Services" ;
+	hazopedge:deviation "Loss of instrument air" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "All valves move to assigned failure positions" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Review the failure modes of all valves to ensure specification is correct" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Services" ;
+	hazopedge:deviation "Power loss" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Stirrer stops. Computer moves plant to a safe hold position" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Include this condition in the check under 27.1" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Services" ;
+	hazopedge:deviation "Power loss" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Stirrer stops. Computer moves plant to a safe hold position" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Consider need for planned restart procedure after such an interruption" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Maintenance" ;
+	hazopedge:deviation "Work on AV203" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "AV203 cannot be isolated from F2 for safe maintenance" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Put additional manual valves in the F2/F3 line" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Maintenance" ;
+	hazopedge:deviation "Work on AV203" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "AV203 cannot be isolated from F2 for safe maintenance" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "As a general action, review the P&ID to ensure all key items can be isolated" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Vessel entry (F3)" ;
+	hazopedge:deviation "Other activity" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Risk to operator from inert atmosphere, especially nitrogen" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Drainage" ;
+	hazopedge:deviation "Leak of B" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Some loss of component B into process area" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Check the materials in use on adjacent units for potential incompatibility" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Drainage" ;
+	hazopedge:deviation "Leak of B" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Some loss of component B into process area" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Operating procedure to include a routine inspection of the transfer line at the stage of the process" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "pH" ;
+	hazopedge:deviation "High/low" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Batch quality affected unless initial pH is range 10À11.5" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Operating procedure to include a check on pH before this step is initiated" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "pH" ;
+	hazopedge:deviation "High/low" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Batch quality affected unless initial pH is range 10À11.5" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Consider need for a procedure for correction of pH" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter "Trip action" ;
+	hazopedge:deviation "Out of range condition" ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence "Control system moves the plant to a predetermined state based on the trip signals" ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Prepare matrix to show which valves act in each trip scenario. Review the matrix at next HAZOP meeting" ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Out of sequence" ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "V6 closed, V5 open" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "Valve labeling and practice" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Too fast" ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "V5 too far open" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "Valve labeling and practice" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Out of sequence" ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "V3 open by mistake, V6 closed, and V4 opened" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "Valve labeling and practice" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Out of sequence/ reverse" ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "V3 left open, V4 left open, V6 open during the depressuring" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "Pump NRV Valve labeling and practice Many valves in route" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Out of sequence/ reverse" ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "V6 left open after blowdown and V1 and V2 opened ready for displacement of C6. V5 still closed" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "Valve labeling and practice" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "V6 left open
+Human factors. V6 opened and V1 and V2 opened for displacement. V5 not yet opened" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "Valve labeling and practice Valve labeling and practice" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Too late (valve operation)" ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "V2 not open, V3 left open" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Too late (valve operation)" ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "V2 not open, V3 left open" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard hazoperro:empty ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Out of sequence" ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "V1 and V2 open, V6 left open, and V5 closed" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "Valve labeling and practice" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "Human factors
+Poor understanding of operation
+Poor understanding of operation" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "PRV on IST" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "No true indication of N2 flow rate" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "None" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "More flow N2 High flow" ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "See 2.4" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "See 2.4" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Incomplete" ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "Line not true, hogs and hollows plus elevation changes" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "None obvious" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Reverse flow of C6" ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "V6 left open and V5 closed at the end of cycle. Some C 6still in the line" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "Valve labeling and practice" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Communication" ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "As above
+Human factors What is the significance of a change in the noise? What will it sound like?" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "Valve labeling and practice" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Communication" ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause hazoperro:empty ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "Lead operator is specified in the procedure" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Incomplete" ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "Hydrostatic head in IST" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "None" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Less flow Incomplete" ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "Flow regime uncertain and line slopes uncertain" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "None" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "Human factors
+Poor understanding of operation" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "PRV on IST" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword "Communication" ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation hazoperro:empty ;
+	hazopedge:cause "“Sound” is the only variable. What will it “sound like”?" ;
+	hazopedge:consequence hazoperro:empty ;
+	hazopedge:safeguard "None" ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action hazoperro:empty ;
+	hazopedge:actionon hazoperro:empty ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
