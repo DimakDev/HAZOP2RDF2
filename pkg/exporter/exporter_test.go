@@ -7,41 +7,41 @@ import (
     "github.com/stretchr/testify/assert"
 )
 
-func TestReportToFile(t *testing.T) {
+func TestWriteToFile(t *testing.T) {
     assert := assert.New(t)
 
-    rpath := "report.txt"
-    tpath := "template_file.txt"
+    rpath := "report_to_file.txt"
+    tpath := "report_template_long.txt"
 
-    report := new(Report)
+    e := new(Exporter)
 
     var err error
 
-    err = report.ReportToFile("", "")
+    err = e.WriteToFile("", "")
     assert.Error(err)
 
-    err = report.ReportToFile(rpath, "")
+    err = e.WriteToFile(rpath, "")
     assert.Error(err)
 
-    err = report.ReportToFile(rpath, tpath)
+    err = e.WriteToFile(rpath, tpath)
     assert.Empty(err)
 
     err = os.Remove(rpath)
     assert.Empty(err)
 }
 
-func TestReportToStdout(t *testing.T) {
+func TestWriteToStdout(t *testing.T) {
     assert := assert.New(t)
 
-    tpath := "template_stdout.txt"
+    tpath := "report_template_short.txt"
 
-    report := new(Report)
+    e := new(Exporter)
 
     var err error
 
-    err = report.ReportToStdout("")
+    err = e.WriteToStdout("")
     assert.Error(err)
 
-    err = report.ReportToStdout(tpath)
+    err = e.WriteToStdout(tpath)
     assert.Empty(err)
 }
