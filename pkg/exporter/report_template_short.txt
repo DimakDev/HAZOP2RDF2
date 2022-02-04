@@ -9,10 +9,10 @@ Workbook: {{ .Workbook }}
 
 --------------------------------------------
 {{ .Index }}. Worksheet: {{ .Name }}
-  ◾️({{ .TotalSize }}) Total Cell(s), ({{ .ValidSize }}) Parsed Cell(s), Quality ({{ .ValidPart }}%)
-  🔸({{ .Logger.Warnings | len }}) Warning(s)
-  🔺({{ .Logger.Errors | len }}) Error(s)
-  🔹({{ .Logger.Info | len }}) Info
+  ◾️({{ .NCells }}) Total Cell(s), ({{ .NValidCells }}) Parsed Cell(s), Valid Part ({{ .PValidCells }}%)
+  🔸({{ .Report.Warnings | len }}) Warning(s)
+  🔺({{ .Report.Errors | len }}) Error(s)
+  🔹({{ .Report.Info | len }}) Info
 {{- end }}
 
 🔗 Full report available under `./{{ .ReportPath }}`

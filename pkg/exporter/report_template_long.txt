@@ -9,15 +9,15 @@ Workbook: {{ .Workbook }}
 
 --------------------------------------------
 {{ .Index }}. Worksheet: {{ .Name }}
-({{ .TotalSize }}) Total Cell(s), ({{ .ValidSize }}) Parsed Cell(s), Quality ({{ .ValidPart }}%)
-({{ .Logger.Warnings | len }}) Warning(s), ({{ .Logger.Errors | len }}) Error(s), ({{ .Logger.Info | len }}) Info
-  {{- range .Logger.Warnings }}
+({{ .NCells }}) Total Cell(s), ({{ .NValidCells }}) Parsed Cell(s), Valid Part ({{ .PValidCells }}%)
+({{ .Report.Warnings | len }}) Warning(s), ({{ .Report.Errors | len }}) Error(s), ({{ .Report.Info | len }}) Info
+  {{- range .Report.Warnings }}
   🔸[WARN] {{ . }}
   {{- end }}
-  {{- range .Logger.Errors }}
+  {{- range .Report.Errors }}
   🔺[ERRO] {{ . }}
   {{- end }}
-  {{- range .Logger.Info }}
+  {{- range .Report.Info }}
   🔹[INFO] {{ . }}
   {{- end }}
 {{- end }}

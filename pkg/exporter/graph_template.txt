@@ -1,6 +1,21 @@
 @base <{{ .BaseUri }}> .
 @prefix hazopnode: <{{ .BaseUri }}/hazopnode#> .
 @prefix hazopedge: <{{ .BaseUri }}/hazopedge#> .
+@prefix hazoperro: <{{ .BaseUri }}/hazoperro#> .
 @prefix reference: <{{ .BaseUri }}/reference#> .
-
-
+{{ range .Worksheets -}}
+{{ range .Graph }}
+{{if .Reference}}reference:{{ .Reference }}{{ else }}hazoperro:empty{{ end }} hazopedge:guideword {{ if .GuideWord }}"{{ .GuideWord }}"{{ else }}hazoperro:empty{{ end }} ;
+	hazopedge:parameter {{ if .Parameter }}"{{ .Parameter }}"{{ else }}hazoperro:empty{{ end }} ;
+	hazopedge:deviation {{ if .Deviation }}"{{ .Deviation }}"{{ else }}hazoperro:empty{{ end }} ;
+	hazopedge:cause {{ if .Cause }}"{{ .Cause }}"{{ else }}hazoperro:empty{{ end }} ;
+	hazopedge:consequence {{ if .Consequence }}"{{ .Consequence }}"{{ else }}hazoperro:empty{{ end }} ;
+	hazopedge:safeguard {{ if .Safeguard }}"{{ .Safeguard }}"{{ else }}hazoperro:empty{{ end }} ;
+	hazopedge:actionreference {{ if .ActionReference }}"{{ .ActionReference }}"{{ else }}hazoperro:empty{{ end }} ;
+	hazopedge:action {{ if .Action }}"{{ .Action }}"{{ else }}hazoperro:empty{{ end }} ;
+	hazopedge:actionon {{ if .ActionOn }}"{{ .ActionOn }}"{{ else }}hazoperro:empty{{ end }} ;
+	hazopedge:severity {{ if .Severity }}"{{ .Severity }}"{{ else }}hazoperro:empty{{ end }} ;
+	hazopedge:probability {{ if .Probability }}"{{ .Probability }}"{{ else }}hazoperro:empty{{ end }} ;
+	hazopedge:riskpriority {{ if .RiskPriority }}"{{ .RiskPriority }}"{{ else }}hazoperro:empty{{ end }} .
+{{ end }}
+{{- end }}
