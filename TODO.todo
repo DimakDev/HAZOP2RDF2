@@ -1,10 +1,11 @@
 Hazop Formula Todos:
- ☐ [test]: add package tests @test
- ☐ [test]: add package benchmarks @test
- ☐ [test]: add cpu, mem profiling @test
- ☐ [graph]: add graph template @feat
+ ☐ [test]: rewrite workbook tests @test
+ ☐ [docs]: update readme @docs
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ [test]: add package benchmarks @test @done (22-02-05 00:58) @project(Hazop Formula Todos)
+ ✔ [test]: add cpu, mem profiling @test @done (22-02-05 00:58) @project(Hazop Formula Todos)
+ ✔ [graph]: add graph template @feat @done (22-02-05 00:58) @project(Hazop Formula Todos)
  ✔ add quality metric @feat @done (22-02-03 18:42) @project(Hazop Formula Todos)
  ✔ [workbook]: read worksheets in go routines @improvement @done (22-01-25 00:44) @project(Hazop Formula Todos)
  ✔ 💯 @done (22-01-01 03:17) @project(Hazop Formula Todos)
@@ -20,9 +21,6 @@ Archive:
  ✘ [go-pretty]: add merged cells @feat @cancelled (21-12-29 22:18) @project(Hazop Formula Todos)
  ✔ [verification]: fix data verification indexing @fix @done (21-12-29 21:47)
  ✔ [verification]: add *data* verification (type, value length, value range) @feat @done (21-12-29 21:47)
- ✘ [workbook]: add go routines and wait groups @imrpovement @cancelled (21-12-29 21:46) @project(Hazop Formula Todos)
- ✘ [graph]: add rdf graph builder @feat @cancelled (21-12-29 05:58) @project(Hazop Formula Todos)
- ✘ [verification]: add column map to filter tables @feat @cancelled (21-12-26 20:57) @project(Hazop Formula Todos)
  ✘ [go-pretty]: show head/tail rows @feat @cancelled (21-12-26 20:20) @project(Hazop Formula Todos)
  ✔ [go-pretty]: show full table @feat @done (21-12-26 20:16) @project(Hazop Formula Todos)
  ✔ [verification]: add *input* verification (regex, synonyms) @feat @done (21-12-25 00:16) @project(Hazop Formula Todos)
