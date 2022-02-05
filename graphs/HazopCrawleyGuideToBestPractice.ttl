@@ -264,19 +264,6 @@ hazoperro:empty hazopedge:guideword hazoperro:empty ;
 	hazopedge:probability hazoperro:empty ;
 	hazopedge:riskpriority hazoperro:empty .
 
-hazoperro:empty hazopedge:guideword hazoperro:empty ;
-	hazopedge:parameter hazoperro:empty ;
-	hazopedge:deviation hazoperro:empty ;
-	hazopedge:cause hazoperro:empty ;
-	hazopedge:consequence hazoperro:empty ;
-	hazopedge:safeguard hazoperro:empty ;
-	hazopedge:actionreference hazoperro:empty ;
-	hazopedge:action hazoperro:empty ;
-	hazopedge:actionon hazoperro:empty ;
-	hazopedge:severity hazoperro:empty ;
-	hazopedge:probability hazoperro:empty ;
-	hazopedge:riskpriority hazoperro:empty .
-
 hazoperro:empty hazopedge:guideword "No" ;
 	hazopedge:parameter "Flow" ;
 	hazopedge:deviation "SSSV closed" ;
@@ -685,19 +672,6 @@ hazoperro:empty hazopedge:guideword hazoperro:empty ;
 	hazopedge:probability hazoperro:empty ;
 	hazopedge:riskpriority hazoperro:empty .
 
-hazoperro:empty hazopedge:guideword hazoperro:empty ;
-	hazopedge:parameter hazoperro:empty ;
-	hazopedge:deviation hazoperro:empty ;
-	hazopedge:cause hazoperro:empty ;
-	hazopedge:consequence hazoperro:empty ;
-	hazopedge:safeguard hazoperro:empty ;
-	hazopedge:actionreference hazoperro:empty ;
-	hazopedge:action hazoperro:empty ;
-	hazopedge:actionon hazoperro:empty ;
-	hazopedge:severity hazoperro:empty ;
-	hazopedge:probability hazoperro:empty ;
-	hazopedge:riskpriority hazoperro:empty .
-
 hazoperro:empty hazopedge:guideword "Slowly open choke" ;
 	hazopedge:parameter "Slowly open choke" ;
 	hazopedge:deviation "Slowly open choke" ;
@@ -976,19 +950,6 @@ hazoperro:empty hazopedge:guideword "To be continued" ;
 	hazopedge:parameter "To be continued" ;
 	hazopedge:deviation "To be continued" ;
 	hazopedge:cause "To be continued" ;
-	hazopedge:consequence hazoperro:empty ;
-	hazopedge:safeguard hazoperro:empty ;
-	hazopedge:actionreference hazoperro:empty ;
-	hazopedge:action hazoperro:empty ;
-	hazopedge:actionon hazoperro:empty ;
-	hazopedge:severity hazoperro:empty ;
-	hazopedge:probability hazoperro:empty ;
-	hazopedge:riskpriority hazoperro:empty .
-
-hazoperro:empty hazopedge:guideword hazoperro:empty ;
-	hazopedge:parameter hazoperro:empty ;
-	hazopedge:deviation hazoperro:empty ;
-	hazopedge:cause hazoperro:empty ;
 	hazopedge:consequence hazoperro:empty ;
 	hazopedge:safeguard hazoperro:empty ;
 	hazopedge:actionreference hazoperro:empty ;
@@ -1648,19 +1609,6 @@ hazoperro:empty hazopedge:guideword hazoperro:empty ;
 	hazopedge:probability hazoperro:empty ;
 	hazopedge:riskpriority hazoperro:empty .
 
-hazoperro:empty hazopedge:guideword hazoperro:empty ;
-	hazopedge:parameter hazoperro:empty ;
-	hazopedge:deviation hazoperro:empty ;
-	hazopedge:cause hazoperro:empty ;
-	hazopedge:consequence hazoperro:empty ;
-	hazopedge:safeguard hazoperro:empty ;
-	hazopedge:actionreference hazoperro:empty ;
-	hazopedge:action hazoperro:empty ;
-	hazopedge:actionon hazoperro:empty ;
-	hazopedge:severity hazoperro:empty ;
-	hazopedge:probability hazoperro:empty ;
-	hazopedge:riskpriority hazoperro:empty .
-
 hazoperro:empty hazopedge:guideword "Out of sequence" ;
 	hazopedge:parameter hazoperro:empty ;
 	hazopedge:deviation hazoperro:empty ;
@@ -1730,19 +1678,6 @@ hazoperro:empty hazopedge:guideword hazoperro:empty ;
 	hazopedge:parameter hazoperro:empty ;
 	hazopedge:deviation hazoperro:empty ;
 	hazopedge:cause "No effects identified" ;
-	hazopedge:consequence hazoperro:empty ;
-	hazopedge:safeguard hazoperro:empty ;
-	hazopedge:actionreference hazoperro:empty ;
-	hazopedge:action hazoperro:empty ;
-	hazopedge:actionon hazoperro:empty ;
-	hazopedge:severity hazoperro:empty ;
-	hazopedge:probability hazoperro:empty ;
-	hazopedge:riskpriority hazoperro:empty .
-
-hazoperro:empty hazopedge:guideword hazoperro:empty ;
-	hazopedge:parameter hazoperro:empty ;
-	hazopedge:deviation hazoperro:empty ;
-	hazopedge:cause hazoperro:empty ;
 	hazopedge:consequence hazoperro:empty ;
 	hazopedge:safeguard hazoperro:empty ;
 	hazopedge:actionreference hazoperro:empty ;
@@ -1925,19 +1860,6 @@ hazoperro:empty hazopedge:guideword "Other guidewords" ;
 	hazopedge:probability hazoperro:empty ;
 	hazopedge:riskpriority hazoperro:empty .
 
-hazoperro:empty hazopedge:guideword hazoperro:empty ;
-	hazopedge:parameter hazoperro:empty ;
-	hazopedge:deviation hazoperro:empty ;
-	hazopedge:cause hazoperro:empty ;
-	hazopedge:consequence hazoperro:empty ;
-	hazopedge:safeguard hazoperro:empty ;
-	hazopedge:actionreference hazoperro:empty ;
-	hazopedge:action hazoperro:empty ;
-	hazopedge:actionon hazoperro:empty ;
-	hazopedge:severity hazoperro:empty ;
-	hazopedge:probability hazoperro:empty ;
-	hazopedge:riskpriority hazoperro:empty .
-
 hazoperro:empty hazopedge:guideword "Less flow Incomplete" ;
 	hazopedge:parameter hazoperro:empty ;
 	hazopedge:deviation hazoperro:empty ;
@@ -1971,19 +1893,6 @@ hazoperro:empty hazopedge:guideword "Communication" ;
 	hazopedge:cause "“Sound” is the only variable. What will it “sound like”?" ;
 	hazopedge:consequence hazoperro:empty ;
 	hazopedge:safeguard "None" ;
-	hazopedge:actionreference hazoperro:empty ;
-	hazopedge:action hazoperro:empty ;
-	hazopedge:actionon hazoperro:empty ;
-	hazopedge:severity hazoperro:empty ;
-	hazopedge:probability hazoperro:empty ;
-	hazopedge:riskpriority hazoperro:empty .
-
-hazoperro:empty hazopedge:guideword hazoperro:empty ;
-	hazopedge:parameter hazoperro:empty ;
-	hazopedge:deviation hazoperro:empty ;
-	hazopedge:cause hazoperro:empty ;
-	hazopedge:consequence hazoperro:empty ;
-	hazopedge:safeguard hazoperro:empty ;
 	hazopedge:actionreference hazoperro:empty ;
 	hazopedge:action hazoperro:empty ;
 	hazopedge:actionon hazoperro:empty ;

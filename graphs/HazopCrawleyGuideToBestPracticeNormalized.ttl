@@ -330,19 +330,6 @@ hazoperro:empty hazopedge:guideword hazoperro:empty ;
 	hazopedge:riskpriority hazoperro:empty .
 
 hazoperro:empty hazopedge:guideword hazoperro:empty ;
-	hazopedge:parameter hazoperro:empty ;
-	hazopedge:deviation hazoperro:empty ;
-	hazopedge:cause hazoperro:empty ;
-	hazopedge:consequence hazoperro:empty ;
-	hazopedge:safeguard hazoperro:empty ;
-	hazopedge:actionreference hazoperro:empty ;
-	hazopedge:action hazoperro:empty ;
-	hazopedge:actionon hazoperro:empty ;
-	hazopedge:severity hazoperro:empty ;
-	hazopedge:probability hazoperro:empty ;
-	hazopedge:riskpriority hazoperro:empty .
-
-hazoperro:empty hazopedge:guideword hazoperro:empty ;
 	hazopedge:parameter "Quantity/ step" ;
 	hazopedge:deviation "No B is added— step omitted" ;
 	hazopedge:cause hazoperro:empty ;
@@ -975,19 +962,6 @@ hazoperro:empty hazopedge:guideword hazoperro:empty ;
 	hazopedge:actionreference hazoperro:empty ;
 	hazopedge:action "Confirm that procedures exist for all materials handled in the process" ;
 	hazopedge:actionon "TB" ;
-	hazopedge:severity hazoperro:empty ;
-	hazopedge:probability hazoperro:empty ;
-	hazopedge:riskpriority hazoperro:empty .
-
-hazoperro:empty hazopedge:guideword hazoperro:empty ;
-	hazopedge:parameter hazoperro:empty ;
-	hazopedge:deviation hazoperro:empty ;
-	hazopedge:cause hazoperro:empty ;
-	hazopedge:consequence hazoperro:empty ;
-	hazopedge:safeguard hazoperro:empty ;
-	hazopedge:actionreference hazoperro:empty ;
-	hazopedge:action hazoperro:empty ;
-	hazopedge:actionon hazoperro:empty ;
 	hazopedge:severity hazoperro:empty ;
 	hazopedge:probability hazoperro:empty ;
 	hazopedge:riskpriority hazoperro:empty .
