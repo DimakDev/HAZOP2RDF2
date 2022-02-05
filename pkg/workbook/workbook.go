@@ -216,18 +216,18 @@ func (ws *Worksheet) checkHeaderAlignment() error {
     }
 
     ws.Valid = true
-    ws.GraphSizeX = ws.NRows - headerY[k0]
+    ws.GraphSizeX = ws.NRows - headerY[k0] + 1
     ws.GraphSizeY = l
     ws.HeaderX = headerX
     ws.HeaderY = headerY
-    ws.Report.NewInfo(fmt.Sprintf("%s %v", InfoHeaderAligned, headerY))
+    ws.Report.NewInfo(fmt.Sprintf("%s %v", InfoHeaderAligned, ws.Header))
     return nil
 }
 
 func (wb *Workbook) readHazopGraph(ws *Worksheet) error {
-    ws.Graph = make([]map[string]interface{}, ws.GraphSizeX)
+    graph := make([]map[string]interface{}, ws.GraphSizeX)
     for i := 0; i < ws.GraphSizeX; i++ {
-        ws.Graph[i] = make(map[string]interface{}, ws.GraphSizeY)
+        graph[i] = make(map[string]interface{}, ws.GraphSizeY)
     }
 
     for k := range ws.Header {
@@ -265,11 +265,11 @@ func (wb *Workbook) readHazopGraph(ws *Worksheet) error {
             ws.Report.NewInfo(fmt.Sprintf("%s: `%s`", InfoValueIsValid, cname))
 
             ws.NValidCells += 1
-            ws.Graph[i][wb.Elements[k].Name] = v
+            graph[i][wb.Elements[k].Name] = v
         }
     }
 
-    ws.Graph = ws.Graph[1:]
+    ws.Graph = graph[1:]
 
     p := float64(ws.NValidCells) / float64(ws.NCells)
     ws.PValidCells = math.Round(p*10000) / 100
