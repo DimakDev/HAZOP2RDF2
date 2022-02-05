@@ -1,7 +1,7 @@
 ============================================
 Program: hazop-formula
 Version: 1.0.0
-Date and time: Sat Feb  5 00:39:10 CET 2022
+Date and time: Sat Feb  5 02:26:30 CET 2022
 
 ============================================
 Workbook: HazopCrawleyGuideToBestPracticeNormalizedShort.xlsx
@@ -10,31 +10,31 @@ Workbook: HazopCrawleyGuideToBestPracticeNormalizedShort.xlsx
 1. Worksheet: Node4.4-Metadata
 (6) Total Cell(s), (0) Parsed Cell(s), Valid Part (0%)
 (0) Warning(s), (14) Error(s), (0) Info
-  🔺[ERRO] Error header not initialized `12:Severity` []
-  🔺[ERRO] Error header not initialized `13:Probability` []
+  🔺[ERRO] Error header not initialized `6:Cause` []
+  🔺[ERRO] Error header not initialized `9:ActionReference` []
+  🔺[ERRO] Error header not initialized `10:Action` []
+  🔺[ERRO] Error header not initialized `11:ActionOn` []
   🔺[ERRO] Error header not initialized `2:Reference` []
+  🔺[ERRO] Error header not initialized `3:GuideWord` []
   🔺[ERRO] Error header not initialized `4:Parameter` []
   🔺[ERRO] Error header not initialized `5:Deviation` []
-  🔺[ERRO] Error header not initialized `8:Safeguard` []
-  🔺[ERRO] Error header not initialized `9:ActionReference` []
-  🔺[ERRO] Error header not initialized `11:ActionOn` []
-  🔺[ERRO] Error header not initialized `3:GuideWord` []
-  🔺[ERRO] Error header not initialized `6:Cause` []
-  🔺[ERRO] Error header not initialized `7:Consequence` []
-  🔺[ERRO] Error header not initialized `10:Action` []
   🔺[ERRO] Error header not initialized `14:RiskPriority` []
+  🔺[ERRO] Error header not initialized `7:Consequence` []
+  🔺[ERRO] Error header not initialized `8:Safeguard` []
+  🔺[ERRO] Error header not initialized `12:Severity` []
+  🔺[ERRO] Error header not initialized `13:Probability` []
   🔺[ERRO] Error invalid header length `0`
 
 --------------------------------------------
 2. Worksheet: Node4.4-Analysis
-(208) Total Cell(s), (150) Parsed Cell(s), Valid Part (72.12%)
-(0) Warning(s), (31) Error(s), (158) Info
-  🔺[ERRO] Error header not initialized `3:GuideWord` []
-  🔺[ERRO] Error header not initialized `14:RiskPriority` []
-  🔺[ERRO] Error header not initialized `13:Probability` []
+(208) Total Cell(s), (156) Parsed Cell(s), Valid Part (75%)
+(0) Warning(s), (32) Error(s), (164) Info
   🔺[ERRO] Error header not initialized `2:Reference` [A1 B2 B3 B4 E5 E10 E20 E21]
+  🔺[ERRO] Error header not initialized `3:GuideWord` []
   🔺[ERRO] Error header not initialized `4:Parameter` []
+  🔺[ERRO] Error header not initialized `14:RiskPriority` []
   🔺[ERRO] Error header not initialized `12:Severity` []
+  🔺[ERRO] Error header not initialized `13:Probability` []
   🔺[ERRO] Error parsing integer `F1`
   🔺[ERRO] Error parsing integer `F2`
   🔺[ERRO] Error parsing integer `F3`
@@ -60,114 +60,15 @@ Workbook: HazopCrawleyGuideToBestPracticeNormalizedShort.xlsx
   🔺[ERRO] Error parsing integer `F23`
   🔺[ERRO] Error parsing integer `F24`
   🔺[ERRO] Error parsing integer `F25`
+  🔺[ERRO] Error parsing integer `F26`
   🔹[INFO] Info header initialized `6:Cause` [C1]
-  🔹[INFO] Info header initialized `7:Consequence` [D1]
-  🔹[INFO] Info header initialized `10:Action` [G1]
-  🔹[INFO] Info header initialized `5:Deviation` [B1]
-  🔹[INFO] Info header initialized `8:Safeguard` [E1]
   🔹[INFO] Info header initialized `9:ActionReference` [F1]
+  🔹[INFO] Info header initialized `10:Action` [G1]
   🔹[INFO] Info header initialized `11:ActionOn` [H1]
-  🔹[INFO] Info header aligned map[5:1 6:1 7:1 8:1 9:1 10:1 11:1]
-  🔹[INFO] Info value parsed/verified: `B1`
-  🔹[INFO] Info value parsed/verified: `B2`
-  🔹[INFO] Info value parsed/verified: `B3`
-  🔹[INFO] Info value parsed/verified: `B4`
-  🔹[INFO] Info value parsed/verified: `B5`
-  🔹[INFO] Info value parsed/verified: `B6`
-  🔹[INFO] Info value parsed/verified: `B7`
-  🔹[INFO] Info value parsed/verified: `B8`
-  🔹[INFO] Info value parsed/verified: `B9`
-  🔹[INFO] Info value parsed/verified: `B10`
-  🔹[INFO] Info value parsed/verified: `B11`
-  🔹[INFO] Info value parsed/verified: `B12`
-  🔹[INFO] Info value parsed/verified: `B13`
-  🔹[INFO] Info value parsed/verified: `B14`
-  🔹[INFO] Info value parsed/verified: `B15`
-  🔹[INFO] Info value parsed/verified: `B16`
-  🔹[INFO] Info value parsed/verified: `B17`
-  🔹[INFO] Info value parsed/verified: `B18`
-  🔹[INFO] Info value parsed/verified: `B19`
-  🔹[INFO] Info value parsed/verified: `B20`
-  🔹[INFO] Info value parsed/verified: `B21`
-  🔹[INFO] Info value parsed/verified: `B22`
-  🔹[INFO] Info value parsed/verified: `B23`
-  🔹[INFO] Info value parsed/verified: `B24`
-  🔹[INFO] Info value parsed/verified: `B25`
-  🔹[INFO] Info value parsed/verified: `E1`
-  🔹[INFO] Info value parsed/verified: `E2`
-  🔹[INFO] Info value parsed/verified: `E3`
-  🔹[INFO] Info value parsed/verified: `E4`
-  🔹[INFO] Info value parsed/verified: `E5`
-  🔹[INFO] Info value parsed/verified: `E6`
-  🔹[INFO] Info value parsed/verified: `E7`
-  🔹[INFO] Info value parsed/verified: `E8`
-  🔹[INFO] Info value parsed/verified: `E9`
-  🔹[INFO] Info value parsed/verified: `E10`
-  🔹[INFO] Info value parsed/verified: `E11`
-  🔹[INFO] Info value parsed/verified: `E12`
-  🔹[INFO] Info value parsed/verified: `E13`
-  🔹[INFO] Info value parsed/verified: `E14`
-  🔹[INFO] Info value parsed/verified: `E15`
-  🔹[INFO] Info value parsed/verified: `E16`
-  🔹[INFO] Info value parsed/verified: `E17`
-  🔹[INFO] Info value parsed/verified: `E18`
-  🔹[INFO] Info value parsed/verified: `E19`
-  🔹[INFO] Info value parsed/verified: `E20`
-  🔹[INFO] Info value parsed/verified: `E21`
-  🔹[INFO] Info value parsed/verified: `E22`
-  🔹[INFO] Info value parsed/verified: `E23`
-  🔹[INFO] Info value parsed/verified: `E24`
-  🔹[INFO] Info value parsed/verified: `E25`
-  🔹[INFO] Info value parsed/verified: `H1`
-  🔹[INFO] Info value parsed/verified: `H2`
-  🔹[INFO] Info value parsed/verified: `H3`
-  🔹[INFO] Info value parsed/verified: `H4`
-  🔹[INFO] Info value parsed/verified: `H5`
-  🔹[INFO] Info value parsed/verified: `H6`
-  🔹[INFO] Info value parsed/verified: `H7`
-  🔹[INFO] Info value parsed/verified: `H8`
-  🔹[INFO] Info value parsed/verified: `H9`
-  🔹[INFO] Info value parsed/verified: `H10`
-  🔹[INFO] Info value parsed/verified: `H11`
-  🔹[INFO] Info value parsed/verified: `H12`
-  🔹[INFO] Info value parsed/verified: `H13`
-  🔹[INFO] Info value parsed/verified: `H14`
-  🔹[INFO] Info value parsed/verified: `H15`
-  🔹[INFO] Info value parsed/verified: `H16`
-  🔹[INFO] Info value parsed/verified: `H17`
-  🔹[INFO] Info value parsed/verified: `H18`
-  🔹[INFO] Info value parsed/verified: `H19`
-  🔹[INFO] Info value parsed/verified: `H20`
-  🔹[INFO] Info value parsed/verified: `H21`
-  🔹[INFO] Info value parsed/verified: `H22`
-  🔹[INFO] Info value parsed/verified: `H23`
-  🔹[INFO] Info value parsed/verified: `H24`
-  🔹[INFO] Info value parsed/verified: `H25`
-  🔹[INFO] Info value parsed/verified: `C1`
-  🔹[INFO] Info value parsed/verified: `C2`
-  🔹[INFO] Info value parsed/verified: `C3`
-  🔹[INFO] Info value parsed/verified: `C4`
-  🔹[INFO] Info value parsed/verified: `C5`
-  🔹[INFO] Info value parsed/verified: `C6`
-  🔹[INFO] Info value parsed/verified: `C7`
-  🔹[INFO] Info value parsed/verified: `C8`
-  🔹[INFO] Info value parsed/verified: `C9`
-  🔹[INFO] Info value parsed/verified: `C10`
-  🔹[INFO] Info value parsed/verified: `C11`
-  🔹[INFO] Info value parsed/verified: `C12`
-  🔹[INFO] Info value parsed/verified: `C13`
-  🔹[INFO] Info value parsed/verified: `C14`
-  🔹[INFO] Info value parsed/verified: `C15`
-  🔹[INFO] Info value parsed/verified: `C16`
-  🔹[INFO] Info value parsed/verified: `C17`
-  🔹[INFO] Info value parsed/verified: `C18`
-  🔹[INFO] Info value parsed/verified: `C19`
-  🔹[INFO] Info value parsed/verified: `C20`
-  🔹[INFO] Info value parsed/verified: `C21`
-  🔹[INFO] Info value parsed/verified: `C22`
-  🔹[INFO] Info value parsed/verified: `C23`
-  🔹[INFO] Info value parsed/verified: `C24`
-  🔹[INFO] Info value parsed/verified: `C25`
+  🔹[INFO] Info header initialized `5:Deviation` [B1]
+  🔹[INFO] Info header initialized `7:Consequence` [D1]
+  🔹[INFO] Info header initialized `8:Safeguard` [E1]
+  🔹[INFO] Info header aligned map[5:B1 6:C1 7:D1 8:E1 9:F1 10:G1 11:H1]
   🔹[INFO] Info value parsed/verified: `D1`
   🔹[INFO] Info value parsed/verified: `D2`
   🔹[INFO] Info value parsed/verified: `D3`
@@ -193,6 +94,59 @@ Workbook: HazopCrawleyGuideToBestPracticeNormalizedShort.xlsx
   🔹[INFO] Info value parsed/verified: `D23`
   🔹[INFO] Info value parsed/verified: `D24`
   🔹[INFO] Info value parsed/verified: `D25`
+  🔹[INFO] Info value parsed/verified: `D26`
+  🔹[INFO] Info value parsed/verified: `E1`
+  🔹[INFO] Info value parsed/verified: `E2`
+  🔹[INFO] Info value parsed/verified: `E3`
+  🔹[INFO] Info value parsed/verified: `E4`
+  🔹[INFO] Info value parsed/verified: `E5`
+  🔹[INFO] Info value parsed/verified: `E6`
+  🔹[INFO] Info value parsed/verified: `E7`
+  🔹[INFO] Info value parsed/verified: `E8`
+  🔹[INFO] Info value parsed/verified: `E9`
+  🔹[INFO] Info value parsed/verified: `E10`
+  🔹[INFO] Info value parsed/verified: `E11`
+  🔹[INFO] Info value parsed/verified: `E12`
+  🔹[INFO] Info value parsed/verified: `E13`
+  🔹[INFO] Info value parsed/verified: `E14`
+  🔹[INFO] Info value parsed/verified: `E15`
+  🔹[INFO] Info value parsed/verified: `E16`
+  🔹[INFO] Info value parsed/verified: `E17`
+  🔹[INFO] Info value parsed/verified: `E18`
+  🔹[INFO] Info value parsed/verified: `E19`
+  🔹[INFO] Info value parsed/verified: `E20`
+  🔹[INFO] Info value parsed/verified: `E21`
+  🔹[INFO] Info value parsed/verified: `E22`
+  🔹[INFO] Info value parsed/verified: `E23`
+  🔹[INFO] Info value parsed/verified: `E24`
+  🔹[INFO] Info value parsed/verified: `E25`
+  🔹[INFO] Info value parsed/verified: `E26`
+  🔹[INFO] Info value parsed/verified: `C1`
+  🔹[INFO] Info value parsed/verified: `C2`
+  🔹[INFO] Info value parsed/verified: `C3`
+  🔹[INFO] Info value parsed/verified: `C4`
+  🔹[INFO] Info value parsed/verified: `C5`
+  🔹[INFO] Info value parsed/verified: `C6`
+  🔹[INFO] Info value parsed/verified: `C7`
+  🔹[INFO] Info value parsed/verified: `C8`
+  🔹[INFO] Info value parsed/verified: `C9`
+  🔹[INFO] Info value parsed/verified: `C10`
+  🔹[INFO] Info value parsed/verified: `C11`
+  🔹[INFO] Info value parsed/verified: `C12`
+  🔹[INFO] Info value parsed/verified: `C13`
+  🔹[INFO] Info value parsed/verified: `C14`
+  🔹[INFO] Info value parsed/verified: `C15`
+  🔹[INFO] Info value parsed/verified: `C16`
+  🔹[INFO] Info value parsed/verified: `C17`
+  🔹[INFO] Info value parsed/verified: `C18`
+  🔹[INFO] Info value parsed/verified: `C19`
+  🔹[INFO] Info value parsed/verified: `C20`
+  🔹[INFO] Info value parsed/verified: `C21`
+  🔹[INFO] Info value parsed/verified: `C22`
+  🔹[INFO] Info value parsed/verified: `C23`
+  🔹[INFO] Info value parsed/verified: `C24`
+  🔹[INFO] Info value parsed/verified: `C25`
+  🔹[INFO] Info value parsed/verified: `C26`
   🔹[INFO] Info value parsed/verified: `G1`
   🔹[INFO] Info value parsed/verified: `G2`
   🔹[INFO] Info value parsed/verified: `G3`
@@ -218,3 +172,56 @@ Workbook: HazopCrawleyGuideToBestPracticeNormalizedShort.xlsx
   🔹[INFO] Info value parsed/verified: `G23`
   🔹[INFO] Info value parsed/verified: `G24`
   🔹[INFO] Info value parsed/verified: `G25`
+  🔹[INFO] Info value parsed/verified: `G26`
+  🔹[INFO] Info value parsed/verified: `H1`
+  🔹[INFO] Info value parsed/verified: `H2`
+  🔹[INFO] Info value parsed/verified: `H3`
+  🔹[INFO] Info value parsed/verified: `H4`
+  🔹[INFO] Info value parsed/verified: `H5`
+  🔹[INFO] Info value parsed/verified: `H6`
+  🔹[INFO] Info value parsed/verified: `H7`
+  🔹[INFO] Info value parsed/verified: `H8`
+  🔹[INFO] Info value parsed/verified: `H9`
+  🔹[INFO] Info value parsed/verified: `H10`
+  🔹[INFO] Info value parsed/verified: `H11`
+  🔹[INFO] Info value parsed/verified: `H12`
+  🔹[INFO] Info value parsed/verified: `H13`
+  🔹[INFO] Info value parsed/verified: `H14`
+  🔹[INFO] Info value parsed/verified: `H15`
+  🔹[INFO] Info value parsed/verified: `H16`
+  🔹[INFO] Info value parsed/verified: `H17`
+  🔹[INFO] Info value parsed/verified: `H18`
+  🔹[INFO] Info value parsed/verified: `H19`
+  🔹[INFO] Info value parsed/verified: `H20`
+  🔹[INFO] Info value parsed/verified: `H21`
+  🔹[INFO] Info value parsed/verified: `H22`
+  🔹[INFO] Info value parsed/verified: `H23`
+  🔹[INFO] Info value parsed/verified: `H24`
+  🔹[INFO] Info value parsed/verified: `H25`
+  🔹[INFO] Info value parsed/verified: `H26`
+  🔹[INFO] Info value parsed/verified: `B1`
+  🔹[INFO] Info value parsed/verified: `B2`
+  🔹[INFO] Info value parsed/verified: `B3`
+  🔹[INFO] Info value parsed/verified: `B4`
+  🔹[INFO] Info value parsed/verified: `B5`
+  🔹[INFO] Info value parsed/verified: `B6`
+  🔹[INFO] Info value parsed/verified: `B7`
+  🔹[INFO] Info value parsed/verified: `B8`
+  🔹[INFO] Info value parsed/verified: `B9`
+  🔹[INFO] Info value parsed/verified: `B10`
+  🔹[INFO] Info value parsed/verified: `B11`
+  🔹[INFO] Info value parsed/verified: `B12`
+  🔹[INFO] Info value parsed/verified: `B13`
+  🔹[INFO] Info value parsed/verified: `B14`
+  🔹[INFO] Info value parsed/verified: `B15`
+  🔹[INFO] Info value parsed/verified: `B16`
+  🔹[INFO] Info value parsed/verified: `B17`
+  🔹[INFO] Info value parsed/verified: `B18`
+  🔹[INFO] Info value parsed/verified: `B19`
+  🔹[INFO] Info value parsed/verified: `B20`
+  🔹[INFO] Info value parsed/verified: `B21`
+  🔹[INFO] Info value parsed/verified: `B22`
+  🔹[INFO] Info value parsed/verified: `B23`
+  🔹[INFO] Info value parsed/verified: `B24`
+  🔹[INFO] Info value parsed/verified: `B25`
+  🔹[INFO] Info value parsed/verified: `B26`

@@ -315,3 +315,16 @@ hazoperro:empty hazopedge:guideword hazoperro:empty ;
 	hazopedge:severity hazoperro:empty ;
 	hazopedge:probability hazoperro:empty ;
 	hazopedge:riskpriority hazoperro:empty .
+
+hazoperro:empty hazopedge:guideword hazoperro:empty ;
+	hazopedge:parameter hazoperro:empty ;
+	hazopedge:deviation "Other event— carjacking attempted" ;
+	hazopedge:cause "Planned criminal activity" ;
+	hazopedge:consequence "Risk of violence with injury (or death)." ;
+	hazopedge:safeguard "Warning to customers to remove car keys and not to leave car unlocked." ;
+	hazopedge:actionreference hazoperro:empty ;
+	hazopedge:action "Review emergency procedures to ensure this eventuality is covered and that training is provided." ;
+	hazopedge:actionon "LO" ;
+	hazopedge:severity hazoperro:empty ;
+	hazopedge:probability hazoperro:empty ;
+	hazopedge:riskpriority hazoperro:empty .
