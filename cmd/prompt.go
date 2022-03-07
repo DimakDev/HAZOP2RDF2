@@ -39,7 +39,7 @@ import (
 )
 
 var (
-    ErrReadingConfig     = errors.New("Error reading config file")
+    ErrReadingConfig     = errors.New("Error reading manifest file")
     ErrNoWorksheetsFound = errors.New("Error no worksheets found")
     ErrNoExcelFiles      = errors.New("Error no Excel files found")
     ErrReadingDirecotry  = errors.New("Error reading directory")
@@ -61,7 +61,7 @@ var promptCmd = &cobra.Command{
 func init() {
     rootCmd.AddCommand(promptCmd)
 
-    viper.SetConfigName("config")
+    viper.SetConfigName("manifest")
     viper.SetConfigType("toml")
     viper.AddConfigPath(".")
 

@@ -44,22 +44,6 @@ func (v checkString) checkValueType(value interface{}) (interface{}, error) {
     return value.(string), nil
 }
 
-func (c checkInteger) checkValueType(value interface{}) (interface{}, error) {
-    if v, err := strconv.Atoi(value.(string)); err != nil {
-        return nil, fmt.Errorf(ErrParsingInteger)
-    } else {
-        return v, nil
-    }
-}
-
-func (c checkFloat) checkValueType(value interface{}) (interface{}, error) {
-    if v, err := strconv.ParseFloat(value.(string), 32); err != nil {
-        return nil, fmt.Errorf(ErrParsingFloat)
-    } else {
-        return v, nil
-    }
-}
-
 func (c checkString) checkValueLength(value interface{}, min, max int) error {
     if len(value.(string)) < min || len(value.(string)) > max {
         return fmt.Errorf("%s %d-%d", ErrValueOutOfRange, min, max)
@@ -68,11 +52,27 @@ func (c checkString) checkValueLength(value interface{}, min, max int) error {
     }
 }
 
+func (c checkInteger) checkValueType(value interface{}) (interface{}, error) {
+    if v, err := strconv.Atoi(value.(string)); err != nil {
+        return nil, fmt.Errorf(ErrParsingInteger)
+    } else {
+        return v, nil
+    }
+}
+
 func (c checkInteger) checkValueLength(value interface{}, min, max int) error {
     if value.(int) < min || value.(int) > max {
         return fmt.Errorf("%s %d-%d", ErrValueOutOfRange, min, max)
     } else {
         return nil
+    }
+}
+
+func (c checkFloat) checkValueType(value interface{}) (interface{}, error) {
+    if v, err := strconv.ParseFloat(value.(string), 32); err != nil {
+        return nil, fmt.Errorf(ErrParsingFloat)
+    } else {
+        return v, nil
     }
 }
 

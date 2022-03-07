@@ -126,13 +126,13 @@ func ReadVerifyWorkbook(fpath string, wg *sync.WaitGroup) (*Workbook, error) {
                 return
             }
 
-            if err := ws.checkHeaderAlignment(); err != nil {
+            if err := ws.verifyHeaderAlignment(); err != nil {
                 log.Println(err)
                 return
             }
 
             if ws.Valid {
-                if err := wb.readHazopGraph(ws); err != nil {
+                if err := wb.readVerifyHazopData(ws); err != nil {
                     log.Println(err)
                     return
                 }
@@ -179,7 +179,8 @@ func (wb *Workbook) searchHazopElements(ws *Worksheet) error {
     return nil
 }
 
-func (ws *Worksheet) checkHeaderAlignment() error {
+func (ws *Worksheet) verifyHeaderAlignment() error {
+
     l := len(ws.Header)
     if l < 2 {
         ws.Valid = false
@@ -224,7 +225,7 @@ func (ws *Worksheet) checkHeaderAlignment() error {
     return nil
 }
 
-func (wb *Workbook) readHazopGraph(ws *Worksheet) error {
+func (wb *Workbook) readVerifyHazopData(ws *Worksheet) error {
     ws.Graph = make([]map[string]interface{}, ws.GraphSizeX)
     for i := 0; i < ws.GraphSizeX; i++ {
         ws.Graph[i] = make(map[string]interface{}, ws.GraphSizeY)
