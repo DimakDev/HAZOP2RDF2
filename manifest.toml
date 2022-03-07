@@ -21,7 +21,7 @@ report_template_short = "pkg/exporter/report_template_short.txt"
 elements = [
     # { id = 0, name = "Label", regex = "^(?i)(name|label|parameter)", data_type = 0, min_len = 1, max_len = 40 },
     # { id = 1, name = "Description", regex = "^(?i)(description)", data_type = 0, min_len = 1, max_len = 160 },
-    { id = 2, name = "Reference", regex = "^(?i)(^ref.?|^no.?)", data_type = 1, min_len = 1, max_len = 320 },
+    { id = 2, name = "Reference", regex = "^(?i)(ref.?|no.?)", data_type = 1, min_len = 1, max_len = 320 },
     { id = 3, name = "GuideWord", regex = "^(?i)(guide\\s?word)", data_type = 0, min_len = 1, max_len = 40 },
     { id = 4, name = "Parameter", regex = "^(?i)(parameter)", data_type = 0, min_len = 1, max_len = 40 },
     { id = 5, name = "Deviation", regex = "^(?i)(deviation)", data_type = 0, min_len = 1, max_len = 80 },
