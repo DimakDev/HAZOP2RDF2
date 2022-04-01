@@ -1,8 +1,8 @@
-@base <https://tu-dresden.de/ing/elektrotechnik/ifa/plt/hazop-formula> .
-@prefix hazopnode: <https://tu-dresden.de/ing/elektrotechnik/ifa/plt/hazop-formula/hazopnode#> .
-@prefix hazopedge: <https://tu-dresden.de/ing/elektrotechnik/ifa/plt/hazop-formula/hazopedge#> .
-@prefix hazoperro: <https://tu-dresden.de/ing/elektrotechnik/ifa/plt/hazop-formula/hazoperro#> .
-@prefix reference: <https://tu-dresden.de/ing/elektrotechnik/ifa/plt/hazop-formula/reference#> .
+@base <https://tu-dresden.de/ing/elektrotechnik/ifa/plt/HAZOP2RDF2> .
+@prefix hazopnode: <https://tu-dresden.de/ing/elektrotechnik/ifa/plt/HAZOP2RDF2/hazopnode#> .
+@prefix hazopedge: <https://tu-dresden.de/ing/elektrotechnik/ifa/plt/HAZOP2RDF2/hazopedge#> .
+@prefix hazoperro: <https://tu-dresden.de/ing/elektrotechnik/ifa/plt/HAZOP2RDF2/hazoperro#> .
+@prefix reference: <https://tu-dresden.de/ing/elektrotechnik/ifa/plt/HAZOP2RDF2/reference#> .
 
 hazoperro:empty hazopedge:guideword hazoperro:empty ;
 	hazopedge:parameter hazoperro:empty ;
