@@ -1,8 +1,7 @@
-Hazop Formula Todos:
- ☐ [test]: rewrite workbook tests @test
- ☐ [docs]: update readme @docs
-＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+HAZOP2RDF2:
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ [docs]: update readme @docs @done (22-03-30 04:03) @project(Hazop Formula Todos)
  ✔ [test]: add package benchmarks @test @done (22-02-05 00:58) @project(Hazop Formula Todos)
  ✔ [test]: add cpu, mem profiling @test @done (22-02-05 00:58) @project(Hazop Formula Todos)
  ✔ [graph]: add graph template @feat @done (22-02-05 00:58) @project(Hazop Formula Todos)
