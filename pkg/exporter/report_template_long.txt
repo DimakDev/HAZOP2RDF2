@@ -1,6 +1,6 @@
 ============================================
-Program: {{ .ProgramName }}
-Version: {{ .ProgramVersion }}
+Program: {{ .AppName }}
+Version: {{ .AppVersion }}
 Date and time: {{ .DateTime }}
 
 ============================================
@@ -9,7 +9,7 @@ Workbook: {{ .Workbook }}
 
 --------------------------------------------
 {{ .Index }}. Worksheet: {{ .Name }}
-({{ .NCells }}) Total Cell(s), ({{ .NValidCells }}) Parsed Cell(s), Valid Part ({{ .PValidCells }}%)
+({{ .PValidCells }}%) Accuracy ({{ .NValidCells }} of {{ .NCells }} cells parsed)
 ({{ .Report.Warnings | len }}) Warning(s), ({{ .Report.Errors | len }}) Error(s), ({{ .Report.Info | len }}) Info
   {{- range .Report.Warnings }}
   🔸[WARN] {{ . }}

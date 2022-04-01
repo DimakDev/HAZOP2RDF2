@@ -6,53 +6,53 @@ import (
     "os"
     "text/template"
 
-    "github.com/dimakdev/hazop-formula/pkg/workbook"
+    "github.com/dimakdev/HAZOP2RDF2/pkg/importer"
 )
 
 type Exporter struct {
-    ReportPath     string
-    GraphPath      string
-    ProgramName    string
-    ProgramVersion string
-    DateTime       string
-    BaseUri        string
-    Workbook       string
-    Worksheets     []*workbook.Worksheet
+    ReportPath string
+    GraphPath  string
+    AppName    string
+    AppVersion string
+    DateTime   string
+    BaseUri    string
+    Workbook   string
+    Worksheets []*importer.Worksheet
 }
 
 var (
-    ErrCreatingFile    = errors.New("Error creating report file")
-    ErrReadingTemplate = errors.New("Error reading report template")
-    ErrWritingReport   = errors.New("Error writing report")
+    ErrCreatingOutputFile  = errors.New("Error creating output file")
+    ErrReadingTemplateFile = errors.New("Error reading template file")
+    ErrWritingTemplateFile = errors.New("Error writing template file")
 )
 
-func (e *Exporter) WriteToFile(fpath, tpath string) error {
+func (e *Exporter) ExportToFile(fpath, tpath string) error {
     f, err := os.Create(fpath)
     if err != nil {
-        return fmt.Errorf("%v `%s`: %v", ErrCreatingFile, fpath, err)
+        return fmt.Errorf("%v `%s`: %v", ErrCreatingOutputFile, fpath, err)
     }
     defer f.Close()
 
     t, err := template.ParseFiles(tpath)
     if err != nil {
-        return fmt.Errorf("%v `%s`: %v", ErrReadingTemplate, tpath, err)
+        return fmt.Errorf("%v `%s`: %v", ErrReadingTemplateFile, tpath, err)
     }
 
     if err := t.Execute(f, e); err != nil {
-        return fmt.Errorf("%v `%s`: %v", ErrWritingReport, tpath, err)
+        return fmt.Errorf("%v `%s`: %v", ErrWritingTemplateFile, tpath, err)
     }
 
     return nil
 }
 
-func (e *Exporter) WriteToStdout(tpath string) error {
+func (e *Exporter) ExportToStdout(tpath string) error {
     t, err := template.ParseFiles(tpath)
     if err != nil {
-        return fmt.Errorf("%v `%s`: %v", ErrReadingTemplate, tpath, err)
+        return fmt.Errorf("%v `%s`: %v", ErrReadingTemplateFile, tpath, err)
     }
 
     if err := t.Execute(os.Stdout, e); err != nil {
-        return fmt.Errorf("%v `%s`: %v", ErrWritingReport, tpath, err)
+        return fmt.Errorf("%v `%s`: %v", ErrWritingTemplateFile, tpath, err)
     }
 
     return nil
