@@ -1,16 +1,16 @@
-# ========== Hazop Formula Settings ============
-[program]
-author = "Dmytro Kostiuk <X100@X100.LINK>"
-name = "hazop-formula"
-description = "Data -> Information -> Knowledge"
+# ========== HAZOP2RDF2 Manifest ============
+[application]
+author = "Dmytro Kostiuk <dmytro.kostiuk@mailbox.tu-dresden.de>"
+name = "HAZOP2RDF2"
+description = "Hazop parser and modeling tool"
 version = "1.0.0"
 
-[data]
-data_dir = "data"
-data_ext = ".xlsx"
-report_dir = "reports"
+[roots]
+hazop_dir = "hazop"
+hazop_ext = ".xlsx"
+report_dir = "report"
 report_ext = ".txt"
-graph_dir = "graphs"
+graph_dir = "graph"
 graph_ext = ".ttl"
 base_uri = "https://tu-dresden.de/ing/elektrotechnik/ifa/plt/"
 graph_template = "pkg/exporter/graph_template.txt"

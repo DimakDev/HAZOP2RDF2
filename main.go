@@ -21,7 +21,7 @@ THE SOFTWARE.
 */
 package main
 
-import "github.com/dimakdev/hazop-formula/cmd"
+import "github.com/dimakdev/HAZOP2RDF2/cmd"
 
 func main() {
     cmd.Execute()
