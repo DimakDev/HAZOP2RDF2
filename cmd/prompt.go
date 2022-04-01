@@ -1,5 +1,5 @@
 /*
-Copyright © 2021 Dmytro Kostiuk <X100@X100.LINK>
+Copyright © 2021 Dmytro Kostiuk <dmytro.kostiuk@mailbox.tu-dresden.de>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,11 +28,10 @@ import (
     "log"
     "path/filepath"
     "strings"
-    "sync"
     "time"
 
-    "github.com/dimakdev/hazop-formula/pkg/exporter"
-    "github.com/dimakdev/hazop-formula/pkg/workbook"
+    "github.com/dimakdev/HAZOP2RDF2/pkg/exporter"
+    "github.com/dimakdev/HAZOP2RDF2/pkg/importer"
     "github.com/manifoldco/promptui"
     "github.com/spf13/cobra"
     "github.com/spf13/viper"
@@ -41,16 +40,16 @@ import (
 var (
     ErrReadingConfig     = errors.New("Error reading manifest file")
     ErrNoWorksheetsFound = errors.New("Error no worksheets found")
-    ErrNoExcelFiles      = errors.New("Error no Excel files found")
+    ErrNoHazopFiles      = errors.New("Error no Hazop files found")
     ErrReadingDirecotry  = errors.New("Error reading directory")
     ErrPromptFailed      = errors.New("Error prompt failed")
-    InfoDescription      = "Import, parse and verify"
+    CommandDescription   = "Import, parse and verify"
 )
 
 var promptCmd = &cobra.Command{
     Use:   "prompt",
-    Short: "Import, parse and verify Excel documents",
-    Long:  "Import, parse and verify Excel documents",
+    Short: "Import, parse and verify Excel workbooks",
+    Long:  "Import, parse and verify Excel workbooks",
     Run: func(cmd *cobra.Command, args []string) {
         if err := run(); err != nil {
             cmd.PrintErrln(err)
@@ -69,30 +68,29 @@ func init() {
         log.Fatalf("%v: %v", ErrReadingConfig, err)
     }
 
-    if err := viper.UnmarshalKey("hazop", &workbook.Hazop); err != nil {
+    if err := viper.UnmarshalKey("hazop", &importer.Hazop); err != nil {
         log.Fatalf("%v: %v", ErrReadingConfig, err)
     }
 
-    if err := viper.UnmarshalKey("program", &program); err != nil {
+    if err := viper.UnmarshalKey("application", &application); err != nil {
         log.Fatalf("%v: %v", ErrReadingConfig, err)
     }
 
-    if err := viper.UnmarshalKey("data", &data); err != nil {
+    if err := viper.UnmarshalKey("roots", &roots); err != nil {
         log.Fatalf("%v: %v", ErrReadingConfig, err)
     }
 }
 
-type Program struct {
+type Application struct {
     Author      string `mapstructure:"author"`
     Name        string `mapstructure:"name"`
     Description string `mapstructure:"description"`
-    Help        string `mapstructure:"help"`
     Version     string `mapstructure:"version"`
 }
 
-type Data struct {
-    DataDir             string `mapstructure:"data_dir"`
-    DataExt             string `mapstructure:"data_ext"`
+type Roots struct {
+    HazopDir            string `mapstructure:"hazop_dir"`
+    HazopExt            string `mapstructure:"hazop_ext"`
     ReportDir           string `mapstructure:"report_dir"`
     ReportExt           string `mapstructure:"report_ext"`
     GraphDir            string `mapstructure:"graph_dir"`
@@ -105,25 +103,25 @@ type Data struct {
 
 type Command struct {
     Name        string
-    Description string
     Datapath    string
+    Description string
 }
 
-var data Data
-var program Program
+var roots Roots
+var application Application
 
 func run() error {
-    files, err := ioutil.ReadDir(data.DataDir)
+    hazopFiles, err := ioutil.ReadDir(roots.HazopDir)
     if err != nil {
-        return fmt.Errorf("%v `%s` %v", ErrReadingDirecotry, data.DataDir, err)
+        return fmt.Errorf("%v `%s` %v", ErrReadingDirecotry, roots.HazopDir, err)
     }
 
     var commands []Command
-    for _, f := range files {
-        if strings.HasSuffix(f.Name(), data.DataExt) {
+    for _, f := range hazopFiles {
+        if strings.HasSuffix(f.Name(), roots.HazopExt) {
             name := fmt.Sprintf("`%s`", f.Name())
-            datapath := filepath.Join(data.DataDir, f.Name())
-            description := fmt.Sprintf("%s `%s`", InfoDescription, f.Name())
+            datapath := filepath.Join(roots.HazopDir, f.Name())
+            description := fmt.Sprintf("%s `%s`", CommandDescription, f.Name())
             commands = append(commands,
                 Command{
                     Name:        name,
@@ -135,7 +133,7 @@ func run() error {
     }
 
     if len(commands) == 0 {
-        return fmt.Errorf("%v %s", ErrNoExcelFiles, data.DataDir)
+        return fmt.Errorf("%v %s", ErrNoHazopFiles, roots.HazopDir)
     }
 
     templates := &promptui.SelectTemplates{
@@ -167,61 +165,40 @@ func run() error {
         return fmt.Errorf("%v %v", ErrPromptFailed, err)
     }
 
-    wb, err := readWorkbook(commands[i].Datapath)
+    wb, err := importer.ImportWorkbook(commands[i].Datapath)
     if err != nil {
         return err
     }
-
-    if err := writeTemplateOutput(wb); err != nil {
-        return err
-    }
-
-    return nil
-}
-
-func readWorkbook(fpath string) (*workbook.Workbook, error) {
-    var wg sync.WaitGroup
-
-    wb, err := workbook.ReadVerifyWorkbook(fpath, &wg)
-    if err != nil {
-        return nil, err
-    }
-
-    wg.Wait()
 
     if len(wb.Worksheets) == 0 {
-        return nil, ErrNoWorksheetsFound
+        return ErrNoWorksheetsFound
     }
 
-    return wb, nil
-}
-
-func writeTemplateOutput(wb *workbook.Workbook) error {
     _, wbname := filepath.Split(wb.File.Path)
     fname := strings.TrimSuffix(wbname, filepath.Ext(wbname))
-    rpath := filepath.Join(data.ReportDir, fname+data.ReportExt)
-    gpath := filepath.Join(data.GraphDir, fname+data.GraphExt)
+    rpath := filepath.Join(roots.ReportDir, fname+roots.ReportExt)
+    gpath := filepath.Join(roots.GraphDir, fname+roots.GraphExt)
 
-    exp := &exporter.Exporter{
-        ReportPath:     rpath,
-        GraphPath:      gpath,
-        ProgramName:    program.Name,
-        ProgramVersion: program.Version,
-        DateTime:       time.Now().Format(time.UnixDate),
-        BaseUri:        data.BaseUri + program.Name,
-        Workbook:       wbname,
-        Worksheets:     wb.Worksheets,
+    e := &exporter.Exporter{
+        ReportPath: rpath,
+        GraphPath:  gpath,
+        AppName:    application.Name,
+        AppVersion: application.Version,
+        DateTime:   time.Now().Format(time.UnixDate),
+        BaseUri:    roots.BaseUri + application.Name,
+        Workbook:   wbname,
+        Worksheets: wb.Worksheets,
     }
 
-    if err := exp.WriteToFile(gpath, data.GraphTemplate); err != nil {
+    if err := e.ExportToFile(gpath, roots.GraphTemplate); err != nil {
         return err
     }
 
-    if err := exp.WriteToFile(rpath, data.ReportTemplateLong); err != nil {
+    if err := e.ExportToFile(rpath, roots.ReportTemplateLong); err != nil {
         return err
     }
 
-    if err := exp.WriteToStdout(data.ReportTemplateShort); err != nil {
+    if err := e.ExportToStdout(roots.ReportTemplateShort); err != nil {
         return err
     }
 

@@ -1,5 +1,5 @@
 /*
-Copyright © 2021 Dmytro Kostiuk <X100@X100.LINK>
+Copyright © 2021 Dmytro Kostiuk <dmytro.kostiuk@mailbox.tu-dresden.de>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,9 +28,9 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-    Use:   "hazop-formula",
-    Short: "Interface to import, parse and verify Hazop studies",
-    Long:  "Interface to import, parse and verify Hazop studies",
+    Use:   "HAZOP2RDF2",
+    Short: "Hazop parser and modeling tool",
+    Long:  "Hazop parser and modeling tool",
 }
 
 func Execute() {
