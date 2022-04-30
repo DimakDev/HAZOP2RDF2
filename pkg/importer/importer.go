@@ -188,15 +188,15 @@ func (wb *Workbook) searchHazopHeaders(ws *Worksheet) error {
             return err
         }
 
-        switch clen := len(coords); {
-        case clen == 0:
+        switch len(coords) {
+        case 0:
             ws.Report.NewError(fmt.Sprintf("%s `%d:%s` %v",
                 ErrHeaderNotFound,
                 e.Id,
                 e.Name,
                 coords,
             ))
-        case clen == 1:
+        case 1:
             ws.Headers[e.Id] = coords[0]
             ws.Report.NewInfo(fmt.Sprintf("%s `%d:%s` %v",
                 InfoHeaderFound,
@@ -218,15 +218,15 @@ func (wb *Workbook) searchHazopHeaders(ws *Worksheet) error {
 }
 
 func (ws *Worksheet) testHeadersAlignment() error {
-    hLength := len(ws.Headers)
-    if hLength < 2 {
+    hlen := len(ws.Headers)
+    if hlen < 2 {
         ws.IsValid = false
         ws.Report.NewError(ErrNoHeaderFound)
         return nil
     }
 
-    var headerX = make(map[int]int, hLength)
-    var headerY = make(map[int]int, hLength)
+    var headerX = make(map[int]int, hlen)
+    var headerY = make(map[int]int, hlen)
     for k, v := range ws.Headers {
         x, y, err := excelize.CellNameToCoordinates(v)
         if err != nil {
@@ -255,7 +255,7 @@ func (ws *Worksheet) testHeadersAlignment() error {
 
     ws.IsValid = true
     ws.GraphNRows = ws.NRows - headerY[k0]
-    ws.GraphNCols = hLength
+    ws.GraphNCols = hlen
     ws.HeaderX = headerX
     ws.HeaderY = headerY
     ws.Report.NewInfo(fmt.Sprintf("%s %v", InfoHeaderAligned, ws.Headers))
@@ -277,7 +277,7 @@ func (wb *Workbook) readVerifyHazopData(ws *Worksheet) error {
         }
 
         for i := 0; i < ws.GraphNRows; i++ {
-            cellName, err := excelize.CoordinatesToCellName(
+            cname, err := excelize.CoordinatesToCellName(
                 ws.HeaderX[k],
                 ws.HeaderY[k]+1+i,
             )
@@ -285,39 +285,39 @@ func (wb *Workbook) readVerifyHazopData(ws *Worksheet) error {
                 return err
             }
 
-            val, err := wb.File.GetCellValue(ws.Name, cellName)
+            val, err := wb.File.GetCellValue(ws.Name, cname)
             if err != nil {
                 return err
             }
 
-            parsed, err := tester.testCellType(val)
+            vparsed, err := tester.testCellType(val)
             if err != nil {
-                ws.Report.NewError(fmt.Sprintf("%v `%v`", err, cellName))
+                ws.Report.NewError(fmt.Sprintf("%v `%v`", err, cname))
                 continue
             }
 
             err = tester.testCellLength(
-                parsed,
+                vparsed,
                 wb.HazopElements[k].MinLen,
                 wb.HazopElements[k].MaxLen,
             )
             if err != nil {
-                ws.Report.NewError(fmt.Sprintf("%v `%v`", err, cellName))
+                ws.Report.NewError(fmt.Sprintf("%v `%v`", err, cname))
                 continue
             }
 
             ws.Report.NewInfo(fmt.Sprintf("%s: `%s`",
                 InfoValueIsValid,
-                cellName,
+                cname,
             ))
 
             ws.NValidCells += 1
-            ws.Graph[i][wb.HazopElements[k].Name] = parsed
+            ws.Graph[i][wb.HazopElements[k].Name] = vparsed
         }
     }
 
-    validCells := float64(ws.NValidCells) / float64(ws.NCells)
-    ws.PValidCells = math.Round(validCells*10000) / 100
+    ws.PValidCells = math.Round(
+        float64(ws.NValidCells)/float64(ws.NCells)*10000) / 100
 
     return nil
 }
