@@ -1,6 +1,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)   
 
-#### HAZOP2RDF2 ⚙️⚙️⚙️ [Thesis].
+#### HAZOP2RDF2 ⚙️⚙️⚙️ [Student Thesis].
 
 Hazop parser and modeling tool.
 
