@@ -22,7 +22,7 @@ var (
 type Workbook struct {
     File          *excelize.File
     SheetMap      map[int]string
-    Worksheets    []*Worksheet
+    Worksheets    map[int]*Worksheet
     HazopElements map[int]HazopElement
 }
 
@@ -102,11 +102,12 @@ func initHazopWorkbook(fpath string) (*Workbook, error) {
     }
 
     var sheetMap = f.GetSheetMap()
+    log.Println(sheetMap)
     var wb = &Workbook{
         File:          f,
         HazopElements: hazopElements,
         SheetMap:      sheetMap,
-        Worksheets:    make([]*Worksheet, len(sheetMap)),
+        Worksheets:    make(map[int]*Worksheet, len(sheetMap)),
     }
 
     return wb, nil
@@ -167,7 +168,7 @@ func (wb *Workbook) readVerifyHazopWorkbook() error {
                 }
             }
 
-            wb.Worksheets[i-1] = ws
+            wb.Worksheets[i] = ws
         }(i, name)
     }
 

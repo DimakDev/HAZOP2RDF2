@@ -17,7 +17,7 @@ type Exporter struct {
     DateTime   string
     BaseUri    string
     Workbook   string
-    Worksheets []*importer.Worksheet
+    Worksheets map[int]*importer.Worksheet
 }
 
 var (
